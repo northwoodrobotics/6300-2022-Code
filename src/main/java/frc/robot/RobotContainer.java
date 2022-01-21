@@ -30,11 +30,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
  
-  public static SwerveDrivetrainModel dt;
-  public static SwerveSubsystem m_swerveSubsystem;
+  public static SwerveDrivetrainModel dt = DrivetrainSubsystem.createSwerveModel();
+  public static SwerveSubsystem m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
+  
+ 
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-  public static VisionSubsystem blindlight;
+  public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
 
 
@@ -49,8 +51,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    dt = DrivetrainSubsystem.createSwerveModel();
-    m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
+   
     m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
     () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS),
           () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS),
@@ -59,7 +60,7 @@ public class RobotContainer {
       
     // Configure the button bindings
     configureButtonBindings();
-    blindlight = new VisionSubsystem(m_swerveSubsystem);
+    
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.setDefaultOption("Move Forward", new DemoFiveBall());
     autoChooser.addOption("DemoSquare", new DemoSquare());
@@ -74,7 +75,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    driveController.xButton.whenPressed(new TurnToTarget(m_swerveSubsystem, blindlight,
+    driveController.xButton.whileHeld(new TurnToTarget(m_swerveSubsystem, blindlight,
     () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS) ,
     () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS)
     ));
