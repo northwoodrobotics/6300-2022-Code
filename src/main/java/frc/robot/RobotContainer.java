@@ -13,6 +13,7 @@ import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.TeleopDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,8 +38,11 @@ public class RobotContainer {
 
     dt = DrivetrainSubsystem.createSwerveModel();
     m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
-    m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand (
-      m_swerveSubsystem));
+    m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
+    () -> -modifyAxis(driveController.getLeftY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
+          () -> -modifyAxis(driveController.getLeftX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
+          () -> -modifyAxis(driveController.getRightX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS));
+    
       
     // Configure the button bindings
     configureButtonBindings();
@@ -60,5 +64,27 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+
+  
+  private static double deadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
+  private static double modifyAxis(double value) {
+    // Deadband
+    value = deadband(value, 0.05);
+
+    // Square the axis
+    value = Math.copySign(value * value, value);
+
+    return value;
   }
 }
