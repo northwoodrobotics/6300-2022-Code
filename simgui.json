@@ -1,6 +1,11 @@
 {
   "HALProvider": {
     "Other Devices": {
+      "Talon FX[14]": {
+        "header": {
+          "open": true
+        }
+      },
       "navX-Sensor[0]": {
         "header": {
           "open": true
@@ -59,16 +64,20 @@
         },
         "Front Right Module": {
           "open": true
-        },
+        }
+      },
+      "SwerveDt": {
         "open": true
       },
       "open": true
     },
     "SmartDashboard": {
-      "Field": {
+      "Auto Chooser": {
         "open": true
       },
-      "open": true
+      "Field": {
+        "open": true
+      }
     }
   },
   "Plot": {
@@ -77,7 +86,10 @@
         {
           "height": 326
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

@@ -64,7 +64,7 @@ public class VisionSubsystem implements Subsystem {
                 .withPosition(5, 0)
                 .withSize(1, 1);
         tab.addNumber("Horizontal Target Error", () -> {
-                    double gyroAngle = RobotContainer.m_swerveSubsystem.dt.getGyroscopeRotation().getRadians();
+                    double gyroAngle = drivetrain.dt.getGyroscopeRotation().getRadians();
                     return getDistanceToTarget().orElse(0.0) *
                             (Math.sin(gyroAngle - getAngleToTarget().orElse(0.0)) / Math.sin(Math.PI / 2.0 - gyroAngle));
                 })
@@ -94,7 +94,7 @@ public class VisionSubsystem implements Subsystem {
             return OptionalDouble.empty();
         }
 
-        double gyroAngle = RobotContainer.m_swerveSubsystem.dt.getGyroscopeRotation().getRadians();
+        double gyroAngle = drivetrain.dt.getGyroscopeRotation().getRadians();
         return OptionalDouble.of(distanceToTargetOpt.getAsDouble() *
                 (Math.sin(gyroAngle - angleToTargetOpt.getAsDouble()) / Math.sin(Math.PI / 2.0 - gyroAngle)));
     }
@@ -120,7 +120,7 @@ public class VisionSubsystem implements Subsystem {
             double distanceToOuterTarget = (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / Math.tan(theta);
 
             // Get the field oriented angle for the outer target, with latency compensation
-            double angleToOuter = RobotContainer.m_swerveSubsystem.dt.getCurActPose().getRotation().getRadians() - targetPosition.getX();
+            double angleToOuter = drivetrain.dt.getGyroscopeRotation().getRadians() - targetPosition.getX();
             double dYOuter = distanceToOuterTarget * Math.sin(angleToOuter);
             double dXOuter = distanceToOuterTarget * Math.cos(angleToOuter);
             dXOuterEntry.setDouble(dXOuter);
@@ -159,7 +159,7 @@ public class VisionSubsystem implements Subsystem {
             return false;
         }
 
-        double delta = targetAngle.getAsDouble() - RobotContainer.m_swerveSubsystem.dt.getGyroscopeRotation().getRadians();
+        double delta = targetAngle.getAsDouble() - drivetrain.dt.getGyroscopeRotation().getRadians();
         if (delta > Math.PI) {
             delta = 2.0 * Math.PI - delta;
         }

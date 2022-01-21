@@ -277,4 +277,15 @@ public class SwerveDrivetrainModel {
     public void goToPose(Pose2d desiredPose, double angle) {
         setModuleStates(m_holo.calculate(getCurActPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
     }
+    public double getAverageAbsoluteValueVelocity() {
+        double averageVelocity = 0;
+        for (var module : realModules) {
+            averageVelocity += Math.abs(module.getDriveVelocity());
+        }
+        return averageVelocity / 4;
+    }
+    
+    
+    
+    
 }
