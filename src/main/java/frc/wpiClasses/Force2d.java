@@ -196,7 +196,8 @@ public class Force2d {
    * @param obj The other object.
    * @return Whether the two objects are equal or not.
    */
-  @Override
+  @Override 
+  @SuppressWarnings("EqualsHashCode")
   public boolean equals(Object obj) {
     if (obj instanceof Force2d) {
       return this.m_matrix.isEqual(((Force2d) obj).m_matrix, 1E-9);
