@@ -98,9 +98,25 @@ public class DrivetrainSubsystem {
     public static SwerveSubsystem createSwerveSubsystem(SwerveDrivetrainModel dt) {
         return new SwerveSubsystem(dt);        
     }
+    private static void passConstants() {
+        SwerveConstants.MAX_FWD_REV_SPEED_MPS = Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS;
+        SwerveConstants.MAX_VOLTAGE = Constants.DriveConstants.MAX_VOLTAGE;
+        SwerveConstants.DFLT_START_POSE = Constants.DriveConstants.DFLT_START_POSE;
+
+        //SwerveConstants.THETACONTROLLERkP = AUTO.THETACONTROLLERkP;
+        //SwerveConstants.TRAJECTORYXkP = AUTO.TRAJECTORYXkP;
+        //SwerveConstants.TRAJECTORYYkP = AUTO.TRAJECTORYYkP;
+        //SwerveConstants.THETACONTROLLERCONSTRAINTS = AUTO.THETACONTROLLERCONSTRAINTS;
+
+        SwerveConstants.TRACKWIDTH_METERS = Constants.DriveConstants.TRACKWIDTH_METERS;
+        SwerveConstants.TRACKLENGTH_METERS = Constants.DriveConstants.WHEELBASE_METERS;
+        SwerveConstants.MASS_kg = Constants.DriveConstants.MASS_kg;
+        SwerveConstants.MOI_KGM2 = Constants.DriveConstants.MOI_KGM2;
+        SwerveConstants.KINEMATICS = Constants.DriveConstants.KINEMATICS;
+    }
 
 
-    
+
 
     
     
