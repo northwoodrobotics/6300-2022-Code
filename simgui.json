@@ -65,20 +65,20 @@
         "Front Right Module": {
           "open": true
         }
+      }
+    },
+    "SmartDashboard": {
+      "Field": {
+        "open": true
       },
-      "SwerveDt": {
+      "Orientation Chooser": {
         "open": true
       },
       "open": true
-    },
-    "SmartDashboard": {
-      "Auto Chooser": {
-        "open": true
-      },
-      "Field": {
-        "open": true
-      }
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   },
   "Plot": {
     "Plot <0>": {
