@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class DrivetrainSubsystem {
+        public static double SwerveVelocity;
     
 
     public static SwerveDrivetrainModel  createSwerveModel(){
@@ -90,16 +91,27 @@ public class DrivetrainSubsystem {
         modules.add(m_frontRightModule);
         modules.add(m_backLeftModule);
         modules.add(m_backRightModule);
+       
+
+        
         
 
 
         return new SwerveDrivetrainModel(modules, gyro);
 
 
+
+
+
+
+
     }
     public static SwerveSubsystem createSwerveSubsystem(SwerveDrivetrainModel dt) {
         return new SwerveSubsystem(dt);        
     }
+
+
+
     private static void passConstants() {
         SwerveConstants.MAX_FWD_REV_SPEED_MPS = Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS;
         SwerveConstants.MAX_VOLTAGE = Constants.DriveConstants.MAX_VOLTAGE;

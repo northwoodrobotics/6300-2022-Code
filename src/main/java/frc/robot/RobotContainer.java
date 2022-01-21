@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
-
+import frc.robot.subsystems.VisionSubsystem;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.TeleopDriveCommand;
+import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.AutoRoutines.DemoFiveBall;
 import frc.robot.commands.AutoRoutines.DemoSquare;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +33,8 @@ public class RobotContainer {
   public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_swerveSubsystem;
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
+
+  public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
 
 
@@ -69,7 +72,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+    driveController.xButton.whenPressed(new TurnToTarget(m_swerveSubsystem, blindlight,
+    () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS) ,
+    () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS)
+    ));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -10,6 +10,7 @@ import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
 import frc.ExternalLib.JackInTheBotLib.math.Vector2;
 import frc.ExternalLib.JackInTheBotLib.robot.drivers.Limelight;
 import frc.robot.RobotContainer;
+import frc.swervelib.SwerveSubsystem;
 
 import java.util.OptionalDouble;
 
@@ -28,7 +29,7 @@ public class VisionSubsystem implements Subsystem {
     private static final Limelight LIMELIGHT = new Limelight("Front");
    
 
-    private final DrivetrainSubsystem drivetrain;
+    private final SwerveSubsystem drivetrain;
 
     private final NetworkTableEntry distanceToTargetEntry;
     private final NetworkTableEntry dXOuterEntry;
@@ -40,7 +41,7 @@ public class VisionSubsystem implements Subsystem {
     private OptionalDouble distanceToTarget = OptionalDouble.empty();
     private OptionalDouble angleToTarget = OptionalDouble.empty();
 
-    public VisionSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
+    public VisionSubsystem(SwerveSubsystem drivetrainSubsystem) {
         drivetrain = drivetrainSubsystem;
         ShuffleboardTab tab = Shuffleboard.getTab("Vision");
         distanceToTargetEntry = tab.add("distance to target", 0.0)
