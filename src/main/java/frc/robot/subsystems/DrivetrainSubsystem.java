@@ -27,6 +27,8 @@ public class DrivetrainSubsystem {
     
 
     public static SwerveDrivetrainModel  createSwerveModel(){
+        passConstants();
+
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
         
         ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
