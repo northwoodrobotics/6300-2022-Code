@@ -13,6 +13,7 @@ import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.AutoRoutines.DemoFiveBall;
+import frc.robot.commands.AutoRoutines.DemoSquare;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
@@ -28,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
  
-  private static SwerveDrivetrainModel dt;
+  public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_swerveSubsystem;
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -58,6 +59,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.setDefaultOption("Move Forward", new DemoFiveBall());
+    autoChooser.addOption("DemoSquare", new DemoSquare());
     
   }
 

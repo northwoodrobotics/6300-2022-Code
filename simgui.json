@@ -23,6 +23,16 @@
       "/SmartDashboard/Orientation Chooser": "String Chooser"
     },
     "windows": {
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "window": {
           "visible": true
