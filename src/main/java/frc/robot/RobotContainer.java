@@ -76,8 +76,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     driveController.xButton.whileHeld(new TurnToTarget(m_swerveSubsystem, blindlight,
-    () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS) ,
-    () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS)
+    () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS) ,
+    () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS)
     ));
   }
 
