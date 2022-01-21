@@ -22,7 +22,7 @@
       "/SmartDashboard/Orientation Chooser": "String Chooser"
     },
     "windows": {
-      "/LiveWindow/SwerveSubsystem": {
+      "/SmartDashboard/Field": {
         "window": {
           "visible": true
         }
@@ -35,16 +35,23 @@
     }
   },
   "NetworkTables": {
-    "LiveWindow": {
-      "SwerveSubsystem": {
+    "Shuffleboard": {
+      "Drivetrain": {
+        "Back Left Module": {
+          "open": true
+        },
+        "Back Right Module": {
+          "open": true
+        },
+        "Front Left Module": {
+          "open": true
+        },
+        "Front Right Module": {
+          "open": true
+        },
         "open": true
       },
       "open": true
-    },
-    "Shuffleboard": {
-      "Drivetrain": {
-        "open": true
-      }
     },
     "SmartDashboard": {
       "Field": {

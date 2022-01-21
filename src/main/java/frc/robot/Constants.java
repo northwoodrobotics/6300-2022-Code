@@ -27,13 +27,13 @@ public final class Constants {
 
         
         
-        public static final double TRACKWIDTH_METERS = 1.0; // FIXME Measure and set trackwidth
+        public static final double TRACKWIDTH_METERS = .71; // FIXME Measure and set trackwidth
         /**
          * The front-to-back distance between the drivetrain wheels.
          *
          * Should be measured from center to center.
          */
-        public static final double WHEELBASE_METERS = 1.0; // FIXME Measure and set wheelbase
+        public static final double WHEELBASE_METERS = .71; // FIXME Measure and set wheelbase
 
         public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),

@@ -14,6 +14,7 @@ import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.TeleopDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,7 +32,7 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  public static final XboxController driveController = new XboxController(0);
+  public static final SpectrumXboxController driveController = new SpectrumXboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -39,9 +40,9 @@ public class RobotContainer {
     dt = DrivetrainSubsystem.createSwerveModel();
     m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
     m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
-    () -> -modifyAxis(driveController.getLeftY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
-          () -> -modifyAxis(driveController.getLeftX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
-          () -> -modifyAxis(driveController.getRightX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS));
+    () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS),
+          () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS),
+          () -> -modifyAxis(driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC)));
     
       
     // Configure the button bindings

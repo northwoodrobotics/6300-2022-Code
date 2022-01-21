@@ -15,12 +15,14 @@ public class navXFactoryBuilder {
     private static class GyroscopeImplementation implements Gyroscope {
         private final AHRS navX;
         private final SimDouble angleSim;
+        private final SimDouble FusedSim;
 
         private GyroscopeImplementation(AHRS navX) {
             this.navX = navX;
 
             int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
             angleSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+            FusedSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "FusedHeading"));
         }
 
         @Override

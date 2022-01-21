@@ -10,13 +10,14 @@ import frc.robot.RobotContainer;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.Constants;
 import java.util.function.DoubleSupplier;
+import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
 
 
 
 
 public class TeleopDriveCommand extends CommandBase{
     private final SwerveSubsystem m_SwerveSubsystem;
-    private final XboxController drivecontroller;
+    private final SpectrumXboxController drivecontroller;
     private final DoubleSupplier m_translationXSupplier;
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
@@ -44,8 +45,8 @@ public class TeleopDriveCommand extends CommandBase{
     @Override
     public void execute(){
       m_SwerveSubsystem.dt.setModuleStates(Constants.DriveConstants.KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
-        m_translationYSupplier.getAsDouble(), 
-        m_translationXSupplier.getAsDouble(), 
+        -m_translationXSupplier.getAsDouble(), 
+         m_translationYSupplier.getAsDouble(), 
         m_rotationSupplier.getAsDouble(), 
         m_SwerveSubsystem.dt.getGyroscopeRotation())));
        
