@@ -6,15 +6,18 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
+
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.TeleopDriveCommand;
+import frc.robot.commands.AutoRoutines.DemoFiveBall;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,13 +27,18 @@ import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+ 
   private static SwerveDrivetrainModel dt;
-  private static SwerveSubsystem m_swerveSubsystem;
+  public static SwerveSubsystem m_swerveSubsystem;
+  private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+
+
+
+  
 
   public static final SpectrumXboxController driveController = new SpectrumXboxController(0);
 
@@ -47,6 +55,10 @@ public class RobotContainer {
       
     // Configure the button bindings
     configureButtonBindings();
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    autoChooser.setDefaultOption("Move Forward", new DemoFiveBall());
+    
   }
 
   /**
@@ -63,8 +75,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+  
   }
 
   
