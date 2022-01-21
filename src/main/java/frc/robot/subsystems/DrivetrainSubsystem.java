@@ -105,10 +105,10 @@ public class DrivetrainSubsystem {
         SwerveConstants.MAX_VOLTAGE = Constants.DriveConstants.MAX_VOLTAGE;
         SwerveConstants.DFLT_START_POSE = Constants.DriveConstants.DFLT_START_POSE;
 
-        //SwerveConstants.THETACONTROLLERkP = AUTO.THETACONTROLLERkP;
-        //SwerveConstants.TRAJECTORYXkP = AUTO.TRAJECTORYXkP;
-        //SwerveConstants.TRAJECTORYYkP = AUTO.TRAJECTORYYkP;
-        //SwerveConstants.THETACONTROLLERCONSTRAINTS = AUTO.THETACONTROLLERCONSTRAINTS;
+        SwerveConstants.THETACONTROLLERkP = Constants.AutoConstants.THETACONTROLLERkP;
+        SwerveConstants.TRAJECTORYXkP = Constants.AutoConstants.TRAJECTORYXkP;
+        SwerveConstants.TRAJECTORYYkP = Constants.AutoConstants.TRAJECTORYYkP;
+        SwerveConstants.THETACONTROLLERCONSTRAINTS = Constants.AutoConstants.THETACONTROLLERCONSTRAINTS;
 
         SwerveConstants.TRACKWIDTH_METERS = Constants.DriveConstants.TRACKWIDTH_METERS;
         SwerveConstants.TRACKLENGTH_METERS = Constants.DriveConstants.WHEELBASE_METERS;

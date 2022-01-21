@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.Constants;
+import java.util.function.DoubleSupplier;
 
 
 
@@ -16,22 +17,24 @@ import frc.robot.Constants;
 public class TeleopDriveCommand extends CommandBase{
     private final SwerveSubsystem m_SwerveSubsystem;
     private final XboxController drivecontroller;
+    private final DoubleSupplier m_translationXSupplier;
+    private final DoubleSupplier m_translationYSupplier;
+    private final DoubleSupplier m_rotationSupplier;
 
     private double m_translationY;
     private double m_translationX;
     private double m_rotation;
 
 
-    public TeleopDriveCommand( SwerveSubsystem subsystem){
+    public TeleopDriveCommand( SwerveSubsystem subsystem, DoubleSupplier translationXSupplier,
+    DoubleSupplier translationYSupplier,
+    DoubleSupplier rotationSupplier){
         this.m_SwerveSubsystem = subsystem;
+        this.m_translationXSupplier = translationXSupplier;
+        this.m_translationYSupplier = translationYSupplier;
+        this.m_rotationSupplier = rotationSupplier;
 
         this.drivecontroller = RobotContainer.driveController;
-
-
-        m_translationX = modifyAxis(-drivecontroller.getLeftY());
-        m_translationY = modifyAxis(-drivecontroller.getLeftX());
-        m_rotation = modifyAxis(-drivecontroller.getRightX());
-
         addRequirements(subsystem);
 
 
@@ -40,9 +43,18 @@ public class TeleopDriveCommand extends CommandBase{
 
     @Override
     public void execute(){
-        m_SwerveSubsystem.dt.setModuleStates(Constants.DriveConstants.KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
+      m_SwerveSubsystem.dt.setModuleStates(Constants.DriveConstants.KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
+        m_translationYSupplier.getAsDouble(), 
+        m_translationXSupplier.getAsDouble(), 
+        m_rotationSupplier.getAsDouble(), 
+        m_SwerveSubsystem.dt.getGyroscopeRotation())));
+       
+      
+      
+      
+      /*m_SwerveSubsystem.dt.setModuleStates(Constants.DriveConstants.KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
             m_translationX*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS, m_translationY*Constants.DriveConstants.MAX_STRAFE_SPEED_MPS, 
-            m_rotation*Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC, m_SwerveSubsystem.dt.getGyroscopeRotation())));
+            m_rotation*Constants.DriveConstants.MAX_STRAFE_SPEED_MPS, m_SwerveSubsystem.dt.getGyroscopeRotation())));*/
     }
 
     @Override

@@ -24,6 +24,8 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
     public static final class DriveConstants{
+
+        
         
         public static final double TRACKWIDTH_METERS = 1.0; // FIXME Measure and set trackwidth
         /**
@@ -86,5 +88,20 @@ public final class Constants {
         static public final double ROBOT_MOI_KGM2 = 1.0/12.0 * ROBOT_MASS_kg * Math.pow((WHEELBASE_METERS*1.1),2) * 2;
         public static final double MASS_kg = Units.lbsToKilograms(30);
         public static final double MOI_KGM2 = 1.0/12.0 * MASS_kg * Math.pow((TRACKWIDTH_METERS*1.1),2) * 2;
+    }
+    public final static class AutoConstants{
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+        public static final double TRAJECTORYXkP = 1;
+        public static final double TRAJECTORYYkP = 1;
+        public static final double THETACONTROLLERkP = 1;
+
+        // Constraint for the motion profilied robot angle controller
+        public static final TrapezoidProfile.Constraints THETACONTROLLERCONSTRAINTS =
+            new TrapezoidProfile.Constraints(
+                kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
 }
