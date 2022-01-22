@@ -15,6 +15,7 @@ import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.AutoRoutines.DemoFiveBall;
 import frc.robot.commands.AutoRoutines.DemoSquare;
+import frc.robot.commands.AutoRoutines.RealSquare;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
@@ -46,16 +47,16 @@ public class RobotContainer {
 
   
 
-  public static final SpectrumXboxController driveController = new SpectrumXboxController(0);
+  public static final SpectrumXboxController driveController = new SpectrumXboxController(0, .1, .1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
    
     m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
-    () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS),
-          () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS),
-          () -> -modifyAxis(driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC)));
+    () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
+          () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
+          () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
     
       
     // Configure the button bindings
@@ -64,6 +65,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.setDefaultOption("Move Forward", new DemoFiveBall());
     autoChooser.addOption("DemoSquare", new DemoSquare());
+    autoChooser.addOption("RealSquare", new RealSquare());
     
   }
 
@@ -76,7 +78,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     driveController.xButton.whileHeld(new TurnToTarget(m_swerveSubsystem, blindlight,
-    () -> -modifyAxis(driveController.leftStick.getY() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS) ,
+    () -> -modifyAxis(-driveController.leftStick.getY() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS) ,
     () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS)
     ));
   }

@@ -45,8 +45,8 @@ public class TeleopDriveCommand extends CommandBase{
     @Override
     public void execute(){
       m_SwerveSubsystem.dt.setModuleStates(Constants.DriveConstants.KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
-        -m_translationXSupplier.getAsDouble(), 
-         m_translationYSupplier.getAsDouble(), 
+        m_translationXSupplier.getAsDouble(), 
+        -m_translationYSupplier.getAsDouble(), 
         m_rotationSupplier.getAsDouble(), 
         m_SwerveSubsystem.dt.getGyroscopeRotation())));
        

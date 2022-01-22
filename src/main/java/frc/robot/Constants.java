@@ -26,20 +26,24 @@ public final class Constants {
     public static final class DriveConstants{
 
         
-        
-        public static final double TRACKWIDTH_METERS = .71; // FIXME Measure and set trackwidth
+        /**
+     * The left-to-right distance between the drivetrain wheels
+     *
+     * Should be measured from center to center.
+     */
+        public static final double TRACKWIDTH_METERS = 0.71; // FIXME Measure and set trackwidth
         /**
          * The front-to-back distance between the drivetrain wheels.
          *
          * Should be measured from center to center.
          */
-        public static final double WHEELBASE_METERS = .71; // FIXME Measure and set wheelbase
+        public static final double WHEELBASE_METERS = 0.71; // FIXME Measure and set wheelbase
 
         public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
-                new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
                 new Translation2d(TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0),
-                new Translation2d(-TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
-                new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0)
+                new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
+                new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0),
+                new Translation2d(-TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0)
         );
 
         public static final double WHEEL_DIAMETER_METERS = 0.10033; // .10033 = ~4 inches
@@ -70,7 +74,7 @@ public final class Constants {
         // Drivetrain Performance Mechanical limits
         static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(12.0);
         static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(12.0);
-        static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(360.0);
+        static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(90);
         static public final double MAX_TRANSLATE_ACCEL_MPS2 = MAX_FWD_REV_SPEED_MPS/0.25; //0-full time of 0.25 second
         static public final double MAX_ROTATE_ACCEL_RAD_PER_SEC_2 = MAX_ROTATE_SPEED_RAD_PER_SEC/0.25; //0-full time of 0.25 second
         public static final double MAX_VOLTAGE = 12.0; // Maximum Voltage sent to the drive motors

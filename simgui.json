@@ -72,6 +72,9 @@
         },
         "open": true
       },
+      "Vision": {
+        "open": true
+      },
       "open": true
     },
     "SmartDashboard": {
@@ -80,7 +83,11 @@
       },
       "Orientation Chooser": {
         "open": true
-      }
+      },
+      "open": true
+    },
+    "limelight-Front": {
+      "open": true
     }
   },
   "Plot": {
