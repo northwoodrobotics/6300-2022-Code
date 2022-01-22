@@ -69,7 +69,9 @@
         },
         "Front Right Module": {
           "open": true
-        },
+        }
+      },
+      "SwerveDt": {
         "open": true
       },
       "Vision": {
