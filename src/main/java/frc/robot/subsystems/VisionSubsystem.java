@@ -15,14 +15,14 @@ import frc.swervelib.SwerveSubsystem;
 import java.util.OptionalDouble;
 
 public class VisionSubsystem implements Subsystem {
-    private static final double TARGET_HEIGHT = 98.25; // Change to height of 2022 goal
+    private static final double TARGET_HEIGHT = 30; // Change to height of 2022 goal
 
-    private static final double LIMELIGHT_HEIGHT = 22.0; //change to actual robot Blindlight Height
-
-
+    private static final double LIMELIGHT_HEIGHT = 5; //change to actual robot Blindlight Height
 
 
-    private static final double LIMELIGHT_MOUNTING_ANGLE = Math.toRadians(29.0); // change to blindlight angle on 2022 robot
+
+
+    private static final double LIMELIGHT_MOUNTING_ANGLE = Math.toRadians(0); // change to blindlight angle on 2022 robot
 
     private static final double TARGET_ALLOWABLE_ERROR = Math.toRadians(2.5);
 
