@@ -6,7 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.swervelib.SwerveDrivetrainModel;
@@ -29,6 +30,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private static ShuffleboardTab master = Shuffleboard.getTab("master");
   // The robot's subsystems and commands are defined here...
  
   public static SwerveDrivetrainModel dt = DrivetrainSubsystem.createSwerveModel();
@@ -61,6 +64,8 @@ public class RobotContainer {
       
     // Configure the button bindings
     configureButtonBindings();
+
+    ShowInputs();
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.setDefaultOption("Move Forward", new DemoFiveBall());
@@ -78,8 +83,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     driveController.xButton.whileHeld(new TurnToTarget(m_swerveSubsystem, blindlight,
-    () -> -modifyAxis(-driveController.leftStick.getY() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS) ,
-    () -> -modifyAxis(driveController.leftStick.getX() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS)
+    () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
+    () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));
   }
 
@@ -116,4 +121,10 @@ public class RobotContainer {
 
     return value;
   }
+  public void ShowInputs(){
+    master.addNumber("X Input", ()-> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS);
+    master.addNumber("Y Input", () -> -modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
+  }
+
+
 }

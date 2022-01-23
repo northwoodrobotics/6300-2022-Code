@@ -11,6 +11,14 @@
           "open": true
         }
       }
+    },
+    "RoboRIO": {
+      "RoboRIO Input": {
+        "open": true
+      },
+      "window": {
+        "visible": true
+      }
     }
   },
   "NTProvider": {
@@ -69,9 +77,7 @@
         },
         "Front Right Module": {
           "open": true
-        }
-      },
-      "SwerveDt": {
+        },
         "open": true
       },
       "Vision": {
@@ -80,9 +86,6 @@
       "open": true
     },
     "SmartDashboard": {
-      "Field": {
-        "open": true
-      },
       "Orientation Chooser": {
         "open": true
       },

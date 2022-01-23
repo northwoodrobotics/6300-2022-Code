@@ -1,12 +1,11 @@
-package frc.swervelib.ctre;
+package com.swervedrivespecialties.swervelib.ctre;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
-
-import frc.swervelib.AbsoluteEncoder;
-import frc.swervelib.AbsoluteEncoderFactory;
+import com.swervedrivespecialties.swervelib.AbsoluteEncoder;
+import com.swervedrivespecialties.swervelib.AbsoluteEncoderFactory;
 
 public class CanCoderFactoryBuilder {
     private Direction direction = Direction.COUNTER_CLOCKWISE;
@@ -25,9 +24,9 @@ public class CanCoderFactoryBuilder {
             config.sensorDirection = direction == Direction.CLOCKWISE;
 
             CANCoder encoder = new CANCoder(configuration.getId());
-            encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, periodMilliseconds, 250);
+            encoder.configAllSettings(config, 250);
 
-            
+            encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, periodMilliseconds, 250);
 
             return new EncoderImplementation(encoder);
         };
@@ -49,15 +48,6 @@ public class CanCoderFactoryBuilder {
             }
 
             return angle;
-        }
-
-        @Override
-        public void setAbsoluteEncoder(double position, double velocity) {
-            // Position is in revolutions.  Velocity is in RPM
-            // CANCoder wants steps for postion.  Steps per 100ms for velocity.  CANCoder has 4096 CPR.
-            encoder.getSimCollection().setRawPosition((int) (position * 4096));
-            // Divide by 600 to go from RPM to Rotations per 100ms.  CANCoder has 4096 CPR.
-            encoder.getSimCollection().setVelocity((int) (velocity / 600 * 4096));
         }
     }
 

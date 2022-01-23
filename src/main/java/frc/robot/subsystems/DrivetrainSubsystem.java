@@ -32,7 +32,7 @@ public class DrivetrainSubsystem {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
         
-        ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
+        ArrayList<SwerveModule> realModules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
 
         SwerveModule m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
                 // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
@@ -87,17 +87,17 @@ public class DrivetrainSubsystem {
 
         Gyroscope gyro = GyroscopeHelper.createnavXMXP();
 
-        modules.add(m_frontLeftModule);
-        modules.add(m_frontRightModule);
-        modules.add(m_backLeftModule);
-        modules.add(m_backRightModule);
+        realModules.add(m_frontLeftModule);
+        realModules.add(m_frontRightModule);
+        realModules.add(m_backLeftModule);
+        realModules.add(m_backRightModule);
        
 
         
         
 
 
-        return new SwerveDrivetrainModel(modules, gyro);
+        return new SwerveDrivetrainModel(realModules, gyro);
 
 
 

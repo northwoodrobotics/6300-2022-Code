@@ -12,6 +12,7 @@ public interface SwerveModule {
     SteerController getSteerController();
 
     AbsoluteEncoder getAbsoluteEncoder();
+    
 
     void resetWheelEncoder();
 
