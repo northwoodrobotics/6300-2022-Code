@@ -124,6 +124,8 @@ public final class Falcon500SteerControllerFactoryBuilder {
                         motor.setSensorPhase(!moduleConfiguration.isSteerInverted());
             motor.setInverted(TalonFXInvertType.CounterClockwise);
             motor.setNeutralMode(NeutralMode.Brake);
+            motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS);
+
 
             
             
@@ -143,7 +145,11 @@ public final class Falcon500SteerControllerFactoryBuilder {
         private final WPI_TalonFX motor;
         private final double motorEncoderPositionCoefficient;
         private final TalonFXControlMode motorControlMode;
+        private final double motorEncoderVelocityCoefficient;
         public final AbsoluteEncoder absoluteEncoder;
+        private static final int ENCODER_RESET_ITERATIONS = 500;
+        private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
+        private double resetIteration = 0;
 
         private double referenceAngleRadians = 0.0;
 
@@ -154,6 +160,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                                          AbsoluteEncoder absoluteEncoder) {
             this.motor = motor;
             this.motorEncoderPositionCoefficient = motorEncoderPositionCoefficient;
+            this.motorEncoderVelocityCoefficient = motorEncoderVelocityCoefficient;
             this.motorControlMode = motorControlMode;
             this.absoluteEncoder = absoluteEncoder;
         }
@@ -166,6 +173,17 @@ public final class Falcon500SteerControllerFactoryBuilder {
         @Override
         public void setReferenceAngle(double referenceAngleRadians) {
             double currentAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
+
+            if (motor.getSelectedSensorVelocity() * motorEncoderVelocityCoefficient < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
+                if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
+                    resetIteration = 0;
+                    double absoluteAngle = absoluteEncoder.getAbsoluteAngle();
+                    motor.setSelectedSensorPosition(absoluteAngle / motorEncoderPositionCoefficient);
+                    currentAngleRadians = absoluteAngle;
+                }
+            } else {
+                resetIteration = 0;
+            }
 
             double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
             if (currentAngleRadiansMod < 0.0) {
