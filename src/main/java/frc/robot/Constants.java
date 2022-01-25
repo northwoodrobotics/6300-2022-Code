@@ -72,9 +72,9 @@ public final class Constants {
         public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(0.0); // FIXME Measure and set back right steer offset        
 
         // Drivetrain Performance Mechanical limits
-        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(12.0);
-        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(12.0);
-        static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(180);
+        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(6.0);
+        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(6.0);
+        static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(90);
         static public final double MAX_TRANSLATE_ACCEL_MPS2 = MAX_FWD_REV_SPEED_MPS/0.25; //0-full time of 0.25 second
         static public final double MAX_ROTATE_ACCEL_RAD_PER_SEC_2 = MAX_ROTATE_SPEED_RAD_PER_SEC/0.25; //0-full time of 0.25 second
         public static final double MAX_VOLTAGE = 12.0; // Maximum Voltage sent to the drive motors

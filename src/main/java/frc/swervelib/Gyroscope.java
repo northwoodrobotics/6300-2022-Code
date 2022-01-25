@@ -15,6 +15,12 @@ public interface Gyroscope {
   */
   void zeroGyroscope();
 
+double readGetAngle();
+
+double readGetYaw();
+    
+double readFused();
+
   /**
    * Sets the simulated gyroscope to a specified angle
    * @param angle Angle to be set in degrees.

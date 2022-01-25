@@ -15,7 +15,7 @@ import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.ZeroGyro;
-import frc.robot.commands.AutoRoutines.DemoFiveBall;
+import frc.robot.commands.AutoRoutines.DriveAndTurn;
 import frc.robot.commands.AutoRoutines.DemoSquare;
 import frc.robot.commands.AutoRoutines.RealSquare;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -69,7 +69,7 @@ public class RobotContainer {
     ShowInputs();
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.setDefaultOption("Move Forward", new DemoFiveBall());
+    autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn());
     autoChooser.addOption("DemoSquare", new DemoSquare());
     autoChooser.addOption("RealSquare", new RealSquare());
     
@@ -130,7 +130,9 @@ public class RobotContainer {
     master.addNumber("X Input", ()-> -modifyAxis(driveController.leftStick.getX()));
     master.addNumber("Y Input", () -> -modifyAxis(driveController.leftStick.getY()));
     master.addNumber("GyroReading", () -> dt.getGyroscopeRotation().getDegrees());
-
+    master.addNumber("Gyro Yaw", () -> dt.getYaw());
+    master.addNumber("Gyro Angle", () -> dt.getAngle());
+    master.addNumber("Gyro Fused", () -> dt.getFused());
     
     
   }

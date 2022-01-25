@@ -29,7 +29,7 @@ public class navXFactoryBuilder {
         public Rotation2d getGyroHeading() {
             if (navX.isMagnetometerCalibrated()) {
                // We will only get valid fused headings if the magnetometer is calibrated
-               return Rotation2d.fromDegrees(3060-navX.getAngle());
+               return Rotation2d.fromDegrees(360-navX.getFusedHeading());
             }
             // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
             return Rotation2d.fromDegrees(360.0 - navX.getYaw());
@@ -39,6 +39,22 @@ public class navXFactoryBuilder {
         public void zeroGyroscope() {
             navX.zeroYaw();
         }
+
+        @Override
+        public double readGetAngle(){
+            return 360- navX.getAngle();
+        }
+        @Override
+        public double readGetYaw(){
+            return 360- navX.getYaw();
+        }
+        @Override
+        public double readFused(){
+            return navX.getFusedHeading();
+        }
+        
+
+
 
         @Override
         public void setAngle(double angle) {

@@ -241,6 +241,18 @@ public class SwerveDrivetrainModel {
         return gyro.getGyroHeading();
     }
 
+    public double getYaw(){
+        return gyro.readGetYaw();
+    }
+    public double getAngle(){
+        return gyro.readGetAngle();
+    }
+
+    public double getFused(){
+        return gyro.readFused();
+    }
+    
+
     public void updateTelemetry(){
         dtPoseView.update(Timer.getFPGATimestamp()*1000);
     }

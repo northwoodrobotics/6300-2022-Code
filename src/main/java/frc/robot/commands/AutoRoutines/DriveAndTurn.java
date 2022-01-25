@@ -6,10 +6,10 @@ import frc.robot.commands.AutoDrive;
 import frc.robot.PathHolder;
 import frc.robot.RobotContainer;
 
-public class DemoFiveBall extends SequentialCommandGroup{
-    public DemoFiveBall(){
+public class DriveAndTurn extends SequentialCommandGroup{
+    public DriveAndTurn(){
         addCommands(
-            new AutoDrive(RobotContainer.m_swerveSubsystem, PathHolder.FiveBall)
+            new AutoDrive(RobotContainer.m_swerveSubsystem, PathHolder.DriveAndTurn)
         );
     }
     

@@ -25,6 +25,19 @@ public class PigeonFactoryBuilder {
         public Rotation2d getGyroHeading() {
             return Rotation2d.fromDegrees(pigeon.getFusedHeading());
         }
+        @Override
+        public double readGetAngle(){
+            return pigeon.getAngle();
+        }
+        @Override
+        public double readGetYaw(){
+            return pigeon.getYaw();
+        }
+        @Override
+        public double readFused(){
+            return pigeon.getFusedHeading();
+        }
+        
 
         @Override
         public void zeroGyroscope() {
