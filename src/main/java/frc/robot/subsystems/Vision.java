@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import java.util.ArrayList;
 
 public class Vision extends SubsystemBase{
     NetworkTable limelight;
+    ArrayList<Double> avgDistance = new ArrayList<>();
 
     public enum LEDMode {
 		PIPELINE(0),
@@ -68,8 +70,100 @@ public class Vision extends SubsystemBase{
 		setLEDMode(LEDMode.LED_OFF);
 		setStreamingMode(StreamingMode.STANDARD);
 	}
+
+    @Override
+	public void periodic() {
+		SmartDashboard.putNumber("Distance to Target", Math.round(getAvgDistance() * 10) / 10.0);
+		avgDistance.add(getRobotToTargetDistance());
+		if(avgDistance.size() == 10){
+			avgDistance.remove(0);
+		}
+	}
+    public double getRobotToTargetDistance() {
+		return (Constants.VisionConstants.TargetHeight - Constants.VisionConstants.blindlightHeight) / Math.tan(Math.toRadians(Constants.VisionConstants.blindlightAngle + getTargetAngleY()));
+	}
+
+	public double getAvgDistance(){
+		double total = 0;
+		for(double d : avgDistance){
+			total += d;
+		}
+		return total / avgDistance.size();
+	}
+	
+
+	/**
+	 * @return The X angle to the target
+	 */
+	public double getTargetAngleX() {
+		return limelight.getEntry("tx").getDouble(0);
+	}
+	
+	/**
+	 * @return The Y angle to the target
+	 */
+	public double getTargetAngleY() {
+		return limelight.getEntry("ty").getDouble(0);
+	}
+	
+	/**
+	 * @return The current latency from the limelight to the robot
+	 */
+	public double getLatency() {
+		return (limelight.getEntry("tl").getDouble(0) + 11) / 1000.0;
+	}
+	
     public boolean hasTarget() {
 		return limelight.getEntry("tv").getDouble(0) == 1;
+	}
+    public double[] get3DSolution() {
+		return limelight.getEntry("camtran").getDoubleArray(new double[]{0, 0, 0, 0, 0, 0});
+	}
+	
+	public double get3DDistance(){
+		return Math.sqrt(getTranslationZ()*getTranslationZ() + getTranslationX()*getTranslationX());
+	}
+	
+	public double getArea(){
+		return limelight.getEntry("ta").getDouble(0);
+	}
+    public double getTranslationX() {
+		return get3DSolution()[0];
+	}
+	
+	/**
+	 * @return The Y distance to the target
+	 */
+	public double getTranslationY() {
+		return get3DSolution()[1];
+	}
+	
+	/**
+	 * @return The Z distance to the target
+	 */
+	public double getTranslationZ() {
+		return get3DSolution()[2];
+	}
+	
+	/**
+	 * @return Target pitch
+	 */
+	public double getRotationPitch() {
+		return get3DSolution()[3];
+	}
+	
+	/**
+	 * @return Target yaw
+	 */
+	public double getRotationYaw() {
+		return get3DSolution()[4];
+	}
+	
+	/**
+	 * @return Target roll
+	 */
+	public double getRotationRoll() {
+		return get3DSolution()[5];
 	}
 
 

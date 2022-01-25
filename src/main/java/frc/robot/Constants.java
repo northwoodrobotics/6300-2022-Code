@@ -23,6 +23,12 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+    public static final class VisionConstants{
+        public static final double TargetHeight = Units.inchesToMeters(30);
+        public static final double blindlightHeight = Units.inchesToMeters(6);
+        public static final double blindlightAngle = 0;
+
+    }
     public static final class DriveConstants{
 
         
