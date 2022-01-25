@@ -19,7 +19,7 @@ import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
 
 public class TeleopDriveCommand extends CommandBase{
     private final SwerveSubsystem m_SwerveSubsystem;
-    private final SpectrumXboxController drivecontroller;
+    
     private final DoubleSupplier m_translationXSupplier;
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
@@ -39,7 +39,7 @@ public class TeleopDriveCommand extends CommandBase{
         this.m_rotationSupplier = rotationSupplier;
         
 
-        this.drivecontroller = RobotContainer.driveController;
+        //this.drivecontroller = RobotContainer.driveController;
 
 
         addRequirements(subsystem);
