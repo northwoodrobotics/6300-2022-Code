@@ -3,6 +3,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -22,6 +24,7 @@ public class TeleopDriveCommand extends CommandBase{
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
 
+
     private double m_translationY;
     private double m_translationX;
     private double m_rotation;
@@ -34,9 +37,16 @@ public class TeleopDriveCommand extends CommandBase{
         this.m_translationXSupplier = translationXSupplier;
         this.m_translationYSupplier = translationYSupplier;
         this.m_rotationSupplier = rotationSupplier;
+        
 
         this.drivecontroller = RobotContainer.driveController;
+
+
         addRequirements(subsystem);
+
+
+
+
 
 
     }
@@ -49,7 +59,8 @@ public class TeleopDriveCommand extends CommandBase{
         -m_translationYSupplier.getAsDouble(), 
         m_rotationSupplier.getAsDouble(), 
         m_SwerveSubsystem.dt.getGyroscopeRotation())));
-       
+
+
       
       
       

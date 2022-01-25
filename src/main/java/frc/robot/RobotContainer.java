@@ -14,6 +14,7 @@ import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.TurnToTarget;
+import frc.robot.commands.ZeroGyro;
 import frc.robot.commands.AutoRoutines.DemoFiveBall;
 import frc.robot.commands.AutoRoutines.DemoSquare;
 import frc.robot.commands.AutoRoutines.RealSquare;
@@ -86,6 +87,7 @@ public class RobotContainer {
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));
+    driveController.aButton.whenPressed(new ZeroGyro(m_swerveSubsystem));
   }
 
   /**
@@ -122,8 +124,15 @@ public class RobotContainer {
     return value;
   }
   public void ShowInputs(){
-    master.addNumber("X Input", ()-> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS);
-    master.addNumber("Y Input", () -> -modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
+    master.addNumber("X Command", ()-> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS);
+    master.addNumber("Y Command", () -> -modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
+    
+    master.addNumber("X Input", ()-> -modifyAxis(driveController.leftStick.getX()));
+    master.addNumber("Y Input", () -> -modifyAxis(driveController.leftStick.getY()));
+    master.addNumber("GyroReading", () -> dt.getGyroscopeRotation().getDegrees());
+
+    
+    
   }
 
 
