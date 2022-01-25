@@ -19,7 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 
 public class TurnToTarget extends CommandBase{
-    private static final PidConstants PID_CONSTANTS = new PidConstants(0.5, 2.0, 0.025);
+    private static final PidConstants PID_CONSTANTS = new PidConstants(1, 0, 0.025);
     private static final double ROTATION_STATIC_CONSTANT = 0.3;
     private static  final double MAXIMUM_AVERAGE_VELOCITY = 2.0;
 

@@ -1,5 +1,6 @@
 package frc.ExternalLib.JackInTheBotLib.robot.drivers;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -16,9 +17,6 @@ public final class Limelight {
     private final NetworkTableEntry ta;
     private final NetworkTableEntry ts;
     private final NetworkTableEntry tl;
-
-    private final NetworkTableEntry tcornx;
-    private final NetworkTableEntry tcorny;
 
     private final NetworkTableEntry ledMode;
     private final NetworkTableEntry camMode;
@@ -56,8 +54,7 @@ public final class Limelight {
         ts = table.getEntry("ts");
         tl = table.getEntry("tl");
 
-        tcornx = table.getEntry("tcornx");
-        tcorny = table.getEntry("tcorny");
+
 
         ledMode = table.getEntry("ledMode");
         camMode = table.getEntry("camMode");
@@ -86,8 +83,8 @@ public final class Limelight {
      * Gets the position of the target in radians within the image.
      * @returns The position of the target.
      */
-    public NWTranslation2d getTargetPosition() {
-        return new NWTranslation2d(Math.toRadians(tx.getDouble(0)), Math.toRadians(ty.getDouble(0)));
+    public Translation2d getTargetPosition() {
+        return new Translation2d(Math.toRadians(tx.getDouble(0)), Math.toRadians(ty.getDouble(0)));
     }
 
     /**
@@ -110,16 +107,7 @@ public final class Limelight {
      * Gets the vertices of the target.
      * @returns The vertices of the target.
      */
-    public double[][] getCorners() {
-        double[] x = tcornx.getDoubleArray(new double[]{0.0, 0.0});
-        double[] y = tcorny.getDoubleArray(new double[]{0.0, 0.0});
-        double[][] corners = new double[x.length][2];
-        for (int i = 0; i < x.length; i++) {
-            corners[i][0] = x[i];
-            corners[i][1] = y[i];
-        }
-        return corners;
-    }
+
 
     /**
      * Sets the operating mode of the Limelight.
