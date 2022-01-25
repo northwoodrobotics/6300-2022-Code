@@ -72,6 +72,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     ShowInputs();
+    showBlindlight();
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn());
