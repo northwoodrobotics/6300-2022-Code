@@ -241,7 +241,7 @@ public class SwerveDrivetrainModel {
         return gyro.getGyroHeading();
     }
 
-    public double getYaw(){
+    public Rotation2d getYaw(){
         return gyro.readGetYaw();
     }
     public double getAngle(){

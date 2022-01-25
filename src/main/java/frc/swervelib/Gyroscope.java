@@ -17,7 +17,7 @@ public interface Gyroscope {
 
 double readGetAngle();
 
-double readGetYaw();
+Rotation2d readGetYaw();
     
 double readFused();
 

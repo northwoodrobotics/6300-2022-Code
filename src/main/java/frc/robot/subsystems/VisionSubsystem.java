@@ -26,7 +26,7 @@ public class VisionSubsystem implements Subsystem {
 
     private static final double TARGET_ALLOWABLE_ERROR = Math.toRadians(2.5);
 
-    private static final Limelight LIMELIGHT = new Limelight("Front");
+    private static final Limelight LIMELIGHT = new Limelight("front");
    
 
     private final SwerveSubsystem drivetrain;
@@ -63,6 +63,9 @@ public class VisionSubsystem implements Subsystem {
         tab.addBoolean("Is on target", this::isOnTarget)
                 .withPosition(5, 0)
                 .withSize(1, 1);
+
+        tab.addBoolean("vison Has target", this:: hasTarget);
+
         tab.addNumber("Horizontal Target Error", () -> {
                     double gyroAngle = drivetrain.dt.getGyroscopeRotation().getRadians();
                     return getDistanceToTarget().orElse(0.0) *

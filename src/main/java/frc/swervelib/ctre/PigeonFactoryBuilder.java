@@ -30,8 +30,8 @@ public class PigeonFactoryBuilder {
             return pigeon.getAngle();
         }
         @Override
-        public double readGetYaw(){
-            return pigeon.getYaw();
+        public Rotation2d readGetYaw(){
+            return Rotation2d.fromDegrees(pigeon.getYaw());
         }
         @Override
         public double readFused(){
