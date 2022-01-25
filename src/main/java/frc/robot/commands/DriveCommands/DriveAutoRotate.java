@@ -55,7 +55,7 @@ public class DriveAutoRotate extends CommandBase {
 //            rotationController.setI(0);
 //        }
 
-        double output = rotationController.calculate(-RobotContainer.blindlight.getTargetAngleX(), 0);
+        double output = rotationController.calculate(RobotContainer.blindlight.getTargetAngleX(), 0);
         SmartDashboard.putNumber("Targeting Output", output);
         if(!rotationController.atSetpoint() && XTranslation == 0 && YTranslation == 0) {
             if(output < 0) output = Math.min(-Constants.DriveConstants.Min_Rotation_Deg, output);
