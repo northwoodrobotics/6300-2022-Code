@@ -30,6 +30,11 @@ public final class Constants {
 
     }
     public static final class DriveConstants{
+        public static final class AimConstants{ 
+            public static final double AimP =1;
+            public static final double AimI =0;
+            public static final double AimD =0;
+        }
 
         
         /**
@@ -98,6 +103,10 @@ public final class Constants {
         static public final double ROBOT_MOI_KGM2 = 1.0/12.0 * ROBOT_MASS_kg * Math.pow((WHEELBASE_METERS*1.1),2) * 2;
         public static final double MASS_kg = Units.lbsToKilograms(30);
         public static final double MOI_KGM2 = 1.0/12.0 * MASS_kg * Math.pow((TRACKWIDTH_METERS*1.1),2) * 2;
+        // degrees per second
+        public static final double Min_Rotation_Deg = 25;
+
+
     }
     public final static class AutoConstants{
         public static final double kMaxSpeedMetersPerSecond = 3;

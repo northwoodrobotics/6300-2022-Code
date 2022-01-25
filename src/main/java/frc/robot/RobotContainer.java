@@ -13,12 +13,13 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
-import frc.robot.commands.TeleopDriveCommand;
-import frc.robot.commands.TurnToTarget;
-import frc.robot.commands.ZeroGyro;
+import frc.robot.commands.DriveCommands.TeleopDriveCommand;
+//import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.AutoRoutines.DriveAndTurn;
+import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.DemoSquare;
 import frc.robot.commands.AutoRoutines.RealSquare;
+import frc.robot.commands.DriveCommands.ZeroGyro;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
@@ -95,6 +96,14 @@ public class RobotContainer {
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));*/
+
+    driveController.leftTriggerButton.whenHeld(
+      new RotateToTarget(m_swerveSubsystem, 
+      () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
+            () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
+            () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
+
+      ));
     driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
   }
 
