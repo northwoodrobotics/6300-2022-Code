@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
@@ -41,7 +42,11 @@ public class RobotContainer {
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-  public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
+  //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
+
+  public static Vision blindlight = new Vision();
+
+
 
 
 
@@ -72,6 +77,8 @@ public class RobotContainer {
     autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn());
     autoChooser.addOption("DemoSquare", new DemoSquare());
     autoChooser.addOption("RealSquare", new RealSquare());
+
+
     
   }
 
@@ -83,10 +90,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    driveController.xButton.whileHeld(new TurnToTarget(m_swerveSubsystem, blindlight,
+    /*driveController.xButton.whileHeld(new TurnToTarget(m_swerveSubsystem, blindlight,
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
-    ));
+    ));*/
     driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
   }
 
@@ -135,6 +142,10 @@ public class RobotContainer {
     master.addNumber("Gyro Fused", () -> dt.getFused());
     
     
+  }
+
+  public void showBlindlight(){
+    master.addBoolean("RobotHasTarget", ()->blindlight.hasTarget());
   }
 
 
