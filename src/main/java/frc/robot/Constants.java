@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.ExternalLib.RangerLib.LookupTable;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -156,4 +157,56 @@ public final class Constants {
 
 
     }
+
+    public final static class ShooterConstants{
+        public static final int ShooterID = 0;
+        public static final int ShooterFollowerID = 0;
+        public static final int HoodID = 0;
+        public static final int HoodEncoderID = 0;
+
+        public static final double HoodP = 0;
+        public static final double HoodI = 0;
+        public static final double HoodD = 0;
+        public static final double HoodIZone = 0;
+        public static final double HoodFF = 0;
+        public static final double HoodMaxOutput = 1;
+        public static final double HoodMinOutput = -1;
+
+        public static final double ShooterGearRatio = 1.5;
+        public static final double ShooterP = 1;
+        public static final double ShooterI = 0.0;
+        public static final double ShooterD = 0.0;
+        public static final double Shooter_AllowableError = 200;
+        public static final double ShooterCurrentLimit = 10.0;
+
+
+        public static final double ShooterPositonSensorCoffiecient = 1/DriveConstants.WHEEL_ENC_COUNTS_PER_WHEEL_REV * ShooterGearRatio;
+        public static final double ShooterVelocitySensorCoffiecient = ShooterPositonSensorCoffiecient* 10*60;
+        public static final double ShooterFF = 0.0012;
+        public static final double StaticFriction = 0.54;
+
+        public static final LookupTable ShooterVelocityTable = new LookupTable();
+        static{
+            // tune
+            ShooterVelocityTable.put(0,0);
+        }
+
+        public static final double HoodMinAngle = 0.0;
+        public static final double HoodMaxAngle = 0.0;
+
+        public static final double HoodOffset = 0.0;
+
+        public static final LookupTable HoodPositionTable = new LookupTable();
+        static {
+            //tune this for as many as you want
+            HoodPositionTable.put(0,0);
+        }
+
+
+
+
+    }
+
+
+
 }
