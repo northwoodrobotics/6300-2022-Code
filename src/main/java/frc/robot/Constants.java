@@ -31,9 +31,9 @@ public final class Constants {
     }
     public static final class DriveConstants{
         public static final class AimConstants{ 
-            public static final double AimP =.1;
+            public static final double AimP =13;
             public static final double AimI =0;
-            public static final double AimD =0;
+            public static final double AimD =0.5;
         }
 
         
@@ -106,6 +106,8 @@ public final class Constants {
         // degrees per second
         public static final double Min_Rotation_Deg = 25;
 
+       
+
 
     }
     public final static class AutoConstants{
@@ -122,5 +124,36 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints THETACONTROLLERCONSTRAINTS =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    }
+    public final static class ClimberConstants{
+        public static final double RevEncoder_CountsPer_Rev = 8192;
+
+        public static final double SpoolDiameter = Units.inchesToMeters(1);
+
+        public static final double MidRungSetpoint = Units.inchesToMeters(0);
+
+
+
+
+        
+    }
+
+    public final static class IntakeConstants{
+        public static final int IntakeMotorID = 0;
+        public static final int IntakeSolenoidID = 0; 
+        public static final double IntakeMotorP = 1;
+        public static final double IntakeMotorI = 0;
+        public static final double IntakeMotorD = 0;
+
+    }
+    public final static class FeederConstants{
+        public static final int FeederMotorID = 0;
+        public static final int FeederStage1Sensor = 0;
+        public static final int FeederStage2Sensor= 0;
+        public static final int IntakeSensor = 0;
+
+
+
+
     }
 }

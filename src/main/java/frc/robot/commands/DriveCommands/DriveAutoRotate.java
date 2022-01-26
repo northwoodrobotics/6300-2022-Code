@@ -14,6 +14,8 @@ public class DriveAutoRotate extends CommandBase {
     /**
      * Creates a new DriveTurnToTarget
      * */
+
+    private ChassisSpeeds stop = new ChassisSpeeds(0, 0, 0);
  
     private final SwerveSubsystem m_SwerveSubsystem;
     
@@ -77,7 +79,8 @@ public class DriveAutoRotate extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-//        RobotContainer.drive.drive(0, 0, 0, true);
+        m_SwerveSubsystem.dt.setModuleStates(stop);
+//        
     }
 
     @Override
