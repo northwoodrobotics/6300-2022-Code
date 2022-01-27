@@ -38,8 +38,8 @@ public class PigeonFactoryBuilder {
             return Rotation2d.fromDegrees(pigeon.getYaw());
         }
         @Override
-        public double readFused(){
-            return pigeon.getFusedHeading();
+        public Rotation2d readFused(){
+            return Rotation2d.fromDegrees(pigeon.getFusedHeading());
         }
         
 
