@@ -79,6 +79,7 @@ public class SwerveDrivetrainModel {
 
         // Trustworthiness of gyro in radians of standard deviation.
         var localMeasurementStdDevs = VecBuilder.fill(Units.degreesToRadians(0.1));
+        
 
         // Trustworthiness of the vision system
         // Measured in expected standard deviation (meters of position and degrees of
@@ -98,6 +99,7 @@ public class SwerveDrivetrainModel {
         orientationChooser.setDefaultOption("Field Oriented", "Field Oriented");
         orientationChooser.addOption("Robot Oriented", "Robot Oriented");
         SmartDashboard.putData("Orientation Chooser", orientationChooser);
+        gyro.calibrateGyroscope();
 
         m_holo = new HolonomicDriveController(SwerveConstants.XPIDCONTROLLER, SwerveConstants.YPIDCONTROLLER, thetaController);
     }
@@ -239,6 +241,9 @@ public class SwerveDrivetrainModel {
 
     public Rotation2d getGyroscopeRotation() {
         return gyro.getGyroHeading();
+    }
+    public void calibrateGyroscope(){
+        gyro.calibrateGyroscope();
     }
 
     public Rotation2d getYaw(){

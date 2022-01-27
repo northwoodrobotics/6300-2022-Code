@@ -19,18 +19,23 @@ public class navXFactoryBuilder {
 
         private GyroscopeImplementation(AHRS navX) {
             this.navX = navX;
+            
+
+            navX.calibrate();
 
             int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
             angleSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
             FusedSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "FusedHeading"));
         }
 
-        
+        @Override public void calibrateGyroscope(){
+            navX.calibrate();
+        }
 
         @Override   
         public Rotation2d getGyroHeading() {
             if (navX.isMagnetometerCalibrated()){
-                return Rotation2d.fromDegrees(360-navX.getFusedHeading());
+                return Rotation2d.fromDegrees((360-navX.getFusedHeading()));
             }
      
         return Rotation2d.fromDegrees(360 -navX.getYaw());
@@ -38,7 +43,7 @@ public class navXFactoryBuilder {
 
         @Override
         public void zeroGyroscope() {
-            navX.zeroYaw();
+            navX.reset();
         }
 
         @Override

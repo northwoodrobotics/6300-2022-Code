@@ -13,6 +13,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
+import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 //import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.AutoRoutines.DriveAndTurn;
@@ -96,8 +97,11 @@ public class RobotContainer {
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));*/
+    driveController.startButton.whenHeld(
+      new CalibrateGyro(m_swerveSubsystem)
+    );
 
-    driveController.leftTriggerButton.whenHeld(
+    driveController.xButton.whenHeld(
       new RotateToTarget(m_swerveSubsystem, 
       () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
             () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
