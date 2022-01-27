@@ -32,9 +32,9 @@ public final class Constants {
     }
     public static final class DriveConstants{
         public static final class AimConstants{ 
-            public static final double AimP =13;
+            public static final double AimP =13 ;           
             public static final double AimI =0;
-            public static final double AimD =0.5;
+            public static final double AimD =0.55;
         }
 
         
