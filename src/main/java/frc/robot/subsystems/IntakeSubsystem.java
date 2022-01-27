@@ -81,15 +81,15 @@ public class IntakeSubsystem extends SubsystemBase implements UpdateManager.Upda
 
     }
 
-    public void setIntakeExtension(boolean intakeExtened){
+    public void setIntakeExtension(boolean IntakeState){
         synchronized(stateLock){
-            this.intakeExtended = intakeExtended;
+            this.intakeExtended = IntakeState;
         }
         
     }
     public void setMotorOutput(double Output){
         synchronized(stateLock){
-            this.motorOutput =motorOutput;
+            this.motorOutput = Output;
         }
     }
     public double getMotorOutput(){
