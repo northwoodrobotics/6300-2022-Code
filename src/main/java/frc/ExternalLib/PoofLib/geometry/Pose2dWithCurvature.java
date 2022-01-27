@@ -91,6 +91,7 @@ public class Pose2dWithCurvature implements IPose2d<Pose2dWithCurvature>, ICurva
     }
 
     @Override
+    @SuppressWarnings("EqualsHashCode")
     public boolean equals(final Object other) {
         if (other == null || !(other instanceof Pose2dWithCurvature)) return false;
         Pose2dWithCurvature p2dwc = (Pose2dWithCurvature)other;

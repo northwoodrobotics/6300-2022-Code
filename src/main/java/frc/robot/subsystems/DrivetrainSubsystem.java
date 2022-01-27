@@ -116,8 +116,9 @@ public class DrivetrainSubsystem {
         SwerveConstants.DFLT_START_POSE = Constants.DriveConstants.DFLT_START_POSE;
 
         SwerveConstants.THETACONTROLLERkP = Constants.AutoConstants.THETACONTROLLERkP;
-        SwerveConstants.TRAJECTORYXkP = Constants.AutoConstants.TRAJECTORYXkP;
-        SwerveConstants.TRAJECTORYYkP = Constants.AutoConstants.TRAJECTORYYkP;
+        SwerveConstants.THETACONTROLLERkI = Constants.AutoConstants.THETACONTROLLERkI;
+        SwerveConstants.THETACONTROLLERkD = Constants.AutoConstants.THETACONTROLLERkD;
+
         SwerveConstants.THETACONTROLLERCONSTRAINTS = Constants.AutoConstants.THETACONTROLLERCONSTRAINTS;
 
         SwerveConstants.TRACKWIDTH_METERS = Constants.DriveConstants.TRACKWIDTH_METERS;
@@ -125,6 +126,18 @@ public class DrivetrainSubsystem {
         SwerveConstants.MASS_kg = Constants.DriveConstants.MASS_kg;
         SwerveConstants.MOI_KGM2 = Constants.DriveConstants.MOI_KGM2;
         SwerveConstants.KINEMATICS = Constants.DriveConstants.KINEMATICS;
+
+
+
+        SwerveConstants.TRAJECTORYXkP = Constants.AutoConstants.TRAJECTORYXkP;
+        SwerveConstants.TRAJECTORYXkI = Constants.AutoConstants.TRAJECTORYXkI;
+        SwerveConstants.TRAJECTORYXkD = Constants.AutoConstants.TRAJECTORYXkD;
+
+
+        SwerveConstants.TRAJECTORYYkP = Constants.AutoConstants.TRAJECTORYYkP;
+        SwerveConstants.TRAJECTORYYkI = Constants.AutoConstants.TRAJECTORYYkI; 
+        SwerveConstants.TRAJECTORYYkD = Constants.AutoConstants.TRAJECTORYYkD;
+        
     }
 
 

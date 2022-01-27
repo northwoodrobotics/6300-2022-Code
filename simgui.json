@@ -84,7 +84,8 @@
         },
         "Front Right Module": {
           "open": true
-        }
+        },
+        "open": true
       },
       "Vision": {
         "open": true
@@ -95,6 +96,9 @@
       "open": true
     },
     "SmartDashboard": {
+      "Auto Chooser": {
+        "open": true
+      },
       "Orientation Chooser": {
         "open": true
       },

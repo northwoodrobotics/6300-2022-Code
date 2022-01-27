@@ -27,6 +27,7 @@ public class MotionProfileConstraints {
     }
 
     @Override
+    @SuppressWarnings("EqualsHashCode")
     public boolean equals(Object obj) {
         if (!(obj instanceof MotionProfileConstraints)) {
             return false;

@@ -17,10 +17,12 @@ import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 //import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.AutoRoutines.DriveAndTurn;
+import frc.robot.commands.AutoRoutines.JustSquare;
 import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.DemoSquare;
 import frc.robot.commands.AutoRoutines.RealSquare;
 import frc.robot.commands.DriveCommands.ZeroGyro;
+import frc.robot.commands.SimCommands.SimAuton;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
@@ -80,6 +82,8 @@ public class RobotContainer {
     autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn());
     autoChooser.addOption("DemoSquare", new DemoSquare());
     autoChooser.addOption("RealSquare", new RealSquare());
+    autoChooser.addOption("No Rotation Square", new JustSquare());
+    autoChooser.addOption("SimTrajectory", new SimAuton());
 
 
     

@@ -45,7 +45,7 @@ public class SwerveDrivetrainModel {
     SwerveModuleState[] states;
     ProfiledPIDController thetaController =
         new ProfiledPIDController(
-            SwerveConstants.THETACONTROLLERkP, 0, 0, SwerveConstants.THETACONTROLLERCONSTRAINTS);
+            SwerveConstants.THETACONTROLLERkP, SwerveConstants.THETACONTROLLERkI, SwerveConstants.THETACONTROLLERkD, SwerveConstants.THETACONTROLLERCONSTRAINTS);
 
     HolonomicDriveController m_holo;
     

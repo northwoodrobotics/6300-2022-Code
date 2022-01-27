@@ -262,6 +262,8 @@ public class Translation2d implements ITranslation2d<Translation2d> {
         return inverse().translateBy(other).norm();
     }
 
+    @SuppressWarnings("EqualsHashCode")
+
     @Override
     public boolean equals(final Object other) {
         if (other == null || !(other instanceof Translation2d)) return false;

@@ -124,6 +124,7 @@ public class MotionState {
      * Checks if two MotionStates are epsilon-equals (all fields are equal within a nominal tolerance).
      */
     @Override
+    @SuppressWarnings("EqualsHashCode")
     public boolean equals(Object other) {
         return (other instanceof MotionState) && equals((MotionState) other, kEpsilon);
     }
@@ -131,6 +132,7 @@ public class MotionState {
     /**
      * Checks if two MotionStates are epsilon-equals (all fields are equal within a specified tolerance).
      */
+    
     public boolean equals(MotionState other, double epsilon) {
         return coincident(other, epsilon) && epsilonEquals(acc, other.acc, epsilon);
     }

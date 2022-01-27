@@ -129,6 +129,7 @@ public class MotionProfileGoal {
     }
 
     @Override
+    @SuppressWarnings("EqualsHashCode")
     public boolean equals(Object obj) {
         if (!(obj instanceof MotionProfileGoal)) {
             return false;
