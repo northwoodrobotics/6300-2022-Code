@@ -50,8 +50,8 @@ public class navXFactoryBuilder {
             return Rotation2d.fromDegrees(navX.getYaw());
         }
         @Override
-        public double readFused(){
-            return navX.getFusedHeading();
+        public Rotation2d readFused(){
+            return Rotation2d.fromDegrees(360-navX.getFusedHeading());
         }
         
 

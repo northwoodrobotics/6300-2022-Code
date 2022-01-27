@@ -248,7 +248,7 @@ public class SwerveDrivetrainModel {
         return gyro.readGetAngle();
     }
 
-    public double getFused(){
+    public Rotation2d getFused(){
         return gyro.readFused();
     }
     

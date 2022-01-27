@@ -18,8 +18,7 @@ public interface Gyroscope {
 double readGetAngle();
 
 Rotation2d readGetYaw();
-    
-double readFused();
+Rotation2d readFused();
 
   /**
    * Sets the simulated gyroscope to a specified angle
