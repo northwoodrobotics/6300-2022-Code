@@ -83,6 +83,7 @@ dependencies {
     testImplementation group: "com.github.sh0nk", name: "matplotlib4j", version: '0.4.0'
 
     errorprone group: 'com.google.errorprone', name: 'error_prone_core', version: '2.3.4'
+    implementation 'gov.nist.math:jama:1.0.3'
 }
 
 // Simulation configuration (e.g. environment variables).
