@@ -3,6 +3,7 @@ package frc.swervelib;
 import java.util.ArrayList;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.HolonomicDriveController;
@@ -269,8 +270,8 @@ public class SwerveDrivetrainModel {
     }
 
     public Command createCommandForTrajectory(PathPlannerTrajectory trajectory, SwerveSubsystem m_drive) {
-        SwerveControllerCommandPP swerveControllerCommand =
-            new SwerveControllerCommandPP(
+        PPSwerveControllerCommand swerveControllerCommand =
+            new PPSwerveControllerCommand(
                 trajectory,
                 () -> getCurActPose(), // Functional interface to feed supplier
                 SwerveConstants.KINEMATICS,
