@@ -20,7 +20,9 @@ public class RotateToTarget extends SequentialCommandGroup{
        addCommands(
            new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
            new ParallelCommandGroup(
-               new LimelightWaitForTarget(), 
+            new LimelightWaitForTarget(),
+            
+                
                new DriveAutoRotate(subsystem, translationXSupplier, translationYSupplier, rotationSupplier)
            )
        );

@@ -34,7 +34,7 @@ public final class Constants {
         public static final class AimConstants{ 
             public static final double AimP =13 ;           
             public static final double AimI =0;
-            public static final double AimD =0.55;
+            public static final double AimD =0.5;
         }
 
         
@@ -114,21 +114,21 @@ public final class Constants {
     public final static class AutoConstants{
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI/2;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecond =Units.degreesToRadians(600);
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Units.degreesToRadians(6000);
 
-        public static final double TRAJECTORYXkP = 1;
+        public static final double TRAJECTORYXkP = .7;
         public static final double TRAJECTORYXkI = 0;
         public static final double TRAJECTORYXkD = 0;
 
-        public static final double TRAJECTORYYkP = 1;
+        public static final double TRAJECTORYYkP = .7;
         public static final double TRAJECTORYYkI = 0;
         public static final double TRAJECTORYYkD = 0;
 
 
-        public static final double THETACONTROLLERkP = 3;
+        public static final double THETACONTROLLERkP = .7;
         public static final double THETACONTROLLERkI = 0;
-        public static final double THETACONTROLLERkD = .005;
+        public static final double THETACONTROLLERkD = 0;
 
 
 

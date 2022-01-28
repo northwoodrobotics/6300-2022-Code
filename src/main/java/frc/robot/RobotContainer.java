@@ -105,7 +105,7 @@ public class RobotContainer {
       new CalibrateGyro(m_swerveSubsystem)
     );
 
-    driveController.xButton.whenHeld(
+    driveController.xButton.whileHeld(
       new RotateToTarget(m_swerveSubsystem, 
       () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
             () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
