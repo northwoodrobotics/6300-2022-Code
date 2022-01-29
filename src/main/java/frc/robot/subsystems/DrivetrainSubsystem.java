@@ -10,6 +10,8 @@ import frc.swervelib.SwerveSubsystem;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.robot.Constants;
+import frc.robot.Constants.AutoConstants;
+
 import java.util.ArrayList;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;

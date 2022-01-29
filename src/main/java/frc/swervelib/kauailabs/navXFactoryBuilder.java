@@ -38,7 +38,7 @@ public class navXFactoryBuilder {
                 return navX.getRotation2d();
             }
      
-        return Rotation2d.fromDegrees(360 -navX.getYaw());
+        return navX.getRotation2d();
     }
 
         @Override
