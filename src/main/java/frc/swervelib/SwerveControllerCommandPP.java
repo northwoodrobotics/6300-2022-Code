@@ -5,6 +5,7 @@
 package frc.swervelib;
 
 import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;

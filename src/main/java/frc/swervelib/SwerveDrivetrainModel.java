@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -24,6 +25,8 @@ import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
 
 public class SwerveDrivetrainModel {
+
+    SwerveDriveOdometry swerveOdometry;
 
     QuadSwerveSim swerveDt;
     ArrayList<SwerveModule> realModules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
@@ -56,12 +59,14 @@ public class SwerveDrivetrainModel {
         this.gyro = gyro;
         this.realModules = realModules;
 
+
         if (RobotBase.isSimulation()) {
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(0)));
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(1)));
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(2)));
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(3)));
         }
+        swerveOdometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
         
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         
@@ -114,6 +119,14 @@ public class SwerveDrivetrainModel {
     public void modelReset(Pose2d pose){
         swerveDt.modelReset(pose);
     }
+    public Pose2d getPose() {
+        return swerveOdometry.getPoseMeters();
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        swerveOdometry.resetPosition(pose, getYaw());
+    }
+
 
     /**
      * Advance the simulation forward by one step
@@ -273,7 +286,7 @@ public class SwerveDrivetrainModel {
         PPSwerveControllerCommand swerveControllerCommand =
             new PPSwerveControllerCommand(
                 trajectory,
-                () -> getCurActPose(), // Functional interface to feed supplier
+                () -> getPose(), // Functional interface to feed supplier
                 SwerveConstants.KINEMATICS,
 
                 // Position controllers
@@ -283,7 +296,9 @@ public class SwerveDrivetrainModel {
                 commandStates -> this.states = commandStates,
                 m_drive);
         return swerveControllerCommand;
+
     }
+
 
     public ArrayList<SwerveModule> getRealModules() {
         return realModules;

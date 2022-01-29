@@ -79,11 +79,11 @@ public class RobotContainer {
     showBlindlight();
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn());
-    autoChooser.addOption("DemoSquare", new DemoSquare());
-    autoChooser.addOption("RealSquare", new RealSquare());
-    autoChooser.addOption("No Rotation Square", new JustSquare());
-    autoChooser.addOption("SimTrajectory", new SimAuton());
+    autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn(m_swerveSubsystem));
+    autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
+    autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
+    autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
+    autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
 
 
     
@@ -139,6 +139,8 @@ public class RobotContainer {
       return 0.0;
     }
   }
+
+  
   private static double modifyAxis(double value) {
     // Deadband
     value = deadband(value, 0.05);
@@ -158,6 +160,11 @@ public class RobotContainer {
     master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
     master.addNumber("Gyro Angle", () -> dt.getAngle());
     master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
+
+
+    
+    
+    
     
     
   }
