@@ -1,5 +1,6 @@
 package frc.swervelib;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -9,13 +10,17 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
     private final ModuleConfiguration moduleConfiguration;
     private final DriveControllerFactory<?, DriveConfiguration> driveControllerFactory;
     private final SteerControllerFactory<?, SteerConfiguration> steerControllerFactory;
+    private SimpleMotorFeedforward driveFF;
+    
 
     public SwerveModuleFactory(ModuleConfiguration moduleConfiguration,
                                DriveControllerFactory<?, DriveConfiguration> driveControllerFactory,
-                               SteerControllerFactory<?, SteerConfiguration> steerControllerFactory) {
+                               SteerControllerFactory<?, SteerConfiguration> steerControllerFactory 
+                               ) {
         this.moduleConfiguration = moduleConfiguration;
         this.driveControllerFactory = driveControllerFactory;
         this.steerControllerFactory = steerControllerFactory;
+        driveFF = new SimpleMotorFeedforward(SwerveConstants.DriveKs, SwerveConstants.DriveKs);
     }
 
     public SwerveModule create(DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration, String namePrefix) {
@@ -124,8 +129,9 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
             if (steerAngle < 0.0) {
                 steerAngle += 2.0 * Math.PI;
             }
+            
 
-            driveController.setReferenceVoltage(driveVoltage);
+            driveController.setReferenceVoltage(driveFF.calculate(driveVoltage));
             steerController.setReferenceAngle(steerAngle);
 
             this.driveVoltageCmdEntry.setDouble(driveVoltage);

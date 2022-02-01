@@ -30,6 +30,10 @@ public class SwerveConstants {
     public static double THETACONTROLLERkI;
     public static double THETACONTROLLERkD;
 
+    public static double DriveKs;
+    public static double DriveKv;
+    public static double DriveKa;
+
 
 
     public static double TRACKWIDTH_METERS;
