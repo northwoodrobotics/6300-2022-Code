@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.SparkMaxPIDController;
@@ -13,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAnalogSensor;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
@@ -23,6 +25,8 @@ import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
 import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
 import com.revrobotics.AnalogInput;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
+
 import java.util.OptionalDouble;
 import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 
@@ -33,15 +37,20 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private CANSparkMax HoodMotor = new CANSparkMax(Constants.ShooterConstants.HoodID, MotorType.kBrushless);
     
-    //private SparkMaxAnalogSensor HoodEncoder;
-    private RevThroughBore HoodEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
+    private RelativeEncoder HoodEncoder;
+    private RevThroughBore HoodAbsEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
    // private SparkMaxAlternateEncoder HoodEncoder;
-    private PIDController HoodController = new PIDController(Constants.ShooterConstants.HoodP, Constants.ShooterConstants.HoodI, Constants.ShooterConstants.HoodD);
+    private SparkMaxPIDController HoodController;
     private final NetworkTableEntry HoodAngleEntry;
     private boolean IsHoodHomed;
     private HoodControlMode hoodControlMode = HoodControlMode.DISABLED;
     private double hoodTargetPosition = Double.NaN;
     private double hoodPercentOutput = 0.0;
+    private static final int ENCODER_RESET_ITERATIONS = 500;
+    private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
+    private double resetIteration = 0;
+    private double referenceAngleRadians = 0;
+
 
 
     public ShooterSubsystem(){
@@ -64,13 +73,14 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configAllSettings(ShooterConfig);
 
         ShooterFollower.follow(Shooter);
+        
 
 
 
         
 
 
-        /*HoodController = HoodMotor.getPIDController();
+        HoodController = HoodMotor.getPIDController();
         HoodController.setFeedbackDevice(HoodEncoder);
         HoodController.setP(Constants.ShooterConstants.HoodP);
         HoodController.setI(Constants.ShooterConstants.HoodI);
@@ -78,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodController.setIZone(Constants.ShooterConstants.HoodIZone);
         HoodController.setFF(Constants.ShooterConstants.HoodFF);
         HoodController.setOutputRange(Constants.ShooterConstants.HoodMinOutput, Constants.ShooterConstants.HoodMaxOutput);
-        HoodEncoder.setPositionConversionFactor(factor)*/
+        //HoodEncoder.setPositionConversionFactor(factor);
 
 
         //HoodEncoder = HoodMotor.getAlternateEncoder(encoderType, countsPerRev)
@@ -87,7 +97,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         .withPosition(0, 0)
         .withSize(1, 1)
         .getEntry();
-        tab.addNumber("Hood Raw Encoder",()-> HoodEncoder.getDistanceDegrees())
+        tab.addNumber("Hood Raw Encoder",()-> HoodEncoder.getPosition())
         .withPosition(0, 2)
         .withSize(1, 1);
 
@@ -127,6 +137,48 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     }
     public boolean isHoodHomed() {
         return IsHoodHomed;
+    }    
+    public boolean isHoodAtTargetAngle() {
+        OptionalDouble targetAngle = getHoodTargetAngle();
+        double currentAngle = getHoodMotorAngle();
+
+        if (targetAngle.isEmpty()) {
+            return false;
+        }
+
+        return MathUtils.epsilonEquals(targetAngle.getAsDouble(), currentAngle, Math.toRadians(1.0));
+    }
+    
+    public void setReferenceAngle(double refereneceAngleRadians){
+        double currentAngleRadians = HoodEncoder.getPosition();
+        if (HoodEncoder.getVelocity() < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
+            if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
+                resetIteration = 0;
+                double absoluteAngle = HoodAbsEncoder.getDistanceDegrees();
+                HoodEncoder.setPosition(absoluteAngle);
+                currentAngleRadians = absoluteAngle;
+            }
+        } else {
+            resetIteration = 0;
+        }
+        
+        double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
+        if (currentAngleRadiansMod < 0.0) {
+            currentAngleRadiansMod += 2.0 * Math.PI;
+        }
+
+        // The reference angle has the range [0, 2pi) but the Neo's encoder can go above that
+        double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
+        if (referenceAngleRadians - currentAngleRadiansMod > Math.PI) {
+            adjustedReferenceAngleRadians -= 2.0 * Math.PI;
+        } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
+            adjustedReferenceAngleRadians += 2.0 * Math.PI;
+        }
+
+        this.referenceAngleRadians = referenceAngleRadians;
+
+        HoodController.setReference(adjustedReferenceAngleRadians, ControlType.kPosition);
+
     }
 
     @Override
@@ -142,12 +194,17 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
                 if (getHoodTargetAngle().isEmpty()) {
                     HoodMotor.set(0.0);
-                } else {
+                } else { 
                     double targetAngle = getHoodTargetAngle().getAsDouble();
+                    targetAngle = MathUtils.clamp(targetAngle, ShooterConstants.HoodMinAngle, ShooterConstants.HoodMaxAngle);
+                   
+                     
+                    /*double targetAngle = getHoodTargetAngle().getAsDouble();
                     targetAngle = MathUtils.clamp(targetAngle, Constants.ShooterConstants.HoodMinAngle, Constants.ShooterConstants.HoodMaxAngle);
                     double Output;
                    Output = HoodController.calculate(HoodEncoder.getDistanceDegrees(), targetAngle);
-                    HoodMotor.set(Output);
+                    HoodMotor.set(Output);*/
+                    setReferenceAngle(Units.degreesToRadians(targetAngle));
 
                 }
                 break;
@@ -159,7 +216,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodAngleEntry.setDouble(Math.toDegrees(getHoodMotorAngle()));
     }
     public double getHoodMotorAngle(){
-        return HoodEncoder.getDistanceDegrees();
+        return HoodAbsEncoder.getDistanceDegrees();
     }
     
     public void disableHood() {
@@ -169,35 +226,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     public void setHoodHomed(boolean target) {
         this.IsHoodHomed = target;
     }
-   public void setHoodHome(){
-       double homeOutput;
-       homeOutput = HoodController.calculate(HoodEncoder.getDistanceDegrees(), 0.0);
-       HoodMotor.set(homeOutput);
-   }
 
 
-
-
-
-
-
-
-
-
-
-
-    
-
-
-    
-
-
-
-
-
-
-
-    public enum HoodControlMode {
+public enum HoodControlMode {
         DISABLED,
         POSITION,
         PERCENT_OUTPUT
