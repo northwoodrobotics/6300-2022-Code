@@ -148,7 +148,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         return MathUtils.epsilonEquals(targetAngle.getAsDouble(), currentAngle, Math.toRadians(1.0));
     }
-    
+    @SuppressWarnings("SelfAssignment")
     public void setReferenceAngle(double refereneceAngleRadians){
         double currentAngleRadians = HoodEncoder.getPosition();
         if (HoodEncoder.getVelocity() < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {

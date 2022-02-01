@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.Vision.LEDMode;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
@@ -21,6 +22,7 @@ import frc.robot.commands.AutoRoutines.JustSquare;
 import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.DemoSquare;
 import frc.robot.commands.AutoRoutines.RealSquare;
+import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.SimCommands.SimAuton;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -113,6 +115,7 @@ public class RobotContainer {
 
       ));
     driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
+    driveController.bButton.whileHeld(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
   }
 
   /**
