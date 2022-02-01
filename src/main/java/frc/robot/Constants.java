@@ -117,13 +117,17 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond =Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-        public static final double TRAJECTORYXkP = 0.20856;
+        public static final double TRAJECTORYXkP = 1;
         public static final double TRAJECTORYXkI = 0;
         public static final double TRAJECTORYXkD = 0;
 
-        public static final double TRAJECTORYYkP = 0.20856;
+        public static final double TRAJECTORYYkP = 1;
         public static final double TRAJECTORYYkI = 0;
         public static final double TRAJECTORYYkD = 0;
+        public static final double DriveKS = 0.0;
+        public static final double DriveKV = 0.0;
+        public static final double DriveKA = 0.0;
+
 
 
         public static final double THETACONTROLLERkP = 1;

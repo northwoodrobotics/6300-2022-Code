@@ -1,16 +1,6 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "Talon FX[14]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[8]": {
-        "header": {
-          "open": true
-        }
-      },
       "navX-Sensor[0]": {
         "header": {
           "open": true
@@ -74,9 +64,6 @@
   "NetworkTables": {
     "Shuffleboard": {
       "Drivetrain": {
-        "Back Left Module": {
-          "open": true
-        },
         "Back Right Module": {
           "open": true
         },
@@ -85,13 +72,9 @@
         },
         "Front Right Module": {
           "open": true
-        },
-        "open": true
+        }
       },
       "Vision": {
-        "open": true
-      },
-      "master": {
         "open": true
       },
       "open": true

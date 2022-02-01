@@ -134,6 +134,9 @@ public class DrivetrainSubsystem {
         SwerveConstants.TRAJECTORYXkP = Constants.AutoConstants.TRAJECTORYXkP;
         SwerveConstants.TRAJECTORYXkI = Constants.AutoConstants.TRAJECTORYXkI;
         SwerveConstants.TRAJECTORYXkD = Constants.AutoConstants.TRAJECTORYXkD;
+        SwerveConstants.DriveKs = AutoConstants.DriveKS;
+        SwerveConstants.DriveKv = AutoConstants.DriveKV;
+        SwerveConstants.DriveKa = AutoConstants.DriveKA;
 
 
         SwerveConstants.TRAJECTORYYkP = Constants.AutoConstants.TRAJECTORYYkP;
