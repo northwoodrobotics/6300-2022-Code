@@ -20,7 +20,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
         this.moduleConfiguration = moduleConfiguration;
         this.driveControllerFactory = driveControllerFactory;
         this.steerControllerFactory = steerControllerFactory;
-        driveFF = new SimpleMotorFeedforward(SwerveConstants.DriveKs, SwerveConstants.DriveKs);
+        driveFF = new SimpleMotorFeedforward(SwerveConstants.DriveKs, SwerveConstants.DriveKs, SwerveConstants.DriveKa);
     }
 
     public SwerveModule create(DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration, String namePrefix) {
