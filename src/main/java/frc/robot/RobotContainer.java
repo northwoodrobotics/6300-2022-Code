@@ -21,6 +21,7 @@ import frc.robot.commands.AutoRoutines.DriveAndTurn;
 import frc.robot.commands.AutoRoutines.JustSquare;
 import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.DemoSquare;
+import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
 import frc.robot.commands.AutoRoutines.RealSquare;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
@@ -86,6 +87,7 @@ public class RobotContainer {
     autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
     autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
+    autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));
 
 
     
