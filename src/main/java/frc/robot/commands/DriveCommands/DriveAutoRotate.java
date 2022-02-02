@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -64,7 +65,7 @@ public class DriveAutoRotate extends CommandBase {
             else output = Math.max(Constants.DriveConstants.Min_Rotation_Deg, output);
         }
         if(!RobotContainer.blindlight.hasTarget()){
-            output = Rotation * Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC;
+            output = Rotation * Units.radiansToDegrees(Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC);
         }
 //        System.out.println(output);
    m_SwerveSubsystem.dt.setModuleStates(Constants.DriveConstants.KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
