@@ -118,6 +118,8 @@ public class RobotContainer {
       ));
     driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     driveController.bButton.whileHeld(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
+    driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
+
   }
 
   /**
@@ -165,6 +167,9 @@ public class RobotContainer {
     master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
     master.addNumber("Gyro Angle", () -> dt.getAngle());
     master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
+    master.addNumber("PoseX", ()-> dt.getEstPose().getX());
+    master.addNumber("PoseY", ()-> dt.getEstPose().getY());
+    master.addNumber("PoseRotation", ()-> dt.getEstPose().getRotation().getDegrees());
 
 
     

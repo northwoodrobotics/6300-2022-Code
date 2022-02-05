@@ -35,10 +35,10 @@ public class navXFactoryBuilder {
         @Override   
         public Rotation2d getGyroHeading() {
             if (navX.isMagnetometerCalibrated()){
-                return Rotation2d.fromDegrees(360-navX.getFusedHeading());
+                return Rotation2d.fromDegrees(navX.getFusedHeading());
             }
      
-        return navX.getRotation2d();
+        return Rotation2d.fromDegrees(360-navX.getYaw());
     }
 
         @Override

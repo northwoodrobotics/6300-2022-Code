@@ -97,90 +97,90 @@ public abstract class ServoMotorSubsystem extends Subsystem {
         mMaster.configSupplyCurrentLimit(SUPPLY_CURRENT_LIMIT);
 
         TalonUtil.checkError(mMaster.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0,
-                Constants.kLongCANTimeoutMs), mConstants.kName + ": Could not detect encoder: ");
+        CitrusConstants.kLongCANTimeoutMs), mConstants.kName + ": Could not detect encoder: ");
 
         mForwardSoftLimitTicks = (int) ((mConstants.kMaxUnitsLimit - mConstants.kHomePosition) * mConstants.kTicksPerUnitDistance);
         TalonUtil.checkError(
-                mMaster.configForwardSoftLimitThreshold(mForwardSoftLimitTicks, Constants.kLongCANTimeoutMs),
+                mMaster.configForwardSoftLimitThreshold(mForwardSoftLimitTicks, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set forward soft limit: ");
 
-        TalonUtil.checkError(mMaster.configForwardSoftLimitEnable(true, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.configForwardSoftLimitEnable(true, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not enable forward soft limit: ");
 
         mReverseSoftLimitTicks = (int) ((mConstants.kMinUnitsLimit - mConstants.kHomePosition) * mConstants.kTicksPerUnitDistance);
         TalonUtil.checkError(
-                mMaster.configReverseSoftLimitThreshold(mReverseSoftLimitTicks, Constants.kLongCANTimeoutMs),
+                mMaster.configReverseSoftLimitThreshold(mReverseSoftLimitTicks, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set reverse soft limit: ");
 
-        TalonUtil.checkError(mMaster.configReverseSoftLimitEnable(true, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.configReverseSoftLimitEnable(true, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not enable reverse soft limit: ");
 
-        TalonUtil.checkError(mMaster.configVoltageCompSaturation(12.0, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.configVoltageCompSaturation(12.0, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set voltage compensation saturation: ");
 
-        TalonUtil.checkError(mMaster.config_kP(kMotionProfileSlot, mConstants.kKp, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kP(kMotionProfileSlot, mConstants.kKp, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": could not set kP: ");
 
-        TalonUtil.checkError(mMaster.config_kI(kMotionProfileSlot, mConstants.kKi, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kI(kMotionProfileSlot, mConstants.kKi, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": could not set kI: ");
 
-        TalonUtil.checkError(mMaster.config_kD(kMotionProfileSlot, mConstants.kKd, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kD(kMotionProfileSlot, mConstants.kKd, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": could not set kD: ");
 
-        TalonUtil.checkError(mMaster.config_kF(kMotionProfileSlot, mConstants.kKf, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kF(kMotionProfileSlot, mConstants.kKf, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set kF: ");
 
         TalonUtil.checkError(mMaster.configMaxIntegralAccumulator(kMotionProfileSlot, mConstants.kMaxIntegralAccumulator,
-                Constants.kLongCANTimeoutMs), mConstants.kName + ": Could not set max integral: ");
+        CitrusConstants.kLongCANTimeoutMs), mConstants.kName + ": Could not set max integral: ");
 
-        TalonUtil.checkError(mMaster.config_IntegralZone(kMotionProfileSlot, mConstants.kIZone, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_IntegralZone(kMotionProfileSlot, mConstants.kIZone, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set i zone: ");
 
         TalonUtil.checkError(
-                mMaster.configAllowableClosedloopError(kMotionProfileSlot, mConstants.kDeadband, Constants.kLongCANTimeoutMs),
+                mMaster.configAllowableClosedloopError(kMotionProfileSlot, mConstants.kDeadband, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set deadband: ");
 
-        TalonUtil.checkError(mMaster.config_kP(kPositionPIDSlot, mConstants.kPositionKp, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kP(kPositionPIDSlot, mConstants.kPositionKp, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": could not set kP: ");
 
-        TalonUtil.checkError(mMaster.config_kI(kPositionPIDSlot, mConstants.kPositionKi, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kI(kPositionPIDSlot, mConstants.kPositionKi, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": could not set kI: ");
 
-        TalonUtil.checkError(mMaster.config_kD(kPositionPIDSlot, mConstants.kPositionKd, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kD(kPositionPIDSlot, mConstants.kPositionKd, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": could not set kD: ");
 
-        TalonUtil.checkError(mMaster.config_kF(kPositionPIDSlot, mConstants.kPositionKf, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_kF(kPositionPIDSlot, mConstants.kPositionKf, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set kF: ");
 
         TalonUtil.checkError(mMaster.configMaxIntegralAccumulator(kPositionPIDSlot, mConstants.kPositionMaxIntegralAccumulator,
-                Constants.kLongCANTimeoutMs), mConstants.kName + ": Could not set max integral: ");
+        CitrusConstants.kLongCANTimeoutMs), mConstants.kName + ": Could not set max integral: ");
 
-        TalonUtil.checkError(mMaster.config_IntegralZone(kPositionPIDSlot, mConstants.kPositionIZone, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.config_IntegralZone(kPositionPIDSlot, mConstants.kPositionIZone, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set i zone: ");
 
         TalonUtil.checkError(
-                mMaster.configAllowableClosedloopError(kPositionPIDSlot, mConstants.kPositionDeadband, Constants.kLongCANTimeoutMs),
+                mMaster.configAllowableClosedloopError(kPositionPIDSlot, mConstants.kPositionDeadband, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set deadband: ");
 
         TalonUtil.checkError(
-                mMaster.configMotionCruiseVelocity(mConstants.kCruiseVelocity, Constants.kLongCANTimeoutMs),
+                mMaster.configMotionCruiseVelocity(mConstants.kCruiseVelocity, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set cruise velocity: ");
 
-        TalonUtil.checkError(mMaster.configMotionAcceleration(mConstants.kAcceleration, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.configMotionAcceleration(mConstants.kAcceleration, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set acceleration: ");
 
-        TalonUtil.checkError(mMaster.configOpenloopRamp(mConstants.kRampRate, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.configOpenloopRamp(mConstants.kRampRate, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set voltage ramp rate: ");
 
-        TalonUtil.checkError(mMaster.configClosedloopRamp(mConstants.kRampRate, Constants.kLongCANTimeoutMs),
+        TalonUtil.checkError(mMaster.configClosedloopRamp(mConstants.kRampRate, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set closed loop ramp rate: ");
 
         TalonUtil.checkError(
-                mMaster.configStatorCurrentLimit(STATOR_CURRENT_LIMIT, Constants.kLongCANTimeoutMs),
+                mMaster.configStatorCurrentLimit(STATOR_CURRENT_LIMIT, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set stator current limit.");
 
         TalonUtil.checkError(
-                mMaster.configSupplyCurrentLimit(SUPPLY_CURRENT_LIMIT, Constants.kLongCANTimeoutMs),
+                mMaster.configSupplyCurrentLimit(SUPPLY_CURRENT_LIMIT, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set supply current limit.");
 
         // TalonUtil.checkError(
@@ -191,7 +191,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
 
 
         TalonUtil.checkError(
-                mMaster.configVoltageCompSaturation(mConstants.kMaxVoltage, Constants.kLongCANTimeoutMs),
+                mMaster.configVoltageCompSaturation(mConstants.kMaxVoltage, CitrusConstants.kLongCANTimeoutMs),
                 mConstants.kName + ": Could not set voltage comp saturation.");
         mMaster.enableVoltageCompensation(true);
 

@@ -130,8 +130,8 @@ public final class Constants {
 
 
 
-        public static final double THETACONTROLLERkP = 0.94791;
-        public static final double THETACONTROLLERkI = 0.0001;
+        public static final double THETACONTROLLERkP = 1;
+        public static final double THETACONTROLLERkI = 0.01;
         public static final double THETACONTROLLERkD = 0;
 
 
@@ -224,7 +224,7 @@ public final class Constants {
 
     }
 
-    public static final int kLongCANTimeoutMs = 100;
+    
 
 
 
