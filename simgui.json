@@ -34,6 +34,11 @@
       "/SmartDashboard/Orientation Chooser": "String Chooser"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/LiveWindow/SwerveSubsystem": {
         "window": {
           "visible": true
@@ -62,6 +67,18 @@
     }
   },
   "NetworkTables": {
+    "LiveWindow": {
+      "SwerveSubsystem": {
+        "open": true
+      },
+      "Ungrouped": {
+        "open": true
+      },
+      "Vision": {
+        "open": true
+      },
+      "open": true
+    },
     "Shuffleboard": {
       "Drivetrain": {
         "Back Right Module": {
@@ -79,18 +96,15 @@
       },
       "master": {
         "open": true
-      },
-      "open": true
-    },
-    "SmartDashboard": {
-      "Auto Chooser": {
-        "open": true
-      },
-      "Orientation Chooser": {
-        "open": true
       }
     },
+    "SmartDashboard": {
+      "open": true
+    },
     "limelight-Front": {
+      "open": true
+    },
+    "limelight-front": {
       "open": true
     }
   },

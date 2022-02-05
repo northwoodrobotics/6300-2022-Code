@@ -69,6 +69,7 @@ public class SwerveDrivetrainModel {
         swerveOdometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
         
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        //thetaController.setIntegratorRange(-Units.degreesToRadians(30), Units.degreesToRadians(30));
         
         endPose = SwerveConstants.DFLT_START_POSE;
 
@@ -286,7 +287,7 @@ public class SwerveDrivetrainModel {
         PPSwerveControllerCommand swerveControllerCommand =
             new PPSwerveControllerCommand(
                 trajectory,
-                () -> getPose(), // Functional interface to feed supplier
+                () -> getEstPose(), // Functional interface to feed supplier
                 SwerveConstants.KINEMATICS,
 
                 // Position controllers

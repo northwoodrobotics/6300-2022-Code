@@ -36,6 +36,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     private TalonFX Shooter = new TalonFX(Constants.ShooterConstants.ShooterID);
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private CANSparkMax HoodMotor = new CANSparkMax(Constants.ShooterConstants.HoodID, MotorType.kBrushless);
+
+
     
     private RelativeEncoder HoodEncoder;
     private RevThroughBore HoodAbsEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
@@ -101,6 +103,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         .withPosition(0, 2)
         .withSize(1, 1);
 
+        
 
 
         
@@ -123,6 +126,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     }
     @Override
     public void update(double time, double dt) {
+    }
+    public void PlayMusic(){
+        Shooter.set(ControlMode.MusicTone, 1);
     }
     public OptionalDouble getHoodTargetAngle() {
         if (Double.isFinite(hoodTargetPosition)) {
@@ -180,7 +186,6 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodController.setReference(adjustedReferenceAngleRadians, ControlType.kPosition);
 
     }
-
     @Override
     public void periodic() {
         switch (hoodControlMode) {
