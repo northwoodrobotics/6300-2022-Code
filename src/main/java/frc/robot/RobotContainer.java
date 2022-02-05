@@ -44,8 +44,8 @@ public class RobotContainer {
   private static ShuffleboardTab master = Shuffleboard.getTab("master");
   // The robot's subsystems and commands are defined here...
  
-  public static SwerveDrivetrainModel dt = DrivetrainSubsystem.createSwerveModel();
-  public static SwerveSubsystem m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
+  public static SwerveDrivetrainModel dt;
+  public static SwerveSubsystem m_swerveSubsystem;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -68,6 +68,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    dt = DrivetrainSubsystem.createSwerveModel();
+    m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
 
    
     m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
@@ -136,7 +138,7 @@ public class RobotContainer {
   }
   public static void UpdateTelemetry(){
     dt.updateTelemetry();
-    dt.Updateodometry();
+    //dt.Updateodometry();
     //dt.update(false, RobotController.getBatteryVoltage());
   }
 
