@@ -50,7 +50,8 @@ public class SwerveDrivetrainModel {
     SwerveModuleState[] states;
     ProfiledPIDController thetaController =
         new ProfiledPIDController(
-            SwerveConstants.THETACONTROLLERkP, SwerveConstants.THETACONTROLLERkI, SwerveConstants.THETACONTROLLERkD, SwerveConstants.THETACONTROLLERCONSTRAINTS);
+            SwerveConstants.THETACONTROLLERkP, SwerveConstants.THETACONTROLLERkI, SwerveConstants.THETACONTROLLERkD, 
+            SwerveConstants.THETACONTROLLERCONSTRAINTS);
 
     HolonomicDriveController m_holo;
     
@@ -297,7 +298,7 @@ public class SwerveDrivetrainModel {
         PPSwerveControllerCommand swerveControllerCommand =
             new PPSwerveControllerCommand(
                 trajectory,
-                () -> getEstPose(), // Functional interface to feed supplier
+                () -> getCurActPose(), // Functional interface to feed supplier
                 SwerveConstants.KINEMATICS,
 
                 // Position controllers

@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    RobotContainer.dt.updateTelemetry();
+    //RobotContainer.dt.updateTelemetry();
    
     
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled

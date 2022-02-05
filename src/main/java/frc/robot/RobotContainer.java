@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Vision.LEDMode;
@@ -20,6 +21,7 @@ import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 //import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.AutoRoutines.DriveAndTurn;
 import frc.robot.commands.AutoRoutines.JustSquare;
+import frc.robot.commands.Playmusic;
 import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.DemoSquare;
 import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
@@ -46,6 +48,7 @@ public class RobotContainer {
  
   public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_swerveSubsystem;
+  public static ShooterSubsystem musicplayer;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -68,22 +71,24 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    dt = DrivetrainSubsystem.createSwerveModel();
-    m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
+    //dt = DrivetrainSubsystem.createSwerveModel();
+    //m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
+
+    musicplayer = new ShooterSubsystem();
 
    
-    m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
+    /*m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
     () -> modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> modifyAxis(-driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
           () -> modifyAxis(driveController.rightStick.getX()) *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
-    
+    */
       
     // Configure the button bindings
     configureButtonBindings();
 
-    ShowInputs();
-    showBlindlight();
-    
+    //ShowInputs();
+    //showBlindlight();
+    /*
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn(m_swerveSubsystem));
     autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
@@ -91,7 +96,7 @@ public class RobotContainer {
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
     autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
     autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));
-
+*/
 
     
   }
@@ -108,20 +113,24 @@ public class RobotContainer {
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));*/
-    driveController.startButton.whenHeld(
+  /*  driveController.startButton.whenHeld(
       new CalibrateGyro(m_swerveSubsystem)
+    );*/
+    driveController.rightTriggerButton.toggleWhenActive(
+      new Playmusic(musicplayer)
+      
     );
-
+/*
     driveController.xButton.whileHeld(
       new RotateToTarget(m_swerveSubsystem, 
       () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
             () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
             () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
 
-      ));
+      ));*//*
     driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     driveController.bButton.whileHeld(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
-    driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
+    driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));*/
 
   }
 
@@ -137,7 +146,7 @@ public class RobotContainer {
   
   }
   public static void UpdateTelemetry(){
-    dt.updateTelemetry();
+    
     //dt.Updateodometry();
     //dt.update(false, RobotController.getBatteryVoltage());
   }
@@ -175,9 +184,9 @@ public class RobotContainer {
     master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
     master.addNumber("Gyro Angle", () -> dt.getAngle());
     master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
-    master.addNumber("PoseX", ()-> dt.getPose().getX());
-    master.addNumber("PoseY", ()-> dt.getPose().getY());
-    master.addNumber("PoseRotation", ()-> dt.getPose().getRotation().getDegrees());
+    master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
+    master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
+    master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getCurActPose().getRotation().getDegrees());
 
 
     

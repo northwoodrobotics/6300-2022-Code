@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-
+import com.ctre.phoenix.music.Orchestra;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
@@ -25,6 +25,7 @@ import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
 import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
 import com.revrobotics.AnalogInput;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ShooterConstants;
 
 import java.util.OptionalDouble;
@@ -32,20 +33,24 @@ import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 
 
 
-public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Updatable{
+public class ShooterSubsystem extends SubsystemBase /*implements UpdateManager.Updatable*/{
+    
+
+    private TalonFX maininstrument = new TalonFX(DriveConstants.FRONT_LEFT_MODULE_DRIVE_MOTOR);
+    private TalonFX secondinstrument = new TalonFX(DriveConstants.FRONT_LEFT_MODULE_STEER_MOTOR);
     private TalonFX Shooter = new TalonFX(Constants.ShooterConstants.ShooterID);
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private CANSparkMax HoodMotor = new CANSparkMax(Constants.ShooterConstants.HoodID, MotorType.kBrushless);
 
-
+    private Orchestra orchestra = new Orchestra();
     
     private RelativeEncoder HoodEncoder;
     private RevThroughBore HoodAbsEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
    // private SparkMaxAlternateEncoder HoodEncoder;
     private SparkMaxPIDController HoodController;
-    private final NetworkTableEntry HoodAngleEntry;
+    //private final NetworkTableEntry HoodAngleEntry;
     private boolean IsHoodHomed;
-    private HoodControlMode hoodControlMode = HoodControlMode.DISABLED;
+    //private HoodControlMode hoodControlMode = HoodControlMode.DISABLED;
     private double hoodTargetPosition = Double.NaN;
     private double hoodPercentOutput = 0.0;
     private static final int ENCODER_RESET_ITERATIONS = 500;
@@ -56,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
 
     public ShooterSubsystem(){
-        IsHoodHomed = false;
+        /*IsHoodHomed = false;
 
         Shooter.configFactoryDefault();
         ShooterFollower.configFactoryDefault();
@@ -101,13 +106,23 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         .getEntry();
         tab.addNumber("Hood Raw Encoder",()-> HoodEncoder.getPosition())
         .withPosition(0, 2)
-        .withSize(1, 1);
+        .withSize(1, 1);*/
+
+        orchestra.addInstrument(maininstrument);
+        
+        orchestra.addInstrument(secondinstrument);
+        orchestra.loadMusic("music");
 
         
 
 
         
     }
+    public void playmusic(){
+        
+        orchestra.play();
+    }
+    /*
     public void setFlywheelCurrentLimitEnabled(boolean enabled) {
         SupplyCurrentLimitConfiguration config = new SupplyCurrentLimitConfiguration();
         config.currentLimit = Constants.ShooterConstants.ShooterCurrentLimit;
@@ -209,6 +224,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
                     double Output;
                    Output = HoodController.calculate(HoodEncoder.getDistanceDegrees(), targetAngle);
                     HoodMotor.set(Output);*/
+                    /*
                     setReferenceAngle(Units.degreesToRadians(targetAngle));
 
                 }
@@ -237,7 +253,7 @@ public enum HoodControlMode {
         DISABLED,
         POSITION,
         PERCENT_OUTPUT
-    }
+    }*/
 
 
 

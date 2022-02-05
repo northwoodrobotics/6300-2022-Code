@@ -60,7 +60,8 @@ public class PoseTelemetry {
     public Pose2d getFieldPose() {
         return field.getRobotObject().getPose();
     }
-    public Field2d getField(){
+
+    public Field2d getField() {
         return field;
     }
 
