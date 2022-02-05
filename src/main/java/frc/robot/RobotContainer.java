@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -133,6 +134,11 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
   
   }
+  public static void UpdateTelemetry(){
+    dt.updateTelemetry();
+    dt.Updateodometry();
+    //dt.update(false, RobotController.getBatteryVoltage());
+  }
 
   
   private static double deadband(double value, double deadband) {
@@ -167,9 +173,9 @@ public class RobotContainer {
     master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
     master.addNumber("Gyro Angle", () -> dt.getAngle());
     master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
-    master.addNumber("PoseX", ()-> dt.getEstPose().getX());
-    master.addNumber("PoseY", ()-> dt.getEstPose().getY());
-    master.addNumber("PoseRotation", ()-> dt.getEstPose().getRotation().getDegrees());
+    master.addNumber("PoseX", ()-> dt.getPose().getX());
+    master.addNumber("PoseY", ()-> dt.getPose().getY());
+    master.addNumber("PoseRotation", ()-> dt.getPose().getRotation().getDegrees());
 
 
     

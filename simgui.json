@@ -1,12 +1,5 @@
 {
   "HALProvider": {
-    "Other Devices": {
-      "navX-Sensor[0]": {
-        "header": {
-          "open": true
-        }
-      }
-    },
     "RoboRIO": {
       "RoboRIO Input": {
         "open": true
@@ -21,6 +14,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
       "/LiveWindow/SwerveSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
@@ -76,8 +70,7 @@
       },
       "Vision": {
         "open": true
-      },
-      "open": true
+      }
     },
     "Shuffleboard": {
       "Drivetrain": {
@@ -99,6 +92,9 @@
       }
     },
     "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
       "open": true
     },
     "limelight-Front": {

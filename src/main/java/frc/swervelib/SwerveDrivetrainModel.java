@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
@@ -126,6 +127,9 @@ public class SwerveDrivetrainModel {
 
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(pose, getYaw());
+    }
+    public void Updateodometry(){
+        swerveOdometry.update(getGyroscopeRotation(), states[0], states[1], states[2], states[3]);
     }
 
 
@@ -261,6 +265,7 @@ public class SwerveDrivetrainModel {
         gyro.calibrateGyroscope();
     }
 
+
     public Rotation2d getYaw(){
         return gyro.readGetYaw();
     }
@@ -275,6 +280,11 @@ public class SwerveDrivetrainModel {
 
     public void updateTelemetry(){
         dtPoseView.update(Timer.getFPGATimestamp()*1000);
+        //dtPoseView.m_poseEstimator.update(getGyroscopeRotation(), states);
+        
+    }
+    public Field2d getField(){
+        return dtPoseView.getField();
     }
 
     public void resetWheelEncoders() {

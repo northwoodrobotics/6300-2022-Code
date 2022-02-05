@@ -40,6 +40,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    RobotContainer.dt.updateTelemetry();
+   
     
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -70,8 +72,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    RobotContainer.dt.updateTelemetry();
-    RobotContainer.dt.update(false, RobotController.getBatteryVoltage());
+   
+    //RobotContainer.dt.update(false, RobotController.getBatteryVoltage());
   }
 
   @Override
@@ -88,8 +90,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.dt.updateTelemetry();
-    RobotContainer.dt.update(false, RobotController.getBatteryVoltage());
+    
+    //RobotContainer.dt.update(false, RobotController.getBatteryVoltage());
   }
 
   @Override
