@@ -34,7 +34,8 @@
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/DriveModeChooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
-      "/SmartDashboard/Orientation Chooser": "String Chooser"
+      "/SmartDashboard/Orientation Chooser": "String Chooser",
+      "/SmartDashboard/SongChooser": "String Chooser"
     },
     "windows": {
       "/FMSInfo": {
@@ -71,20 +72,34 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/SongChooser": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
   "NetworkTables": {
     "LiveWindow": {
-      "SwerveSubsystem": {
-        "open": true
-      },
       "Ungrouped": {
-        "open": true
+        "PIDController[1]": {
+          "open": true
+        },
+        "PIDController[2]": {
+          "open": true
+        },
+        "PIDController[3]": {
+          "open": true
+        },
+        "PIDController[5]": {
+          "open": true
+        }
       },
       "Vision": {
         "open": true
-      }
+      },
+      "open": true
     },
     "Shuffleboard": {
       "Drivetrain": {
@@ -110,6 +125,9 @@
         "open": true
       },
       "DriveModeChooser": {
+        "open": true
+      },
+      "SongChooser": {
         "open": true
       },
       "open": true

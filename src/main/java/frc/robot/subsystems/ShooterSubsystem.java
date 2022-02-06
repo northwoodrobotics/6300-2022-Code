@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-
+import com.ctre.phoenix.music.Orchestra;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
@@ -36,6 +36,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     private TalonFX Shooter = new TalonFX(Constants.ShooterConstants.ShooterID);
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private CANSparkMax HoodMotor = new CANSparkMax(Constants.ShooterConstants.HoodID, MotorType.kBrushless);
+    private Orchestra ShooterOrchestra = new Orchestra();
 
 
     
@@ -92,6 +93,11 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodController.setOutputRange(Constants.ShooterConstants.HoodMinOutput, Constants.ShooterConstants.HoodMaxOutput);
         //HoodEncoder.setPositionConversionFactor(factor);
 
+        ShooterOrchestra.addInstrument(Shooter);
+        ShooterOrchestra.addInstrument(ShooterFollower);
+
+
+
 
         //HoodEncoder = HoodMotor.getAlternateEncoder(encoderType, countsPerRev)
         ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -121,15 +127,19 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         double feedForward = (Constants.ShooterConstants.ShooterFF*speed+Constants.ShooterConstants.StaticFriction)/RobotController.getBatteryVoltage();
         Shooter.set(ControlMode.Velocity, -speed/Constants.ShooterConstants.ShooterVelocitySensorCoffiecient, DemandType.ArbitraryFeedForward, -feedForward);
     }
+    public void PlayMusic(){
+        ShooterOrchestra.play();
+    }
+    public void StopMusic(){
+        
+    }
     public void stopFlywheel() {
         Shooter.set(ControlMode.Disabled, 0);
     }
     @Override
     public void update(double time, double dt) {
     }
-    public void PlayMusic(){
-        Shooter.set(ControlMode.MusicTone, 1);
-    }
+  
     public OptionalDouble getHoodTargetAngle() {
         if (Double.isFinite(hoodTargetPosition)) {
             return OptionalDouble.of(hoodTargetPosition);
@@ -219,6 +229,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         }
 
         HoodAngleEntry.setDouble(Math.toDegrees(getHoodMotorAngle()));
+
+        
     }
     public double getHoodMotorAngle(){
         return HoodAbsEncoder.getDistanceDegrees();
@@ -237,6 +249,10 @@ public enum HoodControlMode {
         DISABLED,
         POSITION,
         PERCENT_OUTPUT
+    }
+
+    public enum ShooterControlMode{
+        MUSIC, SHOOT
     }
 
 

@@ -56,6 +56,8 @@ public class RobotContainer {
   public static MusicMaker musicMaker;
 
   private DrivetrainMode driveControlMode = DrivetrainMode.DRIVE;
+
+  private DriveAndTurn driveandTurn;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -74,16 +76,21 @@ public class RobotContainer {
 
 
 
+
+
   
 
   public static final SpectrumXboxController driveController = new SpectrumXboxController(0, .1, .1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    
+      
 
 
-    switch(driveControlMode){
-      case DRIVE :
+    //switch(driveControlMode){
+     // case DRIVE :
+     // musicMaker = null;
       dt = DrivetrainSubsystem.createSwerveModel();
       m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
       m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
@@ -91,35 +98,39 @@ public class RobotContainer {
           () -> modifyAxis(-driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
           () -> modifyAxis(driveController.rightStick.getX()) *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
            // Configure the button bindings
-    configureButtonBindings();
 
+    configureButtonBindings();
     ShowInputs();
     showBlindlight();
+    driveandTurn = new DriveAndTurn(m_swerveSubsystem);
     
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.setDefaultOption("DriveAndTurn", new DriveAndTurn(m_swerveSubsystem));
+    
+    autoChooser.setDefaultOption("DriveAndTurn", driveandTurn);
     autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
     autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
     autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
     autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));
+    
+   
 
-      break;
-     case MUSIC :
-     musicMaker = new MusicMaker();
-     SongChooser.setDefaultOption("rickroll", new rickroll(musicMaker));
-     SongChooser.addOption("PokerFace", new pokerface(musicMaker));
-     SongChooser.addOption("gas-gas-gas", new gasgasgas(musicMaker));
-     SongChooser.addOption("stayin Alive", new stayinalive(musicMaker));
-     SmartDashboard.putData("SongChooser", SongChooser);
+      //break;
+   // case MUSIC :
+    // dt = null;
+   //  m_swerveSubsystem = null;
+   //  musicMaker = new MusicMaker();
+    // getMusicBindings();
+
 
      
      
-     break;
-     }
-     SmartDashboard.putData("DriveModeChooser", DriveModeChooser);
-     DriveModeChooser.setDefaultOption("DriveMode", DrivetrainMode.DRIVE);
-     DriveModeChooser.addOption("MusicMode", DrivetrainMode.MUSIC);
+    // break;
+    // }
+  //   SmartDashboard.putData("DriveModeChooser", DriveModeChooser);
+    // DriveModeChooser.setDefaultOption("DriveMode", DrivetrainMode.DRIVE);
+   //  DriveModeChooser.addOption("MusicMode", DrivetrainMode.MUSIC);
+  
+     SmartDashboard.putData("Auto Chooser", autoChooser);
 
 
    
@@ -165,6 +176,20 @@ public class RobotContainer {
     driveController.bButton.whileHeld(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
     driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
 
+  }
+  private void getMusicBindings(){
+    driveController.aButton.whenHeld(
+      new gasgasgas(musicMaker)
+    );
+    driveController.bButton.whenHeld(
+      new pokerface(musicMaker)
+    );
+    driveController.xButton.whenHeld(
+      new stayinalive(musicMaker)
+    );
+    driveController.yButton.whenHeld(
+      new rickroll(musicMaker)
+    );
   }
 
 
