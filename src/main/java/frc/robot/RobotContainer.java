@@ -244,9 +244,12 @@ public class RobotContainer {
     master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
     master.addNumber("Gyro Angle", () -> dt.getAngle());
     master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
-    master.addNumber("PoseX", ()-> dt.getPose().getX());
-    master.addNumber("PoseY", ()-> dt.getPose().getY());
-    master.addNumber("PoseRotation", ()-> dt.getPose().getRotation().getDegrees());
+    master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
+    master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
+    master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getEstPose().getRotation().getDegrees());
+    //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
+    //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());
+    //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());
 
 
     

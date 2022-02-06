@@ -1,5 +1,17 @@
 {
   "HALProvider": {
+    "Other Devices": {
+      "Talon FX[8]/Integrated Sensor": {
+        "header": {
+          "open": true
+        }
+      },
+      "navX-Sensor[0]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
     "RoboRIO": {
       "RoboRIO Input": {
         "open": true
