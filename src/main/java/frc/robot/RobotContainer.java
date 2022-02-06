@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import com.swervedrivespecialties.swervelib.DriveController;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.MusicMaker;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Vision.LEDMode;
@@ -26,6 +29,10 @@ import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
 import frc.robot.commands.AutoRoutines.RealSquare;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
+import frc.robot.commands.MusicLibary.gasgasgas;
+import frc.robot.commands.MusicLibary.pokerface;
+import frc.robot.commands.MusicLibary.rickroll;
+import frc.robot.commands.MusicLibary.stayinalive;
 import frc.robot.commands.SimCommands.SimAuton;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -46,9 +53,14 @@ public class RobotContainer {
  
   public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_swerveSubsystem;
+  public static MusicMaker musicMaker;
+
+  private DrivetrainMode driveControlMode = DrivetrainMode.DRIVE;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private static final SendableChooser<DrivetrainMode> DriveModeChooser = new SendableChooser<>();
+  private static final SendableChooser<Command> SongChooser = new SendableChooser<>();
 
   //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
@@ -68,17 +80,17 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    dt = DrivetrainSubsystem.createSwerveModel();
-    m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
 
-   
-    m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
+
+    switch(driveControlMode){
+      case DRIVE :
+      dt = DrivetrainSubsystem.createSwerveModel();
+      m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
+      m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
     () -> modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> modifyAxis(-driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
           () -> modifyAxis(driveController.rightStick.getX()) *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
-    
-      
-    // Configure the button bindings
+           // Configure the button bindings
     configureButtonBindings();
 
     ShowInputs();
@@ -92,9 +104,39 @@ public class RobotContainer {
     autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
     autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));
 
+      break;
+     case MUSIC :
+     musicMaker = new MusicMaker();
+     SongChooser.setDefaultOption("rickroll", new rickroll(musicMaker));
+     SongChooser.addOption("PokerFace", new pokerface(musicMaker));
+     SongChooser.addOption("gas-gas-gas", new gasgasgas(musicMaker));
+     SongChooser.addOption("stayin Alive", new stayinalive(musicMaker));
+     SmartDashboard.putData("SongChooser", SongChooser);
+
+     
+     
+     break;
+     }
+     SmartDashboard.putData("DriveModeChooser", DriveModeChooser);
+     DriveModeChooser.setDefaultOption("DriveMode", DrivetrainMode.DRIVE);
+     DriveModeChooser.addOption("MusicMode", DrivetrainMode.MUSIC);
+
+
+   
+    
+
+    
+   
+
+   
+    
+    
+      
+   
 
     
   }
+  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -124,6 +166,8 @@ public class RobotContainer {
     driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
 
   }
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -186,6 +230,23 @@ public class RobotContainer {
     
     
   }
+
+
+
+  public enum DrivetrainMode{
+    DRIVE,
+    MUSIC
+  }
+
+  public void setDriveMode(){
+    driveControlMode = DrivetrainMode.DRIVE;
+  }
+  public void setMusicMode(){
+    driveControlMode = DrivetrainMode.MUSIC;
+  }
+  
+
+
 
   public void showBlindlight(){
     master.addBoolean("RobotHasTarget", ()->blindlight.hasTarget());

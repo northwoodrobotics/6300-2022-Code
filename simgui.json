@@ -21,9 +21,18 @@
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Talon FX [10]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [11]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [14]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [15]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [4]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [5]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [7]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [8]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/LiveWindow/Vision": "Subsystem",
       "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/DriveModeChooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Orientation Chooser": "String Chooser"
     },
@@ -44,6 +53,11 @@
         }
       },
       "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/DriveModeChooser": {
         "window": {
           "visible": true
         }
@@ -92,7 +106,10 @@
       }
     },
     "SmartDashboard": {
-      "Field": {
+      "Auto Chooser": {
+        "open": true
+      },
+      "DriveModeChooser": {
         "open": true
       },
       "open": true
