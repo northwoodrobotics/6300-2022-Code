@@ -25,6 +25,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
+      "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/SwerveSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",

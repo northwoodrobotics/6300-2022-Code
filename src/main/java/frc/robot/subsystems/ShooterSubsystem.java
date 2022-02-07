@@ -35,16 +35,16 @@ import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Updatable{
     private TalonFX Shooter = new TalonFX(Constants.ShooterConstants.ShooterID);
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
-    private CANSparkMax HoodMotor = new CANSparkMax(Constants.ShooterConstants.HoodID, MotorType.kBrushless);
+    //private CANSparkMax HoodMotor = new CANSparkMax(Constants.ShooterConstants.HoodID, MotorType.kBrushless);
     private Orchestra ShooterOrchestra = new Orchestra();
 
 
     
-    private RelativeEncoder HoodEncoder;
-    private RevThroughBore HoodAbsEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
+    //private RelativeEncoder HoodEncoder;
+    //private RevThroughBore HoodAbsEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
    // private SparkMaxAlternateEncoder HoodEncoder;
-    private SparkMaxPIDController HoodController;
-    private final NetworkTableEntry HoodAngleEntry;
+    //private SparkMaxPIDController HoodController;
+    //private final NetworkTableEntry HoodAngleEntry;
     private boolean IsHoodHomed;
     private HoodControlMode hoodControlMode = HoodControlMode.DISABLED;
     private double hoodTargetPosition = Double.NaN;
@@ -76,6 +76,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configAllSettings(ShooterConfig);
 
         ShooterFollower.follow(Shooter);
+        ShooterFollower.setInverted(InvertType.InvertMotorOutput);
         
 
 
@@ -83,7 +84,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         
 
 
-        HoodController = HoodMotor.getPIDController();
+       /* HoodController = HoodMotor.getPIDController();
         HoodController.setFeedbackDevice(HoodEncoder);
         HoodController.setP(Constants.ShooterConstants.HoodP);
         HoodController.setI(Constants.ShooterConstants.HoodI);
@@ -91,7 +92,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodController.setIZone(Constants.ShooterConstants.HoodIZone);
         HoodController.setFF(Constants.ShooterConstants.HoodFF);
         HoodController.setOutputRange(Constants.ShooterConstants.HoodMinOutput, Constants.ShooterConstants.HoodMaxOutput);
-        //HoodEncoder.setPositionConversionFactor(factor);
+        //HoodEncoder.setPositionConversionFactor(factor);*/
 
         ShooterOrchestra.addInstrument(Shooter);
         ShooterOrchestra.addInstrument(ShooterFollower);
@@ -100,7 +101,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
 
         //HoodEncoder = HoodMotor.getAlternateEncoder(encoderType, countsPerRev)
-        ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+       /* ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
         HoodAngleEntry = tab.add("Hood Angle", 0.0) 
         .withPosition(0, 0)
         .withSize(1, 1)
@@ -108,7 +109,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         tab.addNumber("Hood Raw Encoder",()-> HoodEncoder.getPosition())
         .withPosition(0, 2)
         .withSize(1, 1);
-
+*/
         
 
 
@@ -122,6 +123,10 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configSupplyCurrentLimit(config, 0);
         
     }
+    public void percentoutput(double speed){
+        Shooter.set(ControlMode.PercentOutput, speed);
+    }
+    
 
     public void RunShooter(double speed){
         double feedForward = (Constants.ShooterConstants.ShooterFF*speed+Constants.ShooterConstants.StaticFriction)/RobotController.getBatteryVoltage();
@@ -154,6 +159,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     public boolean isHoodHomed() {
         return IsHoodHomed;
     }    
+    /*
     public boolean isHoodAtTargetAngle() {
         OptionalDouble targetAngle = getHoodTargetAngle();
         double currentAngle = getHoodMotorAngle();
@@ -163,7 +169,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         }
 
         return MathUtils.epsilonEquals(targetAngle.getAsDouble(), currentAngle, Math.toRadians(1.0));
-    }
+    /*
     @SuppressWarnings("SelfAssignment")
     public void setReferenceAngle(double refereneceAngleRadians){
         double currentAngleRadians = HoodEncoder.getPosition();
@@ -195,7 +201,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         HoodController.setReference(adjustedReferenceAngleRadians, ControlType.kPosition);
 
-    }
+    }*/
+    /*
     @Override
     public void periodic() {
         switch (hoodControlMode) {
@@ -218,7 +225,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
                     targetAngle = MathUtils.clamp(targetAngle, Constants.ShooterConstants.HoodMinAngle, Constants.ShooterConstants.HoodMaxAngle);
                     double Output;
                    Output = HoodController.calculate(HoodEncoder.getDistanceDegrees(), targetAngle);
-                    HoodMotor.set(Output);*/
+                    HoodMotor.set(Output);*//*
                     setReferenceAngle(Units.degreesToRadians(targetAngle));
 
                 }
@@ -231,10 +238,11 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodAngleEntry.setDouble(Math.toDegrees(getHoodMotorAngle()));
 
         
-    }
+    }*/
+    /*
     public double getHoodMotorAngle(){
         return HoodAbsEncoder.getDistanceDegrees();
-    }
+    }*/
     
     public void disableHood() {
         hoodControlMode = HoodControlMode.DISABLED;

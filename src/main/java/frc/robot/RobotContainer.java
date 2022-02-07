@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.MusicMaker;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Vision.LEDMode;
@@ -34,6 +35,7 @@ import frc.robot.commands.MusicLibary.pokerface;
 import frc.robot.commands.MusicLibary.rickroll;
 import frc.robot.commands.MusicLibary.stayinalive;
 import frc.robot.commands.SimCommands.SimAuton;
+import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
@@ -58,6 +60,8 @@ public class RobotContainer {
   private DrivetrainMode driveControlMode = DrivetrainMode.DRIVE;
 
   private DriveAndTurn driveandTurn;
+
+  public static ShooterSubsystem shooter;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -66,8 +70,7 @@ public class RobotContainer {
 
   //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
-  public static Vision blindlight = new Vision();
-
+  public static Vision blindlight;
 
 
 
@@ -85,7 +88,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
-      
+      blindlight = new Vision();
+      shooter = new ShooterSubsystem();
 
 
     //switch(driveControlMode){
@@ -97,6 +101,8 @@ public class RobotContainer {
     () -> modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> modifyAxis(-driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
           () -> modifyAxis(driveController.rightStick.getX()) *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
+
+
            // Configure the button bindings
 
     configureButtonBindings();
@@ -164,6 +170,9 @@ public class RobotContainer {
     driveController.startButton.whenHeld(
       new CalibrateGyro(m_swerveSubsystem)
     );
+    driveController.leftTriggerButton.whenHeld(
+      new ShooterCommand(shooter, blindlight)
+    );
 
     driveController.xButton.whileHeld(
       new RotateToTarget(m_swerveSubsystem, 
@@ -173,7 +182,7 @@ public class RobotContainer {
 
       ));
     driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
-    driveController.bButton.whileHeld(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
+    driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
     driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
 
   }

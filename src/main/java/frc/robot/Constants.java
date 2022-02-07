@@ -176,8 +176,8 @@ public final class Constants {
     }
 
     public final static class ShooterConstants{
-        public static final int ShooterID = 0;
-        public static final int ShooterFollowerID = 0;
+        public static final int ShooterID = 20;
+        public static final int ShooterFollowerID = 21;
         public static final int HoodID = 0;
         public static final int HoodEncoderID = 0;
 

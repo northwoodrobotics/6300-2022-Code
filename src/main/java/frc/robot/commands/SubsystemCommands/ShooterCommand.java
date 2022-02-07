@@ -31,8 +31,9 @@ public class ShooterCommand extends CommandBase{
     
     @Override
     public void execute() {
-        subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
-        subsystem.setHoodTargetAngle(Constants.ShooterConstants.HoodPositionTable.lookup(Blindight.getRobotToTargetDistance()));
+        subsystem.percentoutput(.5);
+        //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
+        //subsystem.setHoodTargetAngle(Constants.ShooterConstants.HoodPositionTable.lookup(Blindight.getRobotToTargetDistance()));
     }
     @Override
     public void end(boolean interrupted) {
