@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     private static final SendableChooser<String> SongChooser = new SendableChooser<>();
     public ShuffleboardTab music = Shuffleboard.getTab("Music");
 
-    public String rickroll = "RickRoll";
+    public String rickroll = "rickRoll";
     public String gasgasgas = "gasgasgas";
     public String pokerface = "pokerface";
     public String stayinalive = "stayinalive";
@@ -180,7 +180,10 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     }
     public boolean isHoodHomed() {
         return IsHoodHomed;
-    }    
+    } 
+    public double shooterSpeed(){
+        return Shooter.getSelectedSensorVelocity()*Constants.ShooterConstants.ShooterVelocitySensorCoffiecient;
+    }   
     /*
     public boolean isHoodAtTargetAngle() {
         OptionalDouble targetAngle = getHoodTargetAngle();

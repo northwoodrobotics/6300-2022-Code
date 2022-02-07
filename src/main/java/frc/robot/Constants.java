@@ -197,8 +197,8 @@ public final class Constants {
         public static final double ShooterCurrentLimit = 10.0;
 
 
-        public static final double ShooterPositonSensorCoffiecient = 1/DriveConstants.WHEEL_ENC_COUNTS_PER_WHEEL_REV * ShooterGearRatio;
-        public static final double ShooterVelocitySensorCoffiecient = ShooterPositonSensorCoffiecient* 10*60;
+        public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 1.4;
+        public static final double ShooterVelocitySensorCoffiecient = ShooterPositonSensorCoffiecient* (1000/100)*60;
         public static final double ShooterFF = 0.0012;
         public static final double StaticFriction = 0.54;
 

@@ -265,6 +265,7 @@ public class RobotContainer {
     master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
     master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
     master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getEstPose().getRotation().getDegrees());
+    master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed()*Constants.ShooterConstants.ShooterGearRatio);
     //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
     //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());
     //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());
