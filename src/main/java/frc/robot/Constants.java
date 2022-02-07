@@ -189,8 +189,8 @@ public final class Constants {
         public static final double HoodMaxOutput = 1;
         public static final double HoodMinOutput = -1;
 
-        public static final double ShooterGearRatio = 1.5;
-        public static final double ShooterP = 1;
+        public static final double ShooterGearRatio = 1.4;
+        public static final double ShooterP = .5;
         public static final double ShooterI = 0.0;
         public static final double ShooterD = 0.0;
         public static final double Shooter_AllowableError = 200;

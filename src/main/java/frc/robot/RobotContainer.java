@@ -30,10 +30,7 @@ import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
 import frc.robot.commands.AutoRoutines.RealSquare;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
-import frc.robot.commands.MusicLibary.gasgasgas;
-import frc.robot.commands.MusicLibary.pokerface;
-import frc.robot.commands.MusicLibary.rickroll;
-import frc.robot.commands.MusicLibary.stayinalive;
+import frc.robot.commands.MusicLibary.PlaySelectedSong;
 import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -65,7 +62,7 @@ public class RobotContainer {
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
-  private static final SendableChooser<DrivetrainMode> DriveModeChooser = new SendableChooser<>();
+  //private static final SendableChooser<DrivetrainMode> DriveModeChooser = new SendableChooser<>();
   private static final SendableChooser<Command> SongChooser = new SendableChooser<>();
 
   //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
@@ -84,6 +81,7 @@ public class RobotContainer {
   
 
   public static final SpectrumXboxController driveController = new SpectrumXboxController(0, .1, .1);
+  public static final SpectrumXboxController DJController = new SpectrumXboxController(1, 0.1, 0.1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -117,6 +115,7 @@ public class RobotContainer {
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
     autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
     autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));
+
     
    
 
@@ -136,7 +135,8 @@ public class RobotContainer {
     // DriveModeChooser.setDefaultOption("DriveMode", DrivetrainMode.DRIVE);
    //  DriveModeChooser.addOption("MusicMode", DrivetrainMode.MUSIC);
   
-     SmartDashboard.putData("Auto Chooser", autoChooser);
+     //SmartDashboard.putData("Auto Chooser", autoChooser);
+     SmartDashboard.putData("Song", SongChooser);
 
 
    
@@ -181,12 +181,19 @@ public class RobotContainer {
             () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
 
       ));
-    driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
+    //driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
-    driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
+    //driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
+
+    DJController.aButton.toggleWhenPressed(
+      new PlaySelectedSong(shooter)
+    );
+    
+   
+   
 
   }
-  private void getMusicBindings(){
+  /*private void getMusicBindings(){
     driveController.aButton.whenHeld(
       new gasgasgas(musicMaker)
     );
@@ -199,7 +206,7 @@ public class RobotContainer {
     driveController.yButton.whenHeld(
       new rickroll(musicMaker)
     );
-  }
+  }*/
 
 
 
@@ -213,7 +220,9 @@ public class RobotContainer {
 
     // An ExampleCommand will run in autonomous
   
+ 
   }
+
   public static void UpdateTelemetry(){
     dt.updateTelemetry();
     //dt.Updateodometry();

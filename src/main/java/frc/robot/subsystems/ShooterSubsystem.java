@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
 import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
@@ -38,6 +39,14 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     //private CANSparkMax HoodMotor = new CANSparkMax(Constants.ShooterConstants.HoodID, MotorType.kBrushless);
     private Orchestra ShooterOrchestra = new Orchestra();
 
+    private static final SendableChooser<String> SongChooser = new SendableChooser<>();
+    public ShuffleboardTab music = Shuffleboard.getTab("Music");
+
+    public String rickroll = "RickRoll";
+    public String gasgasgas = "gasgasgas";
+    public String pokerface = "pokerface";
+    public String stayinalive = "stayinalive";
+    
 
     
     //private RelativeEncoder HoodEncoder;
@@ -77,6 +86,12 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         ShooterFollower.follow(Shooter);
         ShooterFollower.setInverted(InvertType.InvertMotorOutput);
+        SongChooser.setDefaultOption("rick roll",rickroll);
+        SongChooser.addOption("Gas Gas GAS!", gasgasgas);
+        SongChooser.addOption("PokerFace", pokerface);
+        SongChooser.addOption("Stayin Alive", stayinalive);
+        music.add(SongChooser);
+       
         
 
 
@@ -132,10 +147,17 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         double feedForward = (Constants.ShooterConstants.ShooterFF*speed+Constants.ShooterConstants.StaticFriction)/RobotController.getBatteryVoltage();
         Shooter.set(ControlMode.Velocity, -speed/Constants.ShooterConstants.ShooterVelocitySensorCoffiecient, DemandType.ArbitraryFeedForward, -feedForward);
     }
+    public void PauseMusic(){
+        ShooterOrchestra.pause();
+    }
+    public void LoadMusic(){
+        ShooterOrchestra.loadMusic(SongChooser.getSelected());
+    }
     public void PlayMusic(){
         ShooterOrchestra.play();
     }
     public void StopMusic(){
+        ShooterOrchestra.stop();
         
     }
     public void stopFlywheel() {
