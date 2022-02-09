@@ -14,10 +14,12 @@ public class ShooterCommand extends CommandBase{
 
     private final ShooterSubsystem subsystem; 
     private final Vision Blindight; 
+    private double speed;
 
 
     public ShooterCommand(ShooterSubsystem shooter, Vision blindlight){
         this.subsystem = shooter;
+        //this.speed = speed;
         this.Blindight = blindlight;
 
         addRequirements(shooter);
@@ -31,9 +33,9 @@ public class ShooterCommand extends CommandBase{
     
     @Override
     public void execute() {
-        subsystem.percentoutput(.5);
+        //subsystem.percentoutput(1);   
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
-        //subsystem.RunShooter(3000);
+        subsystem.RunShooter(5000);
         //subsystem.setHoodTargetAngle(Constants.ShooterConstants.HoodPositionTable.lookup(Blindight.getRobotToTargetDistance()));
     }
     @Override

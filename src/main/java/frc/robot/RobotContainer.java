@@ -32,9 +32,14 @@ import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
 import frc.robot.commands.SimCommands.SimAuton;
+import frc.robot.commands.SubsystemCommands.SetServoMax;
+import frc.robot.commands.SubsystemCommands.SetServoMid;
+import frc.robot.commands.SubsystemCommands.SetServoMin;
+import frc.robot.commands.SubsystemCommands.SetServoZero;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,10 +69,12 @@ public class RobotContainer {
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
   //private static final SendableChooser<DrivetrainMode> DriveModeChooser = new SendableChooser<>();
   private static final SendableChooser<Command> SongChooser = new SendableChooser<>();
-
+  //private static final SendableChooser<Double> SpeedChooser = new SendableChooser<>();
   //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
   public static Vision blindlight;
+  private double ShooterSpeed = 3000;
+
 
 
 
@@ -107,6 +114,9 @@ public class RobotContainer {
     ShowInputs();
     showBlindlight();
     driveandTurn = new DriveAndTurn(m_swerveSubsystem);
+    SmartDashboard.putNumber("Shooter RPM", ShooterSpeed);
+
+    
     
     
     autoChooser.setDefaultOption("DriveAndTurn", driveandTurn);
@@ -115,6 +125,9 @@ public class RobotContainer {
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
     autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
     autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));
+
+     SmartDashboard.getNumber("Shooter RPM", 0);
+      
 
     
    
@@ -172,7 +185,7 @@ public class RobotContainer {
     );
     driveController.leftTriggerButton.whenHeld(
       new ShooterCommand(shooter, blindlight)
-    );
+       );
 
     driveController.xButton.whileHeld(
       new RotateToTarget(m_swerveSubsystem, 
@@ -184,10 +197,14 @@ public class RobotContainer {
     //driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
     //driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
+    driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
+    driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
+    driveController.Dpad.Left.whenPressed(new SetServoMid(shooter), true);
+    driveController.Dpad.Right.whenPressed(new SetServoZero(shooter), true);
 
-    DJController.aButton.toggleWhenPressed(
-      new PlaySelectedSong(shooter)
-    );
+    /*DJController.aButton.toggleWhenPressed(
+      new PlaySelectedSong(shooter), true
+    );*/
     
    
    
@@ -265,10 +282,10 @@ public class RobotContainer {
     master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
     master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
     master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getEstPose().getRotation().getDegrees());
-    master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed()*Constants.ShooterConstants.ShooterGearRatio);
+    master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed()/2);
     //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
     //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());
-    //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());
+    //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());z
 
 
     

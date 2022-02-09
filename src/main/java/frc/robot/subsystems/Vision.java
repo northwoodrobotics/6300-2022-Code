@@ -82,13 +82,14 @@ public class Vision extends SubsystemBase{
     @Override
 	public void periodic() {
 		SmartDashboard.putNumber("Distance to Target", Math.round(getAvgDistance() * 10) / 10.0);
+		SmartDashboard.putNumber("Raw Distance To Target", getRobotToTargetDistance());
 		avgDistance.add(getRobotToTargetDistance());
 		if(avgDistance.size() == 10){
 			avgDistance.remove(0);
 		}
 	}
     public double getRobotToTargetDistance() {
-		return (Constants.VisionConstants.TargetHeight - Constants.VisionConstants.blindlightHeight) / Math.tan(Math.toRadians(Constants.VisionConstants.blindlightAngle + getTargetAngleY()));
+		return (Units.inchesToMeters(16) - Units.inchesToMeters(7.5)) / Math.tan(Math.toRadians(0 + getTargetAngleY()));
 	}
 
 	public double getAvgDistance(){

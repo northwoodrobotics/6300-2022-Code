@@ -25,9 +25,9 @@ import frc.ExternalLib.RangerLib.LookupTable;
 public final class Constants {
 
     public static final class VisionConstants{
-        public static final double TargetHeight = Units.inchesToMeters(30);
-        public static final double blindlightHeight = Units.inchesToMeters(6);
-        public static final double blindlightAngle = 0;
+        public static final double TargetHeight = Units.inchesToMeters(16);
+        public static final double blindlightHeight = Units.inchesToMeters(7.5);
+        public static final double blindlightAngle = 1;
 
     }
     public static final class DriveConstants{
@@ -178,10 +178,12 @@ public final class Constants {
     public final static class ShooterConstants{
         public static final int ShooterID = 20;
         public static final int ShooterFollowerID = 21;
-        public static final int HoodID = 0;
+        public static final int HoodID = 30;
+        public static final int HoodServoID =0;
+        public static final int HoodServo2ID = 2;
         public static final int HoodEncoderID = 0;
 
-        public static final double HoodP = 0;
+        public static final double HoodP = 0.01;
         public static final double HoodI = 0;
         public static final double HoodD = 0;
         public static final double HoodIZone = 0;
@@ -190,16 +192,17 @@ public final class Constants {
         public static final double HoodMinOutput = -1;
 
         public static final double ShooterGearRatio = 1.4;
-        public static final double ShooterP = .5;
+        public static final double ShooterP = 0.01;
         public static final double ShooterI = 0.0;
         public static final double ShooterD = 0.0;
+        //public static final double ShooerFF = .05;
         public static final double Shooter_AllowableError = 200;
         public static final double ShooterCurrentLimit = 10.0;
 
 
-        public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 1.4;
+        public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 2;
         public static final double ShooterVelocitySensorCoffiecient = ShooterPositonSensorCoffiecient* (1000/100)*60;
-        public static final double ShooterFF = 0.0012;
+        public static final double ShooterFF = 0.05;
         public static final double StaticFriction = 0.54;
 
         public static final LookupTable ShooterVelocityTable = new LookupTable();
@@ -208,8 +211,8 @@ public final class Constants {
             ShooterVelocityTable.put(0,0);
         }
 
-        public static final double HoodMinAngle = 0.0;
-        public static final double HoodMaxAngle = 0.0;
+        public static final double HoodMinAngle = 16;
+        public static final double HoodMaxAngle = -30;
 
         public static final double HoodOffset = 0.0;
 
