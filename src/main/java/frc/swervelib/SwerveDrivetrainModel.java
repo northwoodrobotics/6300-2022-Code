@@ -107,7 +107,7 @@ public class SwerveDrivetrainModel {
         orientationChooser.setDefaultOption("Field Oriented", "Field Oriented");
         orientationChooser.addOption("Robot Oriented", "Robot Oriented");
         SmartDashboard.putData("Orientation Chooser", orientationChooser);
-        gyro.calibrateGyroscope();
+        //gyro.calibrateGyroscope();
 
         m_holo = new HolonomicDriveController(SwerveConstants.XPIDCONTROLLER, SwerveConstants.YPIDCONTROLLER, thetaController);
         

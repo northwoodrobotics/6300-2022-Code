@@ -68,7 +68,7 @@ public class RobotContainer {
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
   //private static final SendableChooser<DrivetrainMode> DriveModeChooser = new SendableChooser<>();
-  private static final SendableChooser<Command> SongChooser = new SendableChooser<>();
+  //private static final SendableChooser<Command> SongChooser = new SendableChooser<>();
   //private static final SendableChooser<Double> SpeedChooser = new SendableChooser<>();
   //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
@@ -148,8 +148,8 @@ public class RobotContainer {
     // DriveModeChooser.setDefaultOption("DriveMode", DrivetrainMode.DRIVE);
    //  DriveModeChooser.addOption("MusicMode", DrivetrainMode.MUSIC);
   
-     //SmartDashboard.putData("Auto Chooser", autoChooser);
-     SmartDashboard.putData("Song", SongChooser);
+     SmartDashboard.putData("Auto Chooser", autoChooser);
+     //SmartDashboard.putData("Song", SongChooser);
 
 
    
@@ -282,7 +282,7 @@ public class RobotContainer {
     master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
     master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
     master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getEstPose().getRotation().getDegrees());
-    master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed()/2);
+    master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed());
     //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
     //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());
     //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());z

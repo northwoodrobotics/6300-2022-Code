@@ -35,6 +35,7 @@ public class RevThroughBore implements IYawEncoder{
       double currentYawDist = this.yawDistanceAverage.calculate(encoder.getDistance());
       return frc.ExternalLib.BionicsLib.Conversion.normalize(currentYawDist + encoderOffset, -180, 180);
     }
+    
 
     
     

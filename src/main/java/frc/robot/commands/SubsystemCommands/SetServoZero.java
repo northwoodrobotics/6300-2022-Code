@@ -11,6 +11,6 @@ public class SetServoZero extends CommandBase{
         addRequirements(subsystem);
     }
     public void execute(){
-        shooter.SetHoodZero();
+        shooter.MoveHood(0);
     }
 }

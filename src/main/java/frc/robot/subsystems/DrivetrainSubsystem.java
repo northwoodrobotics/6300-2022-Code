@@ -12,6 +12,7 @@ import frc.wpiClasses.QuadSwerveSim;
 import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
 
 import java.util.ArrayList;
 
@@ -88,7 +89,7 @@ public class DrivetrainSubsystem {
                 Constants.DriveConstants.BACK_RIGHT_MODULE_STEER_OFFSET, "BR"
         );
 
-        Gyroscope gyro = GyroscopeHelper.createnavXMXP();
+        Gyroscope gyro = GyroscopeHelper.createPigeon2CAN(DriveConstants.PIGEON_ID);
 
         realModules.add(m_frontLeftModule);
         realModules.add(m_frontRightModule);
