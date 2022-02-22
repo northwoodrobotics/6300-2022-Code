@@ -229,7 +229,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
 
     public void MoveHood(double setpoint){
-        HoodController.setReference(setpoint, ControlType.kPosition);
+        HoodMotor.getPIDController().setReference(setpoint, ControlType.kPosition);
     }
 
     
@@ -296,8 +296,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
                 } else { 
                     double targetAngle = getHoodTargetAngle().getAsDouble();
                     targetAngle = MathUtils.clamp(targetAngle, ShooterConstants.HoodMinAngle, ShooterConstants.HoodMaxAngle);
-
-                    HoodController.setReference(targetAngle, ControlType.kPosition);
+                    MoveHood(targetAngle);
+                    //HoodController.setReference(targetAngle, ControlType.kPosition);
                    
                      
                   //  double targetAngle = getHoodTargetAngle().getAsDouble();

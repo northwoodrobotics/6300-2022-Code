@@ -11,6 +11,6 @@ public class SetServoMax extends CommandBase{
         addRequirements(subsystem);
     }
     public void execute(){
-        shooter.MoveHood(-10);
+        shooter.setHoodTargetAngle(-10);
     }
 }

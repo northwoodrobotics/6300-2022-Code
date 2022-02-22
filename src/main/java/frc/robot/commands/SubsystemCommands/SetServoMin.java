@@ -11,6 +11,6 @@ public class SetServoMin extends CommandBase{
         addRequirements(subsystem);
     }
     public void execute(){
-       shooter.MoveHood(0);
+       shooter.setHoodTargetAngle(0);
     }
 }
