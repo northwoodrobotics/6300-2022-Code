@@ -211,15 +211,19 @@ public final class Constants {
             ShooterVelocityTable.put(0,0);
         }
 
-        public static final double HoodMinAngle = 16;
-        public static final double HoodMaxAngle = -30;
+        public static final double HoodMinAngle = -40;
+        public static final double HoodMaxAngle = 3;
 
         public static final double HoodOffset = 0.0;
 
         public static final LookupTable HoodPositionTable = new LookupTable();
         static {
             //tune this for as many as you want
-            HoodPositionTable.put(0,0);
+            HoodPositionTable.put(1,-10);
+            HoodPositionTable.put(2, -15);
+            HoodPositionTable.put(3, -20);
+            HoodPositionTable.put(4, -25);
+            HoodPositionTable.put(5, -30);
         }
 
 

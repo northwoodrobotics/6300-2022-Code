@@ -89,7 +89,7 @@ public class Vision extends SubsystemBase{
 		}
 	}
     public double getRobotToTargetDistance() {
-		return (Units.inchesToMeters(16) - Units.inchesToMeters(7.5)) / Math.tan(Math.toRadians(0 + getTargetAngleY()));
+		return (Units.inchesToMeters(98) - Units.inchesToMeters(27)) / Math.tan(Math.toRadians(45 + getTargetAngleY()));
 	}
 
 	public double getAvgDistance(){

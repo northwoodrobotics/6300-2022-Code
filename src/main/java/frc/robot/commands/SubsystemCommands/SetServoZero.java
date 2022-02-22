@@ -11,6 +11,6 @@ public class SetServoZero extends CommandBase{
         addRequirements(subsystem);
     }
     public void execute(){
-        shooter.setHoodMotorPower(0.3);
+        shooter.MoveHood(-30);
     }
 }
