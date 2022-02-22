@@ -10,6 +10,6 @@ public class SetServoMid extends CommandBase{
         addRequirements(subsystem);
     }
     public void execute(){
-        shooter.MoveHood(-25);
+        shooter.disableHood();
     }
 }

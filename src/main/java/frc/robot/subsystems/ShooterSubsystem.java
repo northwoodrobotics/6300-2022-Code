@@ -148,6 +148,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         tab.addNumber("Hood Raw Encoder",()-> HoodEncoder.getPosition())
         .withPosition(0, 2)
         .withSize(1, 1);
+        tab.addString("HoodControlMode", ()-> getControlMode())
+        .withPosition(0, 3)
+        .withSize(2, 2);
 
         
 
@@ -162,8 +165,14 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configSupplyCurrentLimit(config, 0);
         
     }
-    public void percentoutput(double speed){
+   /* public void percentoutput(double speed){
         Shooter.set(ControlMode.PercentOutput, speed);
+    }*/
+
+
+    public void setHoodMotorPower(double percent) {
+        hoodControlMode = HoodControlMode.PERCENT_OUTPUT;
+        hoodPercentOutput = percent;
     }
 
 
@@ -209,31 +218,16 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         hoodControlMode = HoodControlMode.POSITION;
         hoodTargetPosition = angle;
     }
-    public boolean isHoodHomed() {
-        return IsHoodHomed;
-    } 
+
     public double shooterSpeed(){
         return Shooter.getSelectedSensorVelocity()*Constants.ShooterConstants.ShooterVelocitySensorCoffiecient;
     }   
-    public void SetHoodMin(){
-        setHoodTargetAngle(20);
-       
 
-
-    }
 
     public void MoveHood(double setpoint){
         HoodController.setReference(setpoint, ControlType.kPosition);
     }
-    public void SetHoodZero(){
-        setHoodTargetAngle(0);
-    }
-    public void SetHoodMax(){
-       setHoodTargetAngle(-30);
-    }
-    public void SetHoodMid(){
-        setHoodTargetAngle(-10);
-    }
+
     
     public boolean isHoodAtTargetAngle() {
         OptionalDouble targetAngle = getHoodTargetAngle();
@@ -282,7 +276,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     
     
 
-    /*@Override
+    @Override
     public void periodic() {
         switch (hoodControlMode) {
             case DISABLED:
@@ -294,7 +288,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
                 }
 
                 if (getHoodTargetAngle().isEmpty()) {
-                    HoodMotor.set(0.0);
+                    HoodController.setReference(0, ControlType.kPosition);
                 } else { 
                     double targetAngle = getHoodTargetAngle().getAsDouble();
                     targetAngle = MathUtils.clamp(targetAngle, ShooterConstants.HoodMinAngle, ShooterConstants.HoodMaxAngle);
@@ -319,19 +313,32 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         //HoodAngleEntry.setDouble(getHoodTargetAngle().getAsDouble());
 
         
-    }*/
-    /*
-    public double getHoodMotorAngle(){
-        return HoodAbsEncoder.getDistanceDegrees();
-    }*/
+    }
     
-    /*public void disableHood() {
+    public double getHoodMotorAngle(){
+        return HoodEncoder.getPosition();
+    }
+    
+    public void disableHood() {
         hoodControlMode = HoodControlMode.DISABLED;
         hoodTargetPosition = Double.NaN;
     }
     public void setHoodHomed(boolean target) {
         this.IsHoodHomed = target;
-    }*/
+    }
+    public boolean isHoodHomed() {
+        return IsHoodHomed;
+    } 
+    public void zeroHoodMotor() {
+        this.IsHoodHomed = true;
+
+        double sensorPosition = (0);
+        HoodEncoder.setPosition((int) sensorPosition);
+    }
+    public String getControlMode(){
+        return hoodControlMode.toString();
+    }
+    
 
 
 public enum HoodControlMode {

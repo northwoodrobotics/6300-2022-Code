@@ -1,7 +1,7 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "Talon FX[8]/Integrated Sensor": {
+      "Pigeon 2[28]": {
         "header": {
           "open": true
         }
@@ -44,6 +44,7 @@
       "/LiveWindow/Ungrouped/Talon FX [8]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/LiveWindow/Vision": "Subsystem",
+      "/Shuffleboard/Music/SendableChooser[1]": "String Chooser",
       "/Shuffleboard/Music/SendableChooser[2]": "String Chooser",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/DriveModeChooser": "String Chooser",
@@ -113,8 +114,7 @@
       },
       "Vision": {
         "open": true
-      },
-      "open": true
+      }
     },
     "Shuffleboard": {
       "Drivetrain": {
@@ -129,6 +129,9 @@
         }
       },
       "Music": {
+        "open": true
+      },
+      "Shooter": {
         "open": true
       },
       "Vision": {
