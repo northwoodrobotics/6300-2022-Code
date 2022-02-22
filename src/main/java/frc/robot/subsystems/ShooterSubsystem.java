@@ -22,7 +22,8 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.ExternalLib.CitrusLib.Subsystem;
+//import frc.ExternalLib.CitrusLib.Subsystem;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.ExternalLib.CitrusLib.ServoMotorSubsystem.PeriodicIO;
 import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
@@ -151,6 +152,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         tab.addString("HoodControlMode", ()-> getControlMode())
         .withPosition(0, 3)
         .withSize(2, 2);
+        tab.addNumber("HoodControlAngle", ()-> getHoodTargetAngle().orElse(Double.NaN))
+        .withPosition(1, 2)
+        .withSize(1, 1);
 
         
 
