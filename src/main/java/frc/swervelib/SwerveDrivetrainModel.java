@@ -303,7 +303,7 @@ public class SwerveDrivetrainModel {
 
                 // Position controllers
                 SwerveConstants.XPIDCONTROLLER,
-                SwerveConstants.YPIDCONTROLLER,
+                SwerveConstants.YPIDCONTROLLER, 
                 thetaController,
                 commandStates -> this.states = commandStates,
                 m_drive);

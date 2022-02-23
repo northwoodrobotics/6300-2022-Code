@@ -115,7 +115,7 @@ public final class Constants {
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond =Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.pow(Math.PI, 2);
 
         public static final double TRAJECTORYXkP = 0.94791;
         public static final double TRAJECTORYXkI = 0;
@@ -183,7 +183,7 @@ public final class Constants {
         public static final int HoodServo2ID = 2;
         public static final int HoodEncoderID = 0;
 
-        public static final double HoodP = 0.01;
+        public static final double HoodP = 0.1;
         public static final double HoodI = 0;
         public static final double HoodD = 0;
         public static final double HoodIZone = 0;

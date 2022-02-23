@@ -130,8 +130,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
                 steerAngle += 2.0 * Math.PI;
             }
             
-
-            driveController.setReferenceVoltage(driveFF.calculate(driveVoltage));
+            driveController.setReferenceVoltage(driveVoltage);
+            //driveController.setReferenceVoltage(driveFF.calculate(driveVoltage));
             steerController.setReferenceAngle(steerAngle);
 
             this.driveVoltageCmdEntry.setDouble(driveVoltage);

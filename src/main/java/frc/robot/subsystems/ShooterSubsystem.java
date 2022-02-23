@@ -155,6 +155,10 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         tab.addNumber("HoodControlAngle", ()-> getHoodTargetAngle().orElse(Double.NaN))
         .withPosition(1, 2)
         .withSize(1, 1);
+        tab.addBoolean("HoodIsHomed", ()->this.IsHoodHomed)
+        .withPosition(1, 2)
+        .withSize(1, 1);
+
 
         
 
