@@ -35,7 +35,7 @@ import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SubsystemCommands.SetServoMax;
 import frc.robot.commands.SubsystemCommands.SetServoMid;
 import frc.robot.commands.SubsystemCommands.SetServoMin;
-import frc.robot.commands.SubsystemCommands.SetServoZero;
+//import frc.robot.commands.SubsystemCommands.SetServoZero;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -200,7 +200,7 @@ public class RobotContainer {
     driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
     driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
     driveController.Dpad.Left.whenPressed(new SetServoMid(shooter), true);
-    driveController.Dpad.Right.whenPressed(new SetServoZero(shooter), true);
+    //driveController.Dpad.Right.whenPressed(new SetServoZero(shooter), true);
 
     /*DJController.aButton.toggleWhenPressed(
       new PlaySelectedSong(shooter), true

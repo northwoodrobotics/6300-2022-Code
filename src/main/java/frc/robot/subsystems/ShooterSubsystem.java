@@ -235,6 +235,10 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     public void MoveHood(double setpoint){
         HoodMotor.getPIDController().setReference(setpoint, ControlType.kPosition);
     }
+    public double getHoodVelocity(){
+        return HoodEncoder.getVelocity();
+
+    }
 
     
     public boolean isHoodAtTargetAngle() {
