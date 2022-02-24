@@ -145,7 +145,8 @@ public final class Constants {
     }
     public final static class ClimberConstants{
         public static final double RevEncoder_CountsPer_Rev = 8192;
-
+        public static final int ClimbMotor1 = 27;
+        
         public static final double SpoolDiameter = Units.inchesToMeters(1);
 
         public static final double MidRungSetpoint = Units.inchesToMeters(0);
