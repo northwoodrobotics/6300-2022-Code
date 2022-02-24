@@ -10,6 +10,6 @@ public class SetServoMid extends CommandBase{
         addRequirements(subsystem);
     }
     public void execute(){
-        shooter.disableHood();
+        shooter.setHoodMotorPower(.1);
     }
 }

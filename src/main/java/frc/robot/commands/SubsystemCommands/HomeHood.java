@@ -12,16 +12,17 @@ public class HomeHood extends CommandBase{
         this.shooter = subsystem;
         addRequirements(subsystem);
     }
-    
+    /*
     @Override
     public void initialize() {
         shooter.setHoodHomed(false);
         shooter.setHoodMotorPower(0.1);
         zeroVelocityTimestamp = System.currentTimeMillis();
-    }
+    }*/
     public void execute(){
         shooter.setHoodHomed(true);
     }
+    /*
     @Override
     public boolean isFinished() {
 
@@ -35,5 +36,5 @@ public class HomeHood extends CommandBase{
         }
 
         return false;
-    }
+    }*/
 }
