@@ -144,12 +144,21 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
     public final static class ClimberConstants{
-        public static final double RevEncoder_CountsPer_Rev = 8192;
+        public static final int RevEncoder_CountsPer_Rev = 8192;
         public static final int ClimbMotor1 = 27;
+        public static final int ClimbMotor2= 26;
+        public static final int ClimbSolenoid = 2;
+        public static final int BalanceSolenoid =3;
+        public static final int CatchSolenoid = 4;
         
         public static final double SpoolDiameter = Units.inchesToMeters(1);
 
         public static final double MidRungSetpoint = Units.inchesToMeters(0);
+
+        public static final double Climb1P = 0.0;
+        public static final double Climb1D = 0.0;
+        public static final double Climb1I = 0.0;
+        
 
 
 
