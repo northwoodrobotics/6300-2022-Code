@@ -23,15 +23,15 @@ public class ClimberSubsystem extends SubsystemBase{
     private CANSparkMax ClimbMotor2 = new CANSparkMax(Constants.ClimberConstants.ClimbMotor2, MotorType.kBrushless);
     private Solenoid lockSolenoid = new Solenoid(PneumaticsModuleType.REVPH, ClimberConstants.ClimbSolenoid);
     private Solenoid BalanceSolenoid = new Solenoid(PneumaticsModuleType.REVPH, ClimberConstants.BalanceSolenoid);
-    private Solenoid CatchSolenoid = new Solenoid(PneumaticsModuleType.REVPH, ClimberConstants.CatchSolenoid);
+    //private Solenoid CatchSolenoid = new Solenoid(PneumaticsModuleType.REVPH, ClimberConstants.CatchSolenoid);
     private SparkMaxPIDController Climb1Controller;
     private SparkMaxPIDController Climb2Controller;
     private RelativeEncoder Climb1Encoder;
     private RelativeEncoder Climb2Encoder;
     private final Object stateLock = new Object();
 
-    @GuardedBy("stateLock")
-    private boolean LatchOn = false;
+    //@GuardedBy("stateLock")
+    //private boolean LatchOn = false;
     @GuardedBy("stateLock")
     private boolean ClimbUp = false;
     
@@ -51,6 +51,8 @@ public class ClimberSubsystem extends SubsystemBase{
         ClimbMotor1.setIdleMode(IdleMode.kBrake);
         ClimbMotor2.setIdleMode(IdleMode.kBrake);
     }
+
+   
 
 
 
