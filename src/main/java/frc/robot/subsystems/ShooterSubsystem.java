@@ -84,7 +84,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
 
     public ShooterSubsystem(){
-        IsHoodHomed = false;
+        IsHoodHomed = true;
 
         Shooter.configFactoryDefault();
         ShooterFollower.configFactoryDefault();

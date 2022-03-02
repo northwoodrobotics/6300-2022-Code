@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.revrobotics.CANSparkMax;
@@ -23,15 +28,15 @@ import frc.robot.Constants.ClimberConstants;
 public class ClimberSubsystem extends SubsystemBase{
     //private TalonSRX TestClimbMotor = new TalonSRX(31);
     //real stuff
-    private CANSparkMax ClimbMotor1 = new CANSparkMax(Constants.ClimberConstants.ClimbMotor1, MotorType.kBrushless);
-    private CANSparkMax ClimbMotor2 = new CANSparkMax(Constants.ClimberConstants.ClimbMotor2, MotorType.kBrushless);
+    private TalonFX Climb1Talon = new TalonFX(ClimberConstants.ClimbMotor1);
+    private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor1);
     private DoubleSolenoid lockSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.ClimbSolenoid,ClimberConstants.ClimbSolenoid2);
     private DoubleSolenoid BalanceSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.BalanceSolenoid, ClimberConstants.BalanceSolenoid2);
     //private Solenoid CatchSolenoid = new Solenoid(PneumaticsModuleType.REVPH, ClimberConstants.CatchSolenoid);
-    private SparkMaxPIDController Climb1Controller;
-    private SparkMaxPIDController Climb2Controller;
-    private RelativeEncoder Climb1Encoder;
-    private RelativeEncoder Climb2Encoder;
+    //private SparkMaxPIDController Climb1Controller;
+    //private SparkMaxPIDController Climb2Controller;
+    //private RelativeEncoder Climb1Encoder;
+    //private RelativeEncoder Climb2Encoder;
     //private final Object stateLock = new Object();
 
     //@GuardedBy("stateLock")
@@ -47,52 +52,53 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public ClimberSubsystem(){
         setBreakModes();
-        Climb1Controller = ClimbMotor1.getPIDController();
-        Climb1Controller.setP(ClimberConstants.Climb1P);
-        Climb1Controller.setI(ClimberConstants.Climb1I);
-        Climb1Controller.setD(ClimberConstants.Climb1D);
-        Climb1Controller.setOutputRange(-1, 1);
-        
+        //Climb1Controller = ClimbMotor1.getPIDController();
+        TalonFXConfiguration Climb1Config = new TalonFXConfiguration();
+        Climb1Config.slot0.kP = ClimberConstants.Climb1P;
+        Climb1Config.slot0.kI = ClimberConstants.Climb1I;
+        Climb1Config.slot0.kD = ClimberConstants.Climb1D;
+        Climb1Config.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
+        Climb1Config.supplyCurrLimit.currentLimit= 30;
+        Climb1Config.supplyCurrLimit.enable = true; 
+        Climb1Talon.configAllSettings(Climb1Config);
+        Climb1Talon.setNeutralMode(NeutralMode.Brake);
+
+        // fix me 
+        Climb1Talon.setInverted(false);
+        TalonFXConfiguration Climb2Config = new TalonFXConfiguration();
+        Climb2Config.slot0.kP = ClimberConstants.Climb2P;
+        Climb2Config.slot0.kI = ClimberConstants.Climb2I;
+        Climb2Config.slot0.kD = ClimberConstants.Climb2D;
+        Climb2Config.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
+        Climb2Config.supplyCurrLimit.currentLimit= 30;
+        Climb2Config.supplyCurrLimit.enable = true; 
+        Climb2Talon.configAllSettings(Climb1Config);
+        Climb2Talon.setNeutralMode(NeutralMode.Brake);
+
+        // fix me 
+        Climb2Talon.setInverted(false);
 
 
-
-
-        Climb2Controller = ClimbMotor2.getPIDController();
-        Climb1Encoder = ClimbMotor1.getEncoder();
-        Climb1Encoder.setPositionConversionFactor(ClimberConstants.Climb1GearRatio);
-        Climb2Encoder.setPositionConversionFactor(ClimberConstants.Climb2GearRatio);
-        Climb2Encoder = ClimbMotor2.getEncoder();
-        Climb2Controller.setP(ClimberConstants.Climb2P);
-        Climb2Controller.setI(ClimberConstants.Climb2I);
-        Climb2Controller.setD(ClimberConstants.Climb2D);
-        Climb2Controller.setOutputRange(-1, 1);
+       
 
 
         
     }
     
     public void setBreakModes(){
-        ClimbMotor1.setIdleMode(IdleMode.kBrake);
-        ClimbMotor2.setIdleMode(IdleMode.kBrake);
+        
     }
-    public void setCurrentLimits(){
-        ClimbMotor1.enableSoftLimit(SoftLimitDirection.kForward, true);
-        ClimbMotor2.enableSoftLimit(SoftLimitDirection.kForward, true);
-        ClimbMotor1.setSoftLimit(SoftLimitDirection.kForward, ClimberConstants.Climb1SoftForward);
-        ClimbMotor1.setSoftLimit(SoftLimitDirection.kReverse, ClimberConstants.Climb1SoftReverse);
-        ClimbMotor2.setSoftLimit(SoftLimitDirection.kForward, ClimberConstants.Climb2SoftForward);
-        ClimbMotor2.setSoftLimit(SoftLimitDirection.kReverse, ClimberConstants.Climb2SoftReverse);
 
-
-    }
 
 
     public void Climb1ToPositoin(double setpoint){
-        Climb1Controller.setReference(setpoint, ControlType.kPosition);
+        Climb1Talon.set(ControlMode.Position, setpoint);
+       
     }
 
     public void Climb2ToPosition(double setpoint){
-        Climb2Controller.setReference(setpoint, ControlType.kPosition);
+        Climb2Talon.set(ControlMode.Position, setpoint);
+        
     }
 
 
@@ -118,42 +124,75 @@ public class ClimberSubsystem extends SubsystemBase{
              break;
              case StartClimb: 
              Climb1ToPositoin(Climb1Out);
-             Climb2ToPosition(Climb2Out);
+             
              BalanceSolenoid.set(Value.kForward);
              lockSolenoid.set(Value.kReverse);
+             if (lockSolenoid.get() != Value.kReverse){
+                Climb2ToPosition(Climb2Out);
+             }
              break; 
              case Climb:
              Climb1ToPositoin(0);
-             if( getClimb1Position() != 0) {
-                
+             if (Climb1Talon.getSelectedSensorPosition()!= 0){
                 state = climbstate.ToNextBar;
-             } 
+             }
+          
              break; 
              case ToNextBar: {
                  Climb2ToPosition(0);
-                 if(Climb1Encoder.getVelocity()> 0){
+                 if (IsHook2Climbing() != true){
+                    Climb1ToPositoin(Climb1Release);
+                 }
+                 if(Climb2Talon.getSelectedSensorPosition() != 0){
+                     state = climbstate.lock;
+                 }
+                 /*if(Climb1Encoder.getVelocity()> 0){
                      Climb1ToPositoin(Climb1Release);
                  }
                  if(Climb2Encoder.getPosition()!= 0){
                      state = climbstate.Stowed;
+                 }*/
+             }break;
+             case lock:{
+                 if (IsHook1Climbing() != false ){
+                     Climb1ToPositoin(0);
                  }
+                 lockClimb();
+                 BalanceSolenoid.set(Value.kReverse);
+                 Climb2ToPosition(0);
              }
+             
+             
             
              }
         }
+
+        public void StartClimb(){
+            state = climbstate.StartClimb;
+        }
+
+
+       
         
     
 
     public void lockClimb(){
-        if (Climb2Encoder.getVelocity()>0){
-            lockSolenoid.set(Value.kReverse);
-        }else {
+       
             lockSolenoid.set(Value.kForward);
-        }
+        
     }
-    public double getClimb1Position(){
-        return Climb1Encoder.getPosition();
+    public boolean IsHook1Climbing(){
+        if(Climb1Talon.getStatorCurrent()> 20){
+            return true; 
+        }else return false; 
     }
+    
+    public boolean IsHook2Climbing(){
+        if(Climb2Talon.getStatorCurrent()> 20){
+            return true; 
+        }else return false; 
+    }
+ 
 
 
 
