@@ -158,17 +158,19 @@ public final class Constants {
 
     public final static class IntakeConstants{
         public static final int IntakeMotorID = 0;
-        public static final int IntakeSolenoidID = 0; 
-        public static final double IntakeMotorP = 1;
+        public static final int IntakeSolenoidID = 1; 
+        public static final int IntakeSolenoidID2 = 0;
+        public static final double IntakeMotorP = 0.01;
         public static final double IntakeMotorI = 0;
         public static final double IntakeMotorD = 0;
+        public static final double IntakeMotorFF =0.5;
 
     }
     public final static class FeederConstants{
-        public static final int FeederMotorID = 0;
+        public static final int FeederMotorID = 22;
         public static final int FeederStage1Sensor = 0;
-        public static final int FeederStage2Sensor= 0;
-        public static final int IntakeSensor = 0;
+        public static final int FeederStage2Sensor= 1;
+        public static final int IntakeSensor = 2;
 
 
 
