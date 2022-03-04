@@ -32,9 +32,9 @@ import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
 import frc.robot.commands.SimCommands.SimAuton;
-import frc.robot.commands.SubsystemCommands.SetServoMax;
-import frc.robot.commands.SubsystemCommands.SetServoMid;
-import frc.robot.commands.SubsystemCommands.SetServoMin;
+//import frc.robot.commands.SubsystemCommands.SetServoMax;
+//import frc.robot.commands.SubsystemCommands.SetServoMid;
+//import frc.robot.commands.SubsystemCommands.SetServoMin;
 import frc.robot.commands.SubsystemCommands.HomeHood;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -197,9 +197,9 @@ public class RobotContainer {
     //driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
     //driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
-    driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
-    driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
-    driveController.Dpad.Left.whenPressed(new SetServoMid(shooter), true);
+    //driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
+    //driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
+    //driveController.Dpad.Left.whenPressed(new SetServoMid(shooter), true);
     driveController.Dpad.Right.whenPressed(new HomeHood(shooter), true);
 
     /*DJController.aButton.toggleWhenPressed(

@@ -298,7 +298,7 @@ public class SwerveDrivetrainModel {
         PPSwerveControllerCommand swerveControllerCommand =
             new PPSwerveControllerCommand(
                 trajectory,
-                () -> getEstPose(), // Functional interface to feed supplier
+                () -> getPose(), // Functional interface to feed supplier
                 SwerveConstants.KINEMATICS,
 
                 // Position controllers
