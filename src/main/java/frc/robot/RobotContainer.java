@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.MusicMaker;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
@@ -32,12 +33,15 @@ import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
 import frc.robot.commands.SimCommands.SimAuton;
+import frc.robot.commands.SimCommands.TuneTables;
+import frc.robot.commands.SubsystemCommands.FeederCommand;
 //import frc.robot.commands.SubsystemCommands.SetServoMax;
 //import frc.robot.commands.SubsystemCommands.SetServoMid;
 //import frc.robot.commands.SubsystemCommands.SetServoMin;
 import frc.robot.commands.SubsystemCommands.HomeHood;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.SubsystemCommands.FeederCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
@@ -64,6 +68,7 @@ public class RobotContainer {
   private DriveAndTurn driveandTurn;
 
   public static ShooterSubsystem shooter;
+  public static FeederSubsystem feeder;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -73,7 +78,8 @@ public class RobotContainer {
   //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
   public static Vision blindlight;
-  private double ShooterSpeed = 3000;
+  private double ShooterSpeed = -7000;
+  private double hoodAngle = 1;
 
 
 
@@ -92,7 +98,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    
+    TableTuning();
+      feeder = new FeederSubsystem();
       blindlight = new Vision();
       shooter = new ShooterSubsystem();
 
@@ -183,8 +190,15 @@ public class RobotContainer {
     driveController.startButton.whenHeld(
       new CalibrateGyro(m_swerveSubsystem)
     );
+    driveController.aButton.whenHeld(
+     new FeederCommand(feeder,1)
+    );
+    driveController.bButton.whenHeld(
+      new FeederCommand(feeder,-1)
+     );
+    
     driveController.leftTriggerButton.whenHeld(
-      new ShooterCommand(shooter, blindlight)
+      new TuneTables(ShooterSpeed, hoodAngle, shooter)
        );
 
     driveController.xButton.whileHeld(
@@ -282,7 +296,7 @@ public class RobotContainer {
     master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
     master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
     master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getEstPose().getRotation().getDegrees());
-    master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed());
+    //master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed());
     //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
     //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());
     //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());z
@@ -314,6 +328,18 @@ public class RobotContainer {
 
   public void showBlindlight(){
     master.addBoolean("RobotHasTarget", ()->blindlight.hasTarget());
+  }
+
+  public void TableTuning(){
+   SmartDashboard.putNumber("ShooterSpeed", ShooterSpeed);
+   SmartDashboard.putNumber("HoodAngle", hoodAngle);
+
+
+   double shooterspeed = SmartDashboard.getNumber("ShooterSpeed", 3000);
+   double hoodangle = SmartDashboard.getNumber("HoodAngle", 0);
+
+   if(shooterspeed != ShooterSpeed){shooterspeed = ShooterSpeed;}
+   if(hoodangle != hoodAngle){hoodangle = hoodAngle; }
   }
 
 

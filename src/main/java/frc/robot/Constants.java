@@ -224,7 +224,7 @@ public final class Constants {
         public static final double ShooterCurrentLimit = 10.0;
 
 
-        public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 2;
+        public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 1.5;
         public static final double ShooterVelocitySensorCoffiecient = ShooterPositonSensorCoffiecient* (1000/100)*60;
         public static final double ShooterFF = 0.05;
         public static final double StaticFriction = 0.54;

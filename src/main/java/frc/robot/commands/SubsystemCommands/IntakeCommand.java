@@ -34,7 +34,7 @@ public class IntakeCommand extends CommandBase{
     }
     @Override
     public void execute(){
-        if(m_feeder.Stage2Loaded()){
+       /* if(m_feeder.Stage2Loaded()){
             m_intake.setMotorOutput(0);
         }
         else if(!m_feeder.Stage2Loaded()){
@@ -45,7 +45,7 @@ public class IntakeCommand extends CommandBase{
             m_feeder.runFeeder(speed);
         }else{
             m_feeder.runFeeder(0);
-        }
+        }*/
 
     }
     @Override 

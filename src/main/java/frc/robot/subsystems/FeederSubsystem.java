@@ -16,9 +16,9 @@ import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
 
 public class FeederSubsystem extends SubsystemBase implements UpdateManager.Updatable  {
     private CANSparkMax FeederMotor = new CANSparkMax(Constants.FeederConstants.FeederMotorID, MotorType.kBrushless);
-    private AnalogInput FeederStage1Sensor = new AnalogInput(Constants.FeederConstants.FeederStage1Sensor);
-    private AnalogInput FeederStage2Sensor = new AnalogInput(Constants.FeederConstants.FeederStage2Sensor);
-    private AnalogInput IntakeSensor = new AnalogInput(Constants.FeederConstants.IntakeSensor);
+    //private AnalogInput FeederStage1Sensor = new AnalogInput(Constants.FeederConstants.FeederStage1Sensor);
+    //private AnalogInput FeederStage2Sensor = new AnalogInput(Constants.FeederConstants.FeederStage2Sensor);
+    //private AnalogInput IntakeSensor = new AnalogInput(Constants.FeederConstants.IntakeSensor);
     private RelativeEncoder FeederEncoder;
     private final NetworkTableEntry Stage1Loaded;
     private final NetworkTableEntry Stage2Loaded;
@@ -45,7 +45,7 @@ public class FeederSubsystem extends SubsystemBase implements UpdateManager.Upda
         FeederMotor.set(speed);
     }
 
-    public boolean Stage1Loaded(){
+    /*public boolean Stage1Loaded(){
         return FeederStage1Sensor.getVoltage() < 0.1;
 
     }
@@ -61,7 +61,7 @@ public class FeederSubsystem extends SubsystemBase implements UpdateManager.Upda
             return false;
         }
         return IntakeHasBall();
-    }
+    }*/
     @Override
     public void update(double time, double dt){
 
@@ -71,9 +71,9 @@ public class FeederSubsystem extends SubsystemBase implements UpdateManager.Upda
 
     @Override
     public void periodic() {
-        Stage1Loaded.setBoolean(Stage1Loaded());
-        Stage2Loaded.setBoolean(Stage2Loaded());
-        IntakeHasBall.setBoolean(IntakeHasBall());
+        //Stage1Loaded.setBoolean(Stage1Loaded());
+        //Stage2Loaded.setBoolean(Stage2Loaded());
+        //IntakeHasBall.setBoolean(IntakeHasBall());
         motorSpeed.setDouble(FeederEncoder.getVelocity());
 
 
