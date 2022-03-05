@@ -179,7 +179,7 @@ public final class Constants {
     }
 
     public final static class IntakeConstants{
-        public static final int IntakeMotorID = 0;
+        public static final int IntakeMotorID = 29;
         public static final int IntakeSolenoidID = 1; 
         public static final int IntakeSolenoidID2 = 0;
         public static final double IntakeMotorP = 0.01;

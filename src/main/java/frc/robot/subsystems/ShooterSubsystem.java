@@ -132,6 +132,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodController.setIZone(Constants.ShooterConstants.HoodIZone);
         HoodController.setFF(Constants.ShooterConstants.HoodFF);
         HoodController.setOutputRange(Constants.ShooterConstants.HoodMinOutput, Constants.ShooterConstants.HoodMaxOutput);
+        HoodEncoder.setPositionConversionFactor(1/200);
         //HoodEncoder.setPositionConversionFactor(factor);*/
 
         ShooterOrchestra.addInstrument(Shooter);

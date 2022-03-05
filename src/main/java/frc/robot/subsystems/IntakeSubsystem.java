@@ -5,15 +5,19 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
 
 import com.google.errorprone.annotations.concurrent.GuardedBy;
@@ -21,18 +25,18 @@ import com.google.errorprone.annotations.concurrent.GuardedBy;
 
 
 
-public class IntakeSubsystem extends SubsystemBase implements UpdateManager.Updatable{
+public class IntakeSubsystem extends SubsystemBase{
     private CANSparkMax intakeMotor = new CANSparkMax(Constants.IntakeConstants.IntakeMotorID, MotorType.kBrushless);
-    private Solenoid intakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID);
+    private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID, IntakeConstants.IntakeSolenoidID2);
 
 
     private final Object stateLock = new Object();
 
-    @GuardedBy ("stateLock")
+ 
     private double motorOutput = 0.0;
     
-    @GuardedBy("stateLock")
-    private boolean intakeExtended = false; 
+ 
+    private Value intakeExtended = Value.kReverse; 
 
     private final NetworkTableEntry IntakeMotorSpeed;
     private final NetworkTableEntry IntakeExtendedEntry;
@@ -47,49 +51,30 @@ public class IntakeSubsystem extends SubsystemBase implements UpdateManager.Upda
         .withPosition(0, 1)
         .withSize(1, 1)
         .getEntry();
+
+        intakeMotor.setIdleMode(IdleMode.kBrake);
+        
     }
-    @Override
-    public void update(double time, double dt){
-        double localIntakeOutput;
-        boolean localIntakeExtended;
-        synchronized(stateLock){
-
-            if(localIntakeExtended = true){
-                localIntakeOutput = 1.0;
-            }
-            else localIntakeOutput = 0;
-            localIntakeOutput = motorOutput;
-            localIntakeExtended = intakeExtended;
 
 
-        }
-
-
-        intakeMotor.set(localIntakeOutput);
-        if (localIntakeExtended != intakeSolenoid.get()) {
-            intakeSolenoid.set(localIntakeExtended);
+    public Value isIntakeExtended(){
+        {
+           return intakeSolenoid.get();
         }
 
 
     }
 
-    public boolean isIntakeExtended(){
-        synchronized(stateLock){
-            return intakeExtended;
-        }
-
-
-    }
-
-    public void setIntakeExtension(boolean IntakeState){
-        synchronized(stateLock){
+    public void setIntakeExtension(Value IntakeState){
+      
             this.intakeExtended = IntakeState;
-        }
+        
         
     }
     public void setMotorOutput(double Output){
         synchronized(stateLock){
             this.motorOutput = Output;
+            intakeMotor.set(Output);
         }
     }
     public double getMotorOutput(){
@@ -100,8 +85,9 @@ public class IntakeSubsystem extends SubsystemBase implements UpdateManager.Upda
 
     @Override 
     public void periodic(){
+        //intakeMotor.set(motorOutput);
         IntakeMotorSpeed.setDouble(getMotorOutput());
-        IntakeExtendedEntry.setBoolean(isIntakeExtended());
+        //IntakeExtendedEntry.setValue(isIntakeExtended());
     }
 
 
