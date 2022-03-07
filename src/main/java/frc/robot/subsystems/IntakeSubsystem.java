@@ -20,14 +20,18 @@ import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 
 
 
 
 public class IntakeSubsystem extends SubsystemBase{
-    private CANSparkMax intakeMotor = new CANSparkMax(Constants.IntakeConstants.IntakeMotorID, MotorType.kBrushless);
-    private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID, IntakeConstants.IntakeSolenoidID2);
+    private TalonSRX intakeMotor = new TalonSRX(Constants.IntakeConstants.IntakeMotorID);
+    private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(31, PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID2, IntakeConstants.IntakeSolenoidID);
 
 
     private final Object stateLock = new Object();
@@ -36,8 +40,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private double motorOutput = 0.0;
     
  
-    private Value intakeExtended = Value.kReverse; 
-
+    //private Value intakeExtended;
     private final NetworkTableEntry IntakeMotorSpeed;
     private final NetworkTableEntry IntakeExtendedEntry;
 
@@ -51,8 +54,9 @@ public class IntakeSubsystem extends SubsystemBase{
         .withPosition(0, 1)
         .withSize(1, 1)
         .getEntry();
+        //intakeExtended = Value.kReverse;
 
-        intakeMotor.setIdleMode(IdleMode.kBrake);
+        intakeMotor.setNeutralMode(NeutralMode.Brake);
         
     }
 
@@ -66,25 +70,26 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void setIntakeExtension(Value IntakeState){
-      
-            this.intakeExtended = IntakeState;
+            intakeSolenoid.set(IntakeState);
+            //this.intakeExtended = IntakeState;
         
         
     }
     public void setMotorOutput(double Output){
-        synchronized(stateLock){
+        //synchronized(stateLock){
             this.motorOutput = Output;
-            intakeMotor.set(Output);
-        }
+            intakeMotor.set(ControlMode.PercentOutput, Output);
+        //}
     }
     public double getMotorOutput(){
-        synchronized(stateLock){
+        //synchronized(stateLock){
             return motorOutput;
-        }
+        //}
     }
 
     @Override 
     public void periodic(){
+        //intakeSolenoid.set(this.intakeExtended);
         //intakeMotor.set(motorOutput);
         IntakeMotorSpeed.setDouble(getMotorOutput());
         //IntakeExtendedEntry.setValue(isIntakeExtended());

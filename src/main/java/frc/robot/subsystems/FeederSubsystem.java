@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -15,11 +19,11 @@ import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
 
 
 public class FeederSubsystem extends SubsystemBase implements UpdateManager.Updatable  {
-    private CANSparkMax FeederMotor = new CANSparkMax(Constants.FeederConstants.FeederMotorID, MotorType.kBrushless);
+    private TalonFX FeederMotor = new TalonFX(Constants.FeederConstants.FeederMotorID);
     //private AnalogInput FeederStage1Sensor = new AnalogInput(Constants.FeederConstants.FeederStage1Sensor);
     //private AnalogInput FeederStage2Sensor = new AnalogInput(Constants.FeederConstants.FeederStage2Sensor);
     //private AnalogInput IntakeSensor = new AnalogInput(Constants.FeederConstants.IntakeSensor);
-    private RelativeEncoder FeederEncoder;
+    //private RelativeEncoder FeederEncoder;
     private final NetworkTableEntry Stage1Loaded;
     private final NetworkTableEntry Stage2Loaded;
     private final NetworkTableEntry motorSpeed;
@@ -28,8 +32,10 @@ public class FeederSubsystem extends SubsystemBase implements UpdateManager.Upda
 
     public FeederSubsystem(){
         FeederMotor.setInverted(false);
-        FeederMotor.setIdleMode(IdleMode.kBrake);
-        FeederEncoder = FeederMotor.getEncoder();
+        FeederMotor.setNeutralMode(NeutralMode.Brake);
+        TalonFXConfiguration FeederConfig = new TalonFXConfiguration();
+        //FeederConfig.pr
+       
 
         ShuffleboardTab tab =Shuffleboard.getTab("Feeder");
         Stage1Loaded = tab.add("Do We Have 1 Ball", false)
@@ -42,7 +48,7 @@ public class FeederSubsystem extends SubsystemBase implements UpdateManager.Upda
         .withPosition(1, 0).withSize(1, 1).getEntry();
     }
     public void runFeeder(double speed){
-        FeederMotor.set(speed);
+        FeederMotor.set(ControlMode.PercentOutput, speed);
     }
 
     /*public boolean Stage1Loaded(){
@@ -74,7 +80,7 @@ public class FeederSubsystem extends SubsystemBase implements UpdateManager.Upda
         //Stage1Loaded.setBoolean(Stage1Loaded());
         //Stage2Loaded.setBoolean(Stage2Loaded());
         //IntakeHasBall.setBoolean(IntakeHasBall());
-        motorSpeed.setDouble(FeederEncoder.getVelocity());
+            motorSpeed.setDouble(FeederMotor.getSelectedSensorVelocity());
 
 
         

@@ -9,6 +9,7 @@ public class TuneTables extends CommandBase{
     private final ShooterSubsystem subsystem; 
     //private final Vision Blindight; 
     private double m_speed;
+    
     private double m_angle;
 
 
@@ -29,7 +30,7 @@ public class TuneTables extends CommandBase{
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
         subsystem.RunShooter(m_speed);
         //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
-        subsystem.setHoodTargetAngle(m_angle);     
+        //subsystem.MoveHood(m_angle);     
     }
     @Override
     public void end(boolean interrupted) {

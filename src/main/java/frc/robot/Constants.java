@@ -207,19 +207,25 @@ public final class Constants {
         public static final int HoodServo2ID = 2;
         public static final int HoodEncoderID = 0;
 
-        public static final double HoodP = 0.1;
+        public static final double HoodP = 0.5;
         public static final double HoodI = 0;
         public static final double HoodD = 0;
         public static final double HoodIZone = 0;
-        public static final double HoodFF = 0;
+        public static final double HoodFF = 0.045;
         public static final double HoodMaxOutput = 1;
+        public static final double MotionMagicAcceleration = 4096; 
+        public static final double MotionMagicVelocity = 8192;
+        public static final int MotionMagicCurve = 1;
         public static final double HoodMinOutput = -1;
+        public static final double HoodPositionSensorCoffiecient = 1/2048 *36; 
+        public static final double HoodVelocitySensorCoffiecient = HoodPositionSensorCoffiecient* (1000/100)*60;
 
         public static final double ShooterGearRatio = 1.4;
         public static final double ShooterP = 0.01;
         public static final double ShooterI = 0.0;
         public static final double ShooterD = 0.0;
         //public static final double ShooerFF = .05;
+        
         public static final double Shooter_AllowableError = 200;
         public static final double ShooterCurrentLimit = 10.0;
 
@@ -235,8 +241,8 @@ public final class Constants {
             ShooterVelocityTable.put(0,0);
         }
 
-        public static final double HoodMinAngle = -40;
-        public static final double HoodMaxAngle = 3;
+        public static final double HoodMinAngle = 0;
+        public static final double HoodMaxAngle = 40;
 
         public static final double HoodOffset = 0.0;
 

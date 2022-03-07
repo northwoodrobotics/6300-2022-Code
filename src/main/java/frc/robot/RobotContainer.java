@@ -37,6 +37,8 @@ import frc.robot.commands.AutoRoutines.RealSquare;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
+import frc.robot.commands.SimCommands.HoodDown;
+import frc.robot.commands.SimCommands.HoodUp;
 import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.FeederCommand;
@@ -45,6 +47,7 @@ import frc.robot.commands.SubsystemCommands.FeederCommand;
 //import frc.robot.commands.SubsystemCommands.SetServoMin;
 import frc.robot.commands.SubsystemCommands.HomeHood;
 import frc.robot.commands.SubsystemCommands.IntakeCommand;
+import frc.robot.commands.SubsystemCommands.IntakeOutCommand;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -109,8 +112,10 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-      compressor = new Compressor(  31, PneumaticsModuleType.REVPH);
+      compressor = new Compressor(31, PneumaticsModuleType.REVPH);
     //TableTuning();
+
+    
       intake = new IntakeSubsystem();
       feeder = new FeederSubsystem();
       blindlight = new Vision();
@@ -118,17 +123,25 @@ public class RobotContainer {
        hoodAngle = m_hoodAngle.getDouble(1);
        shooterSpeed = m_shooterSpeed.getDouble(-7000);
 
+      compressor.enabled();
+      compressor.enableDigital();
+
+
+       //compressor.enableDigital();
+
+
+
 
     //switch(driveControlMode){
      // case DRIVE :
      // musicMaker = null;
       dt = DrivetrainSubsystem.createSwerveModel();
       m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
-      m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
+     /* m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
     () -> modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> modifyAxis(-driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
           () -> modifyAxis(driveController.rightStick.getX()) *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
-
+*/
 
            // Configure the button bindings
 
@@ -215,7 +228,7 @@ public class RobotContainer {
     driveController.leftTriggerButton.whenHeld(
       new TuneTables(shooterSpeed, hoodAngle, shooter)
        );
-    driveController.yButton.whenHeld(new IntakeCommand(intake, 0.45), true);
+    driveController.yButton.toggleWhenPressed(new IntakeOutCommand(intake), true);
 
     driveController.xButton.whileHeld(
       new RotateToTarget(m_swerveSubsystem, 
@@ -224,6 +237,9 @@ public class RobotContainer {
             () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
 
       ));
+
+      driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
+      driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
 
     //driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     //driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
