@@ -129,7 +129,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodConfig.slot0.kD = ShooterConstants.HoodD;
         HoodConfig.slot0.kF = ShooterConstants.HoodFF;
         HoodConfig.motionAcceleration = ShooterConstants.MotionMagicAcceleration; 
-        HoodConfig.motionCruiseVelocity = ShooterConstants.MotionMagicCurve;
+        HoodConfig.motionCruiseVelocity = ShooterConstants.MotionMagicVelocity;
         HoodConfig.motionCurveStrength = ShooterConstants.MotionMagicCurve;
         HoodConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
         HoodConfig.supplyCurrLimit.currentLimit = 15; 
