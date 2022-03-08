@@ -84,9 +84,9 @@ public final class Constants {
         public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(209.5); // FIXME Measure and set back right steer offset        
 
         // Drivetrain Performance Mechanical limits
-        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(12);
-        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(12);
-        static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(180);
+        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(6);
+        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(6);
+        static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(90);
         static public final double MAX_TRANSLATE_ACCEL_MPS2 = MAX_FWD_REV_SPEED_MPS/0.25; //0-full time of 0.25 second
         static public final double MAX_ROTATE_ACCEL_RAD_PER_SEC_2 = MAX_ROTATE_SPEED_RAD_PER_SEC/0.25; //0-full time of 0.25 second
         public static final double MAX_VOLTAGE = 12.0; // Maximum Voltage sent to the drive motors
@@ -179,7 +179,7 @@ public final class Constants {
     }
 
     public final static class IntakeConstants{
-        public static final int IntakeMotorID = 0;
+        public static final int IntakeMotorID = 29;
         public static final int IntakeSolenoidID = 1; 
         public static final int IntakeSolenoidID2 = 0;
         public static final double IntakeMotorP = 0.01;
@@ -207,24 +207,30 @@ public final class Constants {
         public static final int HoodServo2ID = 2;
         public static final int HoodEncoderID = 0;
 
-        public static final double HoodP = 0.1;
+        public static final double HoodP = 0.5;
         public static final double HoodI = 0;
         public static final double HoodD = 0;
         public static final double HoodIZone = 0;
-        public static final double HoodFF = 0;
+        public static final double HoodFF = 0.045;
         public static final double HoodMaxOutput = 1;
+        public static final double MotionMagicAcceleration = 4096; 
+        public static final double MotionMagicVelocity = 8192;
+        public static final int MotionMagicCurve = 1;
         public static final double HoodMinOutput = -1;
+        public static final double HoodPositionSensorCoffiecient = 1/2048 *36; 
+        public static final double HoodVelocitySensorCoffiecient = HoodPositionSensorCoffiecient* (1000/100)*60;
 
         public static final double ShooterGearRatio = 1.4;
         public static final double ShooterP = 0.01;
         public static final double ShooterI = 0.0;
         public static final double ShooterD = 0.0;
         //public static final double ShooerFF = .05;
+        
         public static final double Shooter_AllowableError = 200;
         public static final double ShooterCurrentLimit = 10.0;
 
 
-        public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 2;
+        public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 1.5;
         public static final double ShooterVelocitySensorCoffiecient = ShooterPositonSensorCoffiecient* (1000/100)*60;
         public static final double ShooterFF = 0.05;
         public static final double StaticFriction = 0.54;
@@ -235,8 +241,8 @@ public final class Constants {
             ShooterVelocityTable.put(0,0);
         }
 
-        public static final double HoodMinAngle = -40;
-        public static final double HoodMaxAngle = 3;
+        public static final double HoodMinAngle = 0;
+        public static final double HoodMaxAngle = 40;
 
         public static final double HoodOffset = 0.0;
 

@@ -25,6 +25,8 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
+      "/LiveWindow/FeederSubsystem": "Subsystem",
+      "/LiveWindow/IntakeSubsystem": "Subsystem",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/SwerveSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
@@ -128,13 +130,10 @@
           "open": true
         }
       },
-      "Music": {
-        "open": true
-      },
-      "Shooter": {
-        "open": true
-      },
       "Vision": {
+        "open": true
+      },
+      "master": {
         "open": true
       },
       "open": true

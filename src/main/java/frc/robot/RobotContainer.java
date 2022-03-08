@@ -6,12 +6,17 @@ package frc.robot;
 
 import com.swervedrivespecialties.swervelib.DriveController;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.MusicMaker;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
@@ -19,6 +24,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Vision.LEDMode;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
+//import kotlinx.html.Q;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 //import frc.robot.commands.TurnToTarget;
@@ -31,13 +37,22 @@ import frc.robot.commands.AutoRoutines.RealSquare;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
-import frc.robot.commands.SimCommands.SimAuton;
+import frc.robot.commands.SimCommands.HoodDown;
+import frc.robot.commands.SimCommands.HoodUp;
+import frc.robot.commands.SimCommands.SimAuton
+import frc.robot.commands.SimCommands.TuneTables;
+import frc.robot.commands.SubsystemCommands.FeederCommand;
+
 //import frc.robot.commands.SubsystemCommands.SetServoMax;
 //import frc.robot.commands.SubsystemCommands.SetServoMid;
 //import frc.robot.commands.SubsystemCommands.SetServoMin;
 import frc.robot.commands.SubsystemCommands.HomeHood;
+import frc.robot.commands.SubsystemCommands.IntakeCommand;
+import frc.robot.commands.SubsystemCommands.IntakeOutCommand;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.SubsystemCommands.FeederCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
@@ -58,12 +73,15 @@ public class RobotContainer {
   public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_swerveSubsystem;
   public static MusicMaker musicMaker;
+  public static Compressor compressor;
 
   private DrivetrainMode driveControlMode = DrivetrainMode.DRIVE;
 
-  private DriveAndTurn driveandTurn;
+  private DriveAndTurn driveAndTurn;
 
   public static ShooterSubsystem shooter;
+  public static FeederSubsystem feeder;
+  public static IntakeSubsystem intake;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -73,7 +91,10 @@ public class RobotContainer {
   //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
   public static Vision blindlight;
-  private double ShooterSpeed = 3000;
+  private NetworkTableEntry m_shooterSpeed = master.add("ShooterSpeed", -7000).getEntry();
+  private NetworkTableEntry m_hoodAngle = master.add("hoodAngle", 1).getEntry();
+  double hoodAngle;
+  double shooterSpeed;
 
 
 
@@ -92,9 +113,24 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+      compressor = new Compressor(31, PneumaticsModuleType.REVPH);
+    //TableTuning();
+
     
+      intake = new IntakeSubsystem();
+      feeder = new FeederSubsystem();
       blindlight = new Vision();
       shooter = new ShooterSubsystem();
+       hoodAngle = m_hoodAngle.getDouble(1);
+       shooterSpeed = m_shooterSpeed.getDouble(-7000);
+
+      compressor.enabled();
+      compressor.enableDigital();
+
+
+       //compressor.enableDigital();
+
+
 
 
     //switch(driveControlMode){
@@ -102,24 +138,24 @@ public class RobotContainer {
      // musicMaker = null;
       dt = DrivetrainSubsystem.createSwerveModel();
       m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
-      m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
+     /* m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
     () -> modifyAxis(driveController.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> modifyAxis(-driveController.leftStick.getX()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
           () -> modifyAxis(driveController.rightStick.getX()) *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
-
+*/
 
            // Configure the button bindings
 
     configureButtonBindings();
     ShowInputs();
     showBlindlight();
-    driveandTurn = new DriveAndTurn(m_swerveSubsystem);
-    SmartDashboard.putNumber("Shooter RPM", ShooterSpeed);
+    driveAndTurn = new DriveAndTurn(m_swerveSubsystem);
+    //SmartDashboard.putNumber("Shooter RPM", ShooterSpeed);
 
     
     
     
-    autoChooser.setDefaultOption("DriveAndTurn", driveandTurn);
+    autoChooser.setDefaultOption("DriveAndTurn", driveAndTurn);
     autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
     autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
@@ -183,9 +219,17 @@ public class RobotContainer {
     driveController.startButton.whenHeld(
       new CalibrateGyro(m_swerveSubsystem)
     );
+    driveController.aButton.whenHeld(
+     new FeederCommand(feeder,0.5)
+    );
+    driveController.bButton.whenHeld(
+      new FeederCommand(feeder,-0.5)
+     );
+    
     driveController.leftTriggerButton.whenHeld(
-      new ShooterCommand(shooter, blindlight)
+      new TuneTables(shooterSpeed, hoodAngle, shooter)
        );
+    driveController.yButton.toggleWhenPressed(new IntakeOutCommand(intake), true);
 
     driveController.xButton.whileHeld(
       new RotateToTarget(m_swerveSubsystem, 
@@ -194,13 +238,17 @@ public class RobotContainer {
             () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
 
       ));
+
+      driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
+      driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
+
     //driveController.aButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
-    driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
+    //driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
     //driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     //driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
     //driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
     //driveController.Dpad.Left.whenPressed(new SetServoMid(shooter), true);
-    driveController.Dpad.Right.whenPressed(new HomeHood(shooter), true);
+
 
     /*DJController.aButton.toggleWhenPressed(
       new PlaySelectedSong(shooter), true
@@ -245,6 +293,35 @@ public class RobotContainer {
     //dt.Updateodometry();
     //dt.update(false, RobotController.getBatteryVoltage());
   }
+  /*public Command ShooterPlus(){
+    addToShooterValue();
+  }
+
+  public  Command addToShooterValue( ){
+    double newShooterSpeed = ShooterSpeed+ 250;
+
+    
+   
+  }
+  public  void subtractToShooterValue( ){
+    ShooterSpeed = ShooterSpeed- 250;
+    
+   
+  }
+  public void addToHoodValue(){
+    hoodAngle = hoodAngle +0.25;
+  }
+  public void subtractToHoodValue(){
+    hoodAngle = hoodAngle-0.25;
+  }
+  
+  
+
+
+  public  double SubtractValue(double intValue, double increment){
+    double newValue = intValue- increment;
+    return newValue;
+  }*/
 
   
   private static double deadband(double value, double deadband) {
@@ -282,7 +359,7 @@ public class RobotContainer {
     master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
     master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
     master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getEstPose().getRotation().getDegrees());
-    master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed());
+    //master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed());
     //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
     //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());
     //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());z
@@ -315,6 +392,18 @@ public class RobotContainer {
   public void showBlindlight(){
     master.addBoolean("RobotHasTarget", ()->blindlight.hasTarget());
   }
+
+  /*public void TableTuning(){
+   SmartDashboard.putNumber("ShooterSpeed", ShooterSpeed);
+   SmartDashboard.putNumber("HoodAngle", hoodAngle);
+
+
+   double shooterspeed = SmartDashboard.getNumber("ShooterSpeed", 3000);
+   double hoodangle = SmartDashboard.getNumber("HoodAngle", 0);
+
+   if(shooterspeed != ShooterSpeed){shooterspeed = ShooterSpeed;}
+   if(hoodangle != hoodAngle){hoodangle = hoodAngle; }
+  }*/
 
 
 }
