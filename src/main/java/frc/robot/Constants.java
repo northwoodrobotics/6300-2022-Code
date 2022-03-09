@@ -43,13 +43,13 @@ public final class Constants {
      *
      * Should be measured from center to center.
      */
-        public static final double TRACKWIDTH_METERS = 0.71; // FIXME Measure and set trackwidth
+        public static final double TRACKWIDTH_METERS = Units.inchesToMeters(30); // FIXME Measure and set trackwidth
         /**
          * The front-to-back distance between the drivetrain wheels.
          *
          * Should be measured from center to center.
          */
-        public static final double WHEELBASE_METERS = 0.71; // FIXME Measure and set wheelbase
+        public static final double WHEELBASE_METERS = Units.inchesToMeters(28); // FIXME Measure and set wheelbase
 
         public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
@@ -147,10 +147,11 @@ public final class Constants {
         public static final int RevEncoder_CountsPer_Rev = 8192;
         public static final int ClimbMotor1 = 27;
         public static final int ClimbMotor2= 26;
-        public static final int ClimbSolenoid = 2;
-        public static final int ClimbSolenoid2 = 3;
-        public static final int BalanceSolenoid =4;
-        public static final int BalanceSolenoid2 = 5;
+        public static final int ClimbServo = 3; 
+        //public static final int ClimbSolenoid = 2;
+        //public static final int ClimbSolenoid2 = 3;
+        //public static final int BalanceSolenoid =4;
+        //public static final int BalanceSolenoid2 = 5;
         
         public static final double SpoolDiameter = Units.inchesToMeters(1);
 
@@ -159,9 +160,16 @@ public final class Constants {
         public static final double Climb1P = 0.0;
         public static final double Climb1D = 0.0;
         public static final double Climb1I = 0.0;
+        public static final double Climb1F = 0.0;
+        public static final double Climb1MotionAccel = 0.0; 
+        public static final double Climb1MotionVelocity =0.0; 
+
         public static final double Climb2P = 0.0;
+        public static final double Climb2F = 0.0;
         public static final double Climb2D = 0.0;
         public static final double Climb2I = 0.0;
+        public static final double Climb2MotionAccel = 0.0; 
+        public static final double Climb2MotionVelocity =0.0; 
         public static final float Climb1SoftForward = 0;
         public static final float Climb1SoftReverse = 0;
         public static final float Climb2SoftForward = 0;

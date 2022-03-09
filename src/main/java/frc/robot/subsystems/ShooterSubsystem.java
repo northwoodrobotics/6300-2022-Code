@@ -41,7 +41,7 @@ import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 
 public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Updatable{
     private TalonFX Shooter = new TalonFX(Constants.ShooterConstants.ShooterID);
-    //private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
+    private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private TalonFX HoodMotor = new TalonFX(Constants.ShooterConstants.HoodID);
     private Orchestra ShooterOrchestra = new Orchestra();
     //private Servo shooteServe1 = new Servo(ShooterConstants.HoodServoID);
@@ -87,7 +87,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         IsHoodHomed = true;
 
         Shooter.configFactoryDefault();
-        //ShooterFollower.configFactoryDefault();
+        ShooterFollower.configFactoryDefault();
         //ShooterServo.setBounds(2.0,1.8,1.5, 1.2, 1.0);
         //ShooterServo2.setBounds(2.0,1.8,1.5, 1.2, 1.0);
       
@@ -105,10 +105,10 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterConfig.slot0.kF = ShooterConstants.ShooterFF;
 
         Shooter.configAllSettings(ShooterConfig);
-        //ShooterFollower.configAllSettings(ShooterConfig);
+        ShooterFollower.configAllSettings(ShooterConfig);
 
-        //ShooterFollower.follow(Shooter);
-        //ShooterFollower.setInverted(InvertType.InvertMotorOutput);
+        ShooterFollower.follow(Shooter);
+        ShooterFollower.setInverted(InvertType.InvertMotorOutput);
         SongChooser.setDefaultOption("rick roll",rickroll);
         SongChooser.addOption("Gas Gas GAS!", gasgasgas);
         SongChooser.addOption("PokerFace", pokerface);
@@ -187,7 +187,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         config.currentLimit = Constants.ShooterConstants.ShooterCurrentLimit;
         config.enable = enabled;
         Shooter.configSupplyCurrentLimit(config, 0);
-        //ShooterFollower.configSupplyCurrentLimit(config, 0);
+        ShooterFollower.configSupplyCurrentLimit(config, 0);
         
     }
    /* public void percentoutput(double speed){
