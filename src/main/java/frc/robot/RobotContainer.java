@@ -39,9 +39,10 @@ import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
 import frc.robot.commands.SimCommands.HoodDown;
 import frc.robot.commands.SimCommands.HoodUp;
-import frc.robot.commands.SimCommands.SimAuton;
+import frc.robot.commands.SimCommands.SimAuton
 import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.FeederCommand;
+
 //import frc.robot.commands.SubsystemCommands.SetServoMax;
 //import frc.robot.commands.SubsystemCommands.SetServoMid;
 //import frc.robot.commands.SubsystemCommands.SetServoMin;
@@ -247,7 +248,7 @@ public class RobotContainer {
     //driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
     //driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
     //driveController.Dpad.Left.whenPressed(new SetServoMid(shooter), true);
-    //driveController.Dpad.Right.whenPressed(new HomeHood(shooter), true);
+
 
     /*DJController.aButton.toggleWhenPressed(
       new PlaySelectedSong(shooter), true
