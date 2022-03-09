@@ -16,7 +16,9 @@ public class DriveAndTurn extends SequentialCommandGroup{
         
         addCommands(
             new InstantCommand(()-> m_subsystem.dt.setKnownPose(PathHolder.DriveAndTurn.getInitialPose())),
-            m_subsystem.dt.createCommandForTrajectory(PathHolder.DriveAndTurn, m_subsystem)
+            m_subsystem.dt.createCommandForTrajectory(PathHolder.DriveAndTurn, m_subsystem),
+           new  AutoDrive(m_subsystem, PathHolder.DriveAndTurn2)
+
             
 
             
