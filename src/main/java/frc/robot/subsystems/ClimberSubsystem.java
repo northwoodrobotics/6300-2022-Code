@@ -19,6 +19,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,8 +31,9 @@ public class ClimberSubsystem extends SubsystemBase{
     //real stuff
     private TalonFX Climb1Talon = new TalonFX(ClimberConstants.ClimbMotor1);
     private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor1);
-    private DoubleSolenoid lockSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.ClimbSolenoid,ClimberConstants.ClimbSolenoid2);
-    private DoubleSolenoid BalanceSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.BalanceSolenoid, ClimberConstants.BalanceSolenoid2);
+    private Servo BalanceServo = new Servo(ClimberConstants.ClimbServo);
+    //private DoubleSolenoid lockSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.ClimbSolenoid,ClimberConstants.ClimbSolenoid2);
+    //private DoubleSolenoid BalanceSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.BalanceSolenoid, ClimberConstants.BalanceSolenoid2);
     //private Solenoid CatchSolenoid = new Solenoid(PneumaticsModuleType.REVPH, ClimberConstants.CatchSolenoid);
     //private SparkMaxPIDController Climb1Controller;
     //private SparkMaxPIDController Climb2Controller;
@@ -51,12 +53,17 @@ public class ClimberSubsystem extends SubsystemBase{
     
 
     public ClimberSubsystem(){
+        BalanceServo.setBounds(2, 1.8, 1.5, 1.2, 1);
         setBreakModes();
         //Climb1Controller = ClimbMotor1.getPIDController();
         TalonFXConfiguration Climb1Config = new TalonFXConfiguration();
         Climb1Config.slot0.kP = ClimberConstants.Climb1P;
         Climb1Config.slot0.kI = ClimberConstants.Climb1I;
         Climb1Config.slot0.kD = ClimberConstants.Climb1D;
+        Climb1Config.slot0.kF = ClimberConstants.Climb1F;
+        Climb1Config.motionAcceleration = ClimberConstants.Climb1MotionAccel; 
+        Climb1Config.motionCruiseVelocity = ClimberConstants.Climb1MotionVelocity;
+        Climb1Config.motionCurveStrength = 1; 
         Climb1Config.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
         Climb1Config.supplyCurrLimit.currentLimit= 30;
         Climb1Config.supplyCurrLimit.enable = true; 
@@ -69,6 +76,10 @@ public class ClimberSubsystem extends SubsystemBase{
         Climb2Config.slot0.kP = ClimberConstants.Climb2P;
         Climb2Config.slot0.kI = ClimberConstants.Climb2I;
         Climb2Config.slot0.kD = ClimberConstants.Climb2D;
+        Climb2Config.slot0.kF = ClimberConstants.Climb2F;
+        Climb2Config.motionAcceleration = ClimberConstants.Climb2MotionAccel;
+        Climb2Config.motionCruiseVelocity = ClimberConstants.Climb2MotionVelocity;
+        Climb2Config.motionCurveStrength = 1;
         Climb2Config.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
         Climb2Config.supplyCurrLimit.currentLimit= 30;
         Climb2Config.supplyCurrLimit.enable = true; 
@@ -87,17 +98,18 @@ public class ClimberSubsystem extends SubsystemBase{
     
     public void setBreakModes(){
         
+        
     }
 
 
 
     public void Climb1ToPositoin(double setpoint){
-        Climb1Talon.set(ControlMode.Position, setpoint);
+        Climb1Talon.set(ControlMode.MotionMagic, setpoint);
        
     }
 
     public void Climb2ToPosition(double setpoint){
-        Climb2Talon.set(ControlMode.Position, setpoint);
+        Climb2Talon.set(ControlMode.MotionMagic, setpoint);
         
     }
 
@@ -118,32 +130,33 @@ public class ClimberSubsystem extends SubsystemBase{
             case Stowed:
              Climb1ToPositoin(0);
              Climb2ToPosition(0);
-             BalanceSolenoid.set(Value.kReverse);
+             //BalanceSolenoid.set(Value.kReverse);
              lockClimb();
              
              break;
              case StartClimb: 
              Climb1ToPositoin(Climb1Out);
+             BalanceServo.setPosition(1.8);
              
-             BalanceSolenoid.set(Value.kForward);
-             lockSolenoid.set(Value.kReverse);
-             if (lockSolenoid.get() != Value.kReverse){
+            // BalanceSolenoid.set(Value.kForward);
+            // lockSolenoid.set(Value.kReverse);
+            // if (lockSolenoid.get() != Value.kReverse){
                 Climb2ToPosition(Climb2Out);
-             }
+             
              break; 
              case Climb:
              Climb1ToPositoin(0);
-             if (Climb1Talon.getSelectedSensorPosition()!= 0){
+             if (Climb1Talon.getSelectedSensorPosition()< 300){
                 state = climbstate.ToNextBar;
              }
           
              break; 
              case ToNextBar: {
                  Climb2ToPosition(0);
-                 if (IsHook2Climbing() != true){
+                 if (IsHook2Climbing() != false){
                     Climb1ToPositoin(Climb1Release);
                  }
-                 if(Climb2Talon.getSelectedSensorPosition() != 0){
+                 if(Climb2Talon.getSelectedSensorPosition() < 300){
                      state = climbstate.lock;
                  }
                  /*if(Climb1Encoder.getVelocity()> 0){
@@ -158,7 +171,7 @@ public class ClimberSubsystem extends SubsystemBase{
                      Climb1ToPositoin(0);
                  }
                  lockClimb();
-                 BalanceSolenoid.set(Value.kReverse);
+                 //BalanceSolenoid.set(Value.kReverse);
                  Climb2ToPosition(0);
              }
              
@@ -178,7 +191,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public void lockClimb(){
        
-            lockSolenoid.set(Value.kForward);
+            //lockSolenoid.set(Value.kForward);
         
     }
     public boolean IsHook1Climbing(){
