@@ -8,9 +8,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
 import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+
 import java.util.ArrayList;
+import java.util.OptionalDouble;
 
 public class Vision extends SubsystemBase{
     NetworkTable limelight;
@@ -78,6 +82,23 @@ public class Vision extends SubsystemBase{
 		setLEDMode(LEDMode.LED_OFF);
 		setStreamingMode(StreamingMode.STANDARD);
 	}
+	public boolean isOnTarget() {
+        OptionalDouble targetAngle = opGetTargetAngleX();
+        if (targetAngle.isEmpty()) {
+            return false;
+        }
+
+        double delta = targetAngle.getAsDouble() - RobotContainer.m_swerveSubsystem.dt.getGyroscopeRotation().getRadians();
+        if (delta > Math.PI) {
+            delta = 2.0 * Math.PI - delta;
+        }
+
+        return MathUtils.epsilonEquals(
+                delta,
+                0,
+                Math.toRadians(5)
+        );
+    }
 
     @Override
 	public void periodic() {
@@ -107,6 +128,11 @@ public class Vision extends SubsystemBase{
 	public double getTargetAngleX() {
 		return limelight.getEntry("tx").getDouble(0);
 	}
+	
+	public OptionalDouble opGetTargetAngleX() {
+		return OptionalDouble.of(getTargetAngleX());
+	}
+	
 	
 	/**
 	 * @return The Y angle to the target

@@ -190,6 +190,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configSupplyCurrentLimit(config, 0);
         
     }
+    
    /* public void percentoutput(double speed){
         Shooter.set(ControlMode.PercentOutput, speed);
     }*/
@@ -231,6 +232,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     @Override
     public void update(double time, double dt) {
     }
+    public boolean isFlyWheelAtTargetVelocity(){
+        return MathUtils.epsilonEquals(shooterSpeed(), getShooterTargetVelocity(), 300);
+    }
   
     public OptionalDouble getHoodTargetAngle() {
         if (Double.isFinite(hoodTargetPosition)) {
@@ -268,6 +272,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         }
 
         return MathUtils.epsilonEquals(targetAngle.getAsDouble(), currentAngle, Math.toRadians(1.0));
+    }
+    public double getShooterTargetVelocity(){
+        return Shooter.getClosedLoopTarget()*Constants.ShooterConstants.ShooterVelocitySensorCoffiecient;
     }
     /*
     @SuppressWarnings("SelfAssignment")

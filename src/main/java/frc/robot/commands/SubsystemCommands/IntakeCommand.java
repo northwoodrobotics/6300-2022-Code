@@ -1,5 +1,6 @@
 package frc.robot.commands.SubsystemCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -10,15 +11,16 @@ import frc.robot.subsystems.FeederSubsystem;
 
 public class IntakeCommand extends CommandBase{
     private final IntakeSubsystem m_intake;
-    //private final FeederSubsystem m_feeder;
+    private final FeederSubsystem m_feeder;
     //private SpectrumXboxController controller;
     private final double IntakeSpeed;
+    private Timer feedTimer; 
     //private double speed;
 
-    public IntakeCommand(IntakeSubsystem intake,  double intakeSpeed){
+    public IntakeCommand(IntakeSubsystem intake,  FeederSubsystem feeder,double intakeSpeed){
             this.IntakeSpeed = intakeSpeed;
             //this.controller = controller;
-            //this.m_feeder = feeder;
+            this.m_feeder = feeder;
             this.m_intake = intake;
             //this.speed = intakeSpeed;
             
@@ -30,23 +32,31 @@ public class IntakeCommand extends CommandBase{
 
     @Override 
     public void initialize(){
-        //m_intake.setIntakeExtension(Value.kReverse);
+        m_intake.setIntakeExtension(Value.kReverse);
 
     }
     @Override
     public void execute(){
-        /*if(m_feeder.Stage2Loaded()){
+        if(m_feeder.Stage2Loaded()){
             m_intake.setMotorOutput(0);
         }
         else if(!m_feeder.Stage2Loaded()){
             m_intake.setMotorOutput(IntakeSpeed);
-            m_intake.setIntakeExtension(Value.kReverse);
+            //m_intake.setIntakeExtension(Value.kReverse);
         }
         if(m_feeder.shouldAdvance()){
-            m_feeder.runFeeder(speed);
+            feedTimer.start();
+            if (feedTimer.get()> 0.25){
+                m_feeder.runFeeder(0.45);
+            }
+            if (feedTimer.get() > 0.3){
+                feedTimer.reset();
+            }
+
+            
         }else{
             m_feeder.runFeeder(0);
-        }*/
+        }
         //m_intake.setIntakeExtension(Value.kForward);
         m_intake.setMotorOutput(IntakeSpeed);
         
@@ -54,7 +64,7 @@ public class IntakeCommand extends CommandBase{
     }
     @Override 
     public void end(boolean interrupted){
-        //m_intake.setIntakeExtension(Value.kForward);
+        m_intake.setIntakeExtension(Value.kForward);
         //m_feeder.runFeeder(0.0);
         m_intake.setMotorOutput(0.0);
         

@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(31, PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID2, IntakeConstants.IntakeSolenoidID);
 
 
-    private final Object stateLock = new Object();
+    //private final Object stateLock = new Object();
 
  
     private double motorOutput = 0.0;

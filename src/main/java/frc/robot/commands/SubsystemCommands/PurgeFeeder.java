@@ -3,10 +3,10 @@ package frc.robot.commands.SubsystemCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-public class FeederCommand extends CommandBase{
+public class PurgeFeeder extends CommandBase{
     private final FeederSubsystem m_feeder;
     private final double speed; 
-    public FeederCommand(FeederSubsystem feeder, double FeederSpeed ){
+    public PurgeFeeder(FeederSubsystem feeder, double FeederSpeed ){
         this.m_feeder = feeder;
         this.speed = FeederSpeed;
     }
