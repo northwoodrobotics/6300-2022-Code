@@ -25,16 +25,16 @@ import frc.ExternalLib.RangerLib.LookupTable;
 public final class Constants {
 
     public static final class VisionConstants{
-        public static final double TargetHeight = Units.inchesToMeters(16);
-        public static final double blindlightHeight = Units.inchesToMeters(7.5);
-        public static final double blindlightAngle = 1;
+        public static final double TargetHeight = Units.inchesToMeters(102);
+        public static final double blindlightHeight = Units.inchesToMeters(40);
+        public static final double blindlightAngle = 23;
 
     }
     public static final class DriveConstants{
         public static final class AimConstants{ 
-            public static final double AimP =13 ;           
+            public static final double AimP =.75 ;           
             public static final double AimI =0;
-            public static final double AimD =0.5;
+            public static final double AimD =0.75;
         }
 
         
@@ -81,7 +81,7 @@ public final class Constants {
         public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 15; // FIXME Set back right drive motor ID
         public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 14; // FIXME Set back right steer motor ID
         public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 16; // FIXME Set back right steer encoder ID
-        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(209.5); // FIXME Measure and set back right steer offset        
+        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(209.5 -180); // FIXME Measure and set back right steer offset        
 
         // Drivetrain Performance Mechanical limits
         static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(6);
@@ -144,7 +144,7 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
     public final static class ClimberConstants{
-        public static final int RevEncoder_CountsPer_Rev = 8192;
+        //public static final int RevEncoder_CountsPer_Rev = 8192;
         public static final int ClimbMotor1 = 27;
         public static final int ClimbMotor2= 26;
         public static final int ClimbServo = 3; 
@@ -157,19 +157,19 @@ public final class Constants {
 
         public static final double MidRungSetpoint = Units.inchesToMeters(0);
 
-        public static final double Climb1P = 0.0;
+        public static final double Climb1P = 0.5;
         public static final double Climb1D = 0.0;
         public static final double Climb1I = 0.0;
-        public static final double Climb1F = 0.0;
-        public static final double Climb1MotionAccel = 0.0; 
-        public static final double Climb1MotionVelocity =0.0; 
+        public static final double Climb1F = 0.045;
+        public static final double Climb1MotionAccel = 8192; 
+        public static final double Climb1MotionVelocity =8192; 
 
         public static final double Climb2P = 0.0;
-        public static final double Climb2F = 0.0;
+        public static final double Climb2F = 0.045;
         public static final double Climb2D = 0.0;
         public static final double Climb2I = 0.0;
-        public static final double Climb2MotionAccel = 0.0; 
-        public static final double Climb2MotionVelocity =0.0; 
+        public static final double Climb2MotionAccel = 8192; 
+        public static final double Climb2MotionVelocity =8192; 
         public static final float Climb1SoftForward = 0;
         public static final float Climb1SoftReverse = 0;
         public static final float Climb2SoftForward = 0;
@@ -198,9 +198,9 @@ public final class Constants {
     }
     public final static class FeederConstants{
         public static final int FeederMotorID = 22;
-        public static final int FeederStage1Sensor = 0;
+        public static final int FeederStage1Sensor = 2;
         public static final int FeederStage2Sensor= 1;
-        public static final int IntakeSensor = 2;
+        public static final int IntakeSensor = 0;
 
 
 
@@ -246,8 +246,13 @@ public final class Constants {
         public static final LookupTable ShooterVelocityTable = new LookupTable();
         static{
             // tune
-            ShooterVelocityTable.put(0,0);
-        }
+            ShooterVelocityTable.put(1.8,-5000);
+            ShooterVelocityTable.put(1.9, -5250);
+            ShooterVelocityTable.put(2.2,-5500);
+
+            ShooterVelocityTable.put(3,-7000);
+
+            }
 
         public static final double HoodMinAngle = 0;
         public static final double HoodMaxAngle = 40;
@@ -257,9 +262,10 @@ public final class Constants {
         public static final LookupTable HoodPositionTable = new LookupTable();
         static {
             //tune this for as many as you want
-            HoodPositionTable.put(1,-10);
-            HoodPositionTable.put(2, -15);
             HoodPositionTable.put(3, -20);
+            HoodPositionTable.put(1.8, 5.5);
+            HoodPositionTable.put(3, 5.5);
+            
             HoodPositionTable.put(4, -25);
             HoodPositionTable.put(5, -30);
         }

@@ -57,6 +57,8 @@ public class IntakeSubsystem extends SubsystemBase{
         //intakeExtended = Value.kReverse;
 
         intakeMotor.setNeutralMode(NeutralMode.Brake);
+        intakeMotor.configPeakCurrentLimit(15);
+        
         
     }
 

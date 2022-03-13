@@ -23,6 +23,7 @@ public class IntakeCommand extends CommandBase{
             this.m_feeder = feeder;
             this.m_intake = intake;
             //this.speed = intakeSpeed;
+            feedTimer = new Timer();
             
             addRequirements(intake);
 
@@ -38,25 +39,23 @@ public class IntakeCommand extends CommandBase{
     @Override
     public void execute(){
         if(m_feeder.Stage2Loaded()){
-            m_intake.setMotorOutput(0);
+            m_intake.setMotorOutput(-IntakeSpeed);
+            m_feeder.runFeeder(0);
         }
         else if(!m_feeder.Stage2Loaded()){
             m_intake.setMotorOutput(IntakeSpeed);
             //m_intake.setIntakeExtension(Value.kReverse);
         }
         if(m_feeder.shouldAdvance()){
-            feedTimer.start();
-            if (feedTimer.get()> 0.25){
-                m_feeder.runFeeder(0.45);
-            }
-            if (feedTimer.get() > 0.3){
-                feedTimer.reset();
-            }
+            Timer.delay(0.45);
+            m_feeder.runFeeder(0.45);
+            Timer.delay(0.55);
+        }else m_feeder.runFeeder(0);
+
 
             
-        }else{
-            m_feeder.runFeeder(0);
-        }
+       
+
         //m_intake.setIntakeExtension(Value.kForward);
         m_intake.setMotorOutput(IntakeSpeed);
         

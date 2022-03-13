@@ -9,6 +9,7 @@ import com.swervedrivespecialties.swervelib.DriveController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -38,7 +39,7 @@ import frc.robot.commands.AutoRoutines.TwoBall;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
-import frc.robot.commands.SimCommands.SimAuton;
+//import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.AutoFeedCommand;
@@ -50,6 +51,7 @@ import frc.robot.commands.SubsystemCommands.IntakeCommand;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -121,6 +123,7 @@ public class RobotContainer {
       feeder = new FeederSubsystem();
       blindlight = new Vision();
       shooter = new ShooterSubsystem();
+      compressor = new Compressor(31, PneumaticsModuleType.REVPH);
     //  yeet = new XboxController(1);
 
       //yeet.getAButtonPressed()
@@ -216,25 +219,28 @@ public class RobotContainer {
       new CalibrateGyro(m_swerveSubsystem)
     );
     driveController.leftTriggerButton.whileHeld(
-      new TuneTables(m_shooterSpeed.getValue().getDouble(), m_hoodAngle.getValue().getDouble(),shooter).alongWith(new RotateToTarget(m_swerveSubsystem, 
-      () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
-            () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
-            () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC),
-            new AutoFeedCommand(m_swerveSubsystem, feeder, shooter, blindlight)));
-
+      new ShooterCommand(shooter, blindlight).alongWith( new WaitCommand(2), new PurgeFeeder(feeder, 0.45)));
+    driveController.leftBumper.whileHeld(new RotateToTarget(m_swerveSubsystem, 
+    () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
+          () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
+          () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
     /*driveController.xButton.whileHeld(
-      new RotateToTarget(m_swerveSubsystem, 
+      new RotateToTarget(m_swerveSubsystem,   
       () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
             () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
             () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
 
       ));*/
-      leftTrigger.whenPressed(
+      /*leftTrigger.whenPressed(
         new ShooterCommand(shooter, blindlight)
-      );
-      
-      driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
-      driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
+      );*/
+      driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.35), true);
+      driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
+      driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45), true);
+      //driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
+      //driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
+      //driveController.Dpad.Left.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));
+      //driveController.Dpad.Right.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));
     //driveController.aButton.whenHeld(new PurgeFeeder(feeder, 0.45));
     driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
     //driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));

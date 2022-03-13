@@ -34,7 +34,7 @@ public class DriveAutoRotate extends CommandBase {
         this.m_rotationSupplier = rotationSupplier;
 
         rotationController = new PIDController(Constants.DriveConstants.AimConstants.AimP, Constants.DriveConstants.AimConstants.AimI, Constants.DriveConstants.AimConstants.AimD);
-        rotationController.setTolerance(0.5);
+        rotationController.setTolerance(5);
     }
 
     @Override

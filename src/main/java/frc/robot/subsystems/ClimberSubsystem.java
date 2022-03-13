@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -88,6 +89,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
         // fix me 
         Climb2Talon.setInverted(false);
+        Climb1Talon.setInverted(false);
 
 
        
@@ -99,6 +101,14 @@ public class ClimberSubsystem extends SubsystemBase{
     public void setBreakModes(){
         
         
+    }
+    public void ExtendClimb(){
+        Climb1Talon.set(ControlMode.PercentOutput, 0.3);
+        Climb2Talon.set(TalonFXControlMode.PercentOutput, 0.3);
+    }
+    public void Climb(){
+        Climb1Talon.set(TalonFXControlMode.PercentOutput, -0.15);
+        Climb2Talon.set(TalonFXControlMode.PercentOutput, -0.15);
     }
 
 
@@ -120,12 +130,13 @@ public class ClimberSubsystem extends SubsystemBase{
         Stowed,
         StartClimb,
         Climb,ToNextBar
-        ,lock
+        ,lock, PercentOutput
     }
     public climbstate state = climbstate.Stowed;
 
     @Override 
     public void periodic(){
+        /*
         switch (state){
             case Stowed:
              Climb1ToPositoin(0);
@@ -164,7 +175,7 @@ public class ClimberSubsystem extends SubsystemBase{
                  }
                  if(Climb2Encoder.getPosition()!= 0){
                      state = climbstate.Stowed;
-                 }*/
+                 }
              }break;
              case lock:{
                  if (IsHook1Climbing() != false ){
@@ -173,11 +184,12 @@ public class ClimberSubsystem extends SubsystemBase{
                  lockClimb();
                  //BalanceSolenoid.set(Value.kReverse);
                  Climb2ToPosition(0);
+                
              }
              
              
             
-             }
+             }*/
         }
 
         public void StartClimb(){

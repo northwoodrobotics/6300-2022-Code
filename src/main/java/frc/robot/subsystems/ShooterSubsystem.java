@@ -263,7 +263,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     }
 
     
-    public boolean isHoodAtTargetAngle() {
+   public boolean isHoodAtTargetAngle() {
         OptionalDouble targetAngle = getHoodTargetAngle();
         double currentAngle = getHoodTargetAngle().getAsDouble();
 
@@ -367,6 +367,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     private double angleToTalonUnits(double angle) {
         return angle * 2048 / (2 * Math.PI) ;
     }
+    
 
     public void disableHood() {
         hoodControlMode = HoodControlMode.DISABLED;
@@ -377,13 +378,14 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     }
     public boolean isHoodHomed() {
         return IsHoodHomed;
-    } 
-    /*public void zeroHoodMotor() {
+    } /*
+    public void zeroHoodMotor() {
         this.IsHoodHomed = true;
 
         double sensorPosition = (0);
         HoodEncoder.setPosition((int) sensorPosition);
     }*/
+    
     public String getControlMode(){
         return hoodControlMode.toString();
     }

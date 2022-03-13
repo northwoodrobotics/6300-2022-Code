@@ -20,6 +20,7 @@ public class AutoFeedCommand extends CommandBase{
         this.feeder = feeder; 
         this.shooter = shooter;
         this.vision = blindlight;
+        timer = new Timer();
     }
     @Override
     public void initialize(){
@@ -28,7 +29,7 @@ public class AutoFeedCommand extends CommandBase{
     }
     @Override
     public void execute(){
-        if(vision.isOnTarget()&& shooter.isFlyWheelAtTargetVelocity()&& shooter.isHoodAtTargetAngle()){
+        if(vision.isOnTarget()&& shooter.isFlyWheelAtTargetVelocity()/*&& shooter.isHoodAtTargetAngle()*/){
             timer.start();
             if(timer.hasElapsed(0.05)){
                 feeder.runFeeder(1);

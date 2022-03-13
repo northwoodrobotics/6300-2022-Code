@@ -23,8 +23,10 @@ public class FeederSubsystem extends SubsystemBase {
     //private AnalogInput FeederStage1Sensor = new AnalogInput(Constants.FeederConstants.FeederStage1Sensor);
     private AnalogInput FeederStage2Sensor = new AnalogInput(Constants.FeederConstants.FeederStage2Sensor);
     private AnalogInput IntakeSensor = new AnalogInput(Constants.FeederConstants.IntakeSensor);
+    //\private Timer AdvanceTimer = new Timer();
     //private RelativeEncoder FeederEncoder;
     private final NetworkTableEntry Stage1Loaded;
+    private final NetworkTableEntry ShouldAdvance;
     private final NetworkTableEntry Stage2Loaded;
     private final NetworkTableEntry motorSpeed;
     private final NetworkTableEntry IntakeHasBall;
@@ -46,6 +48,7 @@ public class FeederSubsystem extends SubsystemBase {
         .withPosition(0, 3).withSize(1, 1).getEntry();
         motorSpeed = tab.add("MotorSpeed", 0.0)
         .withPosition(1, 0).withSize(1, 1).getEntry();
+        ShouldAdvance = tab.add("ShouldAdvance", false).withPosition(1, 2).withSize(1, 1).getEntry();
     }
     public void runFeeder(double speed){
         FeederMotor.set(ControlMode.PercentOutput, speed);
@@ -68,13 +71,16 @@ public class FeederSubsystem extends SubsystemBase {
         }
         return IntakeHasBall();
     }
+
+    
    
 
     @Override
     public void periodic() {
         //Stage1Loaded.setBoolean(Stage1Loaded());
-        //Stage2Loaded.setBoolean(Stage2Loaded());
-        //IntakeHasBall.setBoolean(IntakeHasBall());
+        Stage2Loaded.setBoolean(Stage2Loaded());
+        IntakeHasBall.setBoolean(IntakeHasBall());
+        ShouldAdvance.setBoolean(shouldAdvance());
             motorSpeed.setDouble(FeederMotor.getSelectedSensorVelocity());
 
 

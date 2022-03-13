@@ -11,7 +11,7 @@ public class HoodUp extends CommandBase{
     }
     @Override
     public void initialize() {
-        newAngle = shooter.getHoodAngle()+1; 
+      //  newAngle = shooter.getHoodAngle()+1; 
     }
     @Override
     public void execute() {
