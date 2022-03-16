@@ -145,8 +145,8 @@ public final class Constants {
     }
     public final static class ClimberConstants{
         //public static final int RevEncoder_CountsPer_Rev = 8192;
-        public static final int ClimbMotor1 = 27;
-        public static final int ClimbMotor2= 26;
+        public static final int ClimbMotor1 = 26;
+        public static final int ClimbMotor2= 27;
         public static final int ClimbServo = 3; 
         //public static final int ClimbSolenoid = 2;
         //public static final int ClimbSolenoid2 = 3;

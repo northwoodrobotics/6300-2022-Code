@@ -12,7 +12,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
 
 
-public class ShooterCommand extends CommandBase{
+public class AutoShoot extends CommandBase{
     //private static final InterpolatingTreeMap<InterpolatingDouble, Translation2d> ShooterTuning = new InterpolatingTreeMap<>();
 
     private final ShooterSubsystem subsystem; 
@@ -21,11 +21,11 @@ public class ShooterCommand extends CommandBase{
     private Timer timer;
 
 
-    public ShooterCommand(ShooterSubsystem shooter, Vision blindlight){
+    public AutoShoot(ShooterSubsystem shooter, Vision blindlight){
         this.subsystem = shooter;
         //this.speed = speed;
         this.Blindight = blindlight;
-      
+        timer = new Timer();
 
         addRequirements(shooter);
 
@@ -34,10 +34,12 @@ public class ShooterCommand extends CommandBase{
     @Override
     public void initialize() {
         subsystem.setFlywheelCurrentLimitEnabled(false);
+        timer.start();
  
     }
     @Override
     public void execute() {
+        //timer.start();
         //subsystem.percentoutput(1);   
         
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
@@ -51,7 +53,11 @@ public class ShooterCommand extends CommandBase{
     public void end(boolean interrupted) {
         subsystem.setFlywheelCurrentLimitEnabled(true);
         subsystem.stopFlywheel();
-       
+        
+    }
+    @Override 
+    public boolean isFinished(){
+        return timer.get()>4.0;
     }
 }
     

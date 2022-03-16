@@ -31,7 +31,7 @@ public class ClimberSubsystem extends SubsystemBase{
     //private TalonSRX TestClimbMotor = new TalonSRX(31);
     //real stuff
     private TalonFX Climb1Talon = new TalonFX(ClimberConstants.ClimbMotor1);
-    private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor1);
+    private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor2);
     private Servo BalanceServo = new Servo(ClimberConstants.ClimbServo);
     //private DoubleSolenoid lockSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.ClimbSolenoid,ClimberConstants.ClimbSolenoid2);
     //private DoubleSolenoid BalanceSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.BalanceSolenoid, ClimberConstants.BalanceSolenoid2);
@@ -103,12 +103,17 @@ public class ClimberSubsystem extends SubsystemBase{
         
     }
     public void ExtendClimb(){
-        Climb1Talon.set(ControlMode.PercentOutput, 0.3);
-        Climb2Talon.set(TalonFXControlMode.PercentOutput, 0.3);
+        Climb1Talon.set(TalonFXControlMode.PercentOutput, -1);
+        Climb2Talon.set(TalonFXControlMode.PercentOutput, -1);
     }
     public void Climb(){
-        Climb1Talon.set(TalonFXControlMode.PercentOutput, -0.15);
-        Climb2Talon.set(TalonFXControlMode.PercentOutput, -0.15);
+        Climb1Talon.set(TalonFXControlMode.PercentOutput, 1);
+        Climb2Talon.set(TalonFXControlMode.PercentOutput, 1);
+    }
+    public void HoldClimb(){
+        Climb1Talon.set(TalonFXControlMode.Disabled, 0);
+        Climb2Talon.set(TalonFXControlMode.Disabled, 0);
+        
     }
 
 

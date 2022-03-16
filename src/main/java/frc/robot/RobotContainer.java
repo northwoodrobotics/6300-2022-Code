@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -32,13 +33,19 @@ import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 //import frc.robot.commands.AutoRoutines.DriveAndTurn;
 //import frc.robot.commands.AutoRoutines.JustSquare;
 import frc.robot.commands.ActionCommands.*;
+import frc.robot.commands.AutoRoutines.FourBall;
+import frc.robot.commands.AutoRoutines.OneBall;
+import frc.robot.commands.AutoRoutines.OneBallRed;
+import frc.robot.commands.AutoRoutines.SystemsCheck;
 import frc.robot.commands.AutoRoutines.TwoBall;
+import frc.robot.commands.AutoRoutines.TwoBallRed;
 //import frc.robot.commands.AutoRoutines.DemoSquare;
 //import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
 //import frc.robot.commands.AutoRoutines.RealSquare;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.ZeroGyro;
 import frc.robot.commands.MusicLibary.PlaySelectedSong;
+import frc.robot.commands.SimCommands.HoodUp;
 //import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
@@ -75,9 +82,10 @@ public class RobotContainer {
   public static SwerveSubsystem m_swerveSubsystem;
   public static FeederSubsystem feeder; 
   public static IntakeSubsystem intake; 
+  public static ClimberSubsystem climber;
 
-  public static XboxController yeet = new XboxController (1);
-  public static JoystickButton leftTrigger = new JoystickButton(yeet, XboxController.Button.kLeftBumper.value);
+ // public static XboxController yeet = new XboxController (1);
+  //public static JoystickButton leftTrigger = new JoystickButton(yeet, XboxController.Button.kLeftBumper.value);
   
 
   public static MusicMaker musicMaker;
@@ -123,8 +131,11 @@ public class RobotContainer {
       feeder = new FeederSubsystem();
       blindlight = new Vision();
       shooter = new ShooterSubsystem();
+      climber = new ClimberSubsystem();
+
       compressor = new Compressor(31, PneumaticsModuleType.REVPH);
     //  yeet = new XboxController(1);
+    //shooter.setHoodTargetAngle(37);
 
       //yeet.getAButtonPressed()
 
@@ -154,11 +165,16 @@ public class RobotContainer {
     
     
     
-    autoChooser.setDefaultOption("DriveAndTurn", new TwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.setDefaultOption("TwoBall", new TwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("FourBall", new FourBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("SystemsCheck", new SystemsCheck(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("TwoBallRed", new TwoBallRed(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("OneBallBlue", new OneBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("OneBallRed", new OneBallRed(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     /*autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
     autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
-    autoChooser.addOption("SimTrajectory", new SimAuton(m_swerveSubsystem));
+    autoChooser.addOption("SimTrajectory", new SimAuton(m_s   werveSubsystem));
     autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));*/
 
      //SmartDashboard.getNumber("Shooter RPM", 0);
@@ -219,7 +235,7 @@ public class RobotContainer {
       new CalibrateGyro(m_swerveSubsystem)
     );
     driveController.leftTriggerButton.whileHeld(
-      new ShooterCommand(shooter, blindlight).alongWith( new WaitCommand(2), new PurgeFeeder(feeder, 0.45)));
+      new ShooterCommand(shooter, blindlight).alongWith( new HoodUp(shooter, shooter.getHoodTargetAngle().orElse(37)),new WaitCommand(5), new PurgeFeeder(feeder, 1)));
     driveController.leftBumper.whileHeld(new RotateToTarget(m_swerveSubsystem, 
     () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
@@ -231,18 +247,26 @@ public class RobotContainer {
             () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
 
       ));*/
+      //driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.35), true);
+
       /*leftTrigger.whenPressed(
         new ShooterCommand(shooter, blindlight)
       );*/
-      driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.35), true);
-      driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
-      driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45), true);
-      //driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
-      //driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
+      DJController.bButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.5), true);
+    // driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
+      //driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45));
+      driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
+      driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
+      DJController.leftBumper.whileHeld(()->feeder.runFeeder(0.45));
+      DJController.leftBumper.whenReleased(()-> feeder.runFeeder(0));
+      //DJController.leftBumper.whenReleased(new PurgeFeeder(feeder, 0));
+      DJController.rightBumper.whileHeld(()-> feeder.runFeeder(0.-45));
+      DJController.rightBumper.whenReleased(()-> feeder.runFeeder(0));
+      //DJController.rightBumper.whenReleased(new PurgeFeeder(feeder, 0));
       //driveController.Dpad.Left.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));
       //driveController.Dpad.Right.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));
     //driveController.aButton.whenHeld(new PurgeFeeder(feeder, 0.45));
-    driveController.bButton.whenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
+    //driveController.bButton.wxhenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
     //driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
     //driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
     //driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
@@ -252,6 +276,10 @@ public class RobotContainer {
     /*DJController.aButton.toggleWhenPressed(
       new PlaySelectedSong(shooter), true
     );*/
+    DJController.yButton.whileHeld(()-> climber.ExtendClimb() );
+    DJController.yButton.whenReleased(()-> climber.HoldClimb() );
+    DJController.aButton.whileHeld(()-> climber.Climb() );
+    DJController.aButton.whenReleased(()-> climber.HoldClimb() );
     
    
    

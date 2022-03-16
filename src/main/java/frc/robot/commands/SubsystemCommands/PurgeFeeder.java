@@ -1,5 +1,6 @@
 package frc.robot.commands.SubsystemCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -18,6 +19,7 @@ public class PurgeFeeder extends CommandBase{
     }
     @Override
     public void execute(){
+        Timer.delay(0.5);
         m_feeder.runFeeder(speed);
        
 

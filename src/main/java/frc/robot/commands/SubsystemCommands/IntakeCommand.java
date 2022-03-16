@@ -1,4 +1,4 @@
-package frc.robot.commands.SubsystemCommands;
+         package frc.robot.commands.SubsystemCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -16,7 +16,7 @@ public class IntakeCommand extends CommandBase{
     private final double IntakeSpeed;
     private Timer feedTimer; 
     //private double speed;
-
+    
     public IntakeCommand(IntakeSubsystem intake,  FeederSubsystem feeder,double intakeSpeed){
             this.IntakeSpeed = intakeSpeed;
             //this.controller = controller;
@@ -47,9 +47,10 @@ public class IntakeCommand extends CommandBase{
             //m_intake.setIntakeExtension(Value.kReverse);
         }
         if(m_feeder.shouldAdvance()){
-            Timer.delay(0.45);
-            m_feeder.runFeeder(0.45);
-            Timer.delay(0.55);
+            Timer.delay(0.5);
+            m_feeder.runFeeder(.7);
+            m_intake.setMotorOutput(0.3);
+            Timer.delay(0.4);
         }else m_feeder.runFeeder(0);
 
 
