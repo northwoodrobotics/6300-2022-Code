@@ -130,7 +130,7 @@ public class SwerveDrivetrainModel {
         swerveOdometry.resetPosition(pose, getYaw());
     }
     public void Updateodometry(){
-        swerveOdometry.update(getGyroscopeRotation(), states[0], states[1], states[2], states[3]);
+        swerveOdometry.update(getGyroscopeRotation(), states);
     }
 
 
@@ -307,7 +307,7 @@ public class SwerveDrivetrainModel {
                 thetaController,
                 commandStates -> this.states = commandStates,
                 m_drive);
-        return swerveControllerCommand;
+        return swerveControllerCommand.andThen(()-> setModuleStates(new ChassisSpeeds(0, 0, 0)));
 
     }
 

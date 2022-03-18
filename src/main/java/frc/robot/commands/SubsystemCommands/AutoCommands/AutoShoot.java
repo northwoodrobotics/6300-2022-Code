@@ -1,4 +1,4 @@
-package frc.robot.commands.SubsystemCommands;
+package frc.robot.commands.SubsystemCommands.AutoCommands;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;

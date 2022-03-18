@@ -25,6 +25,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
+
 
 
 
@@ -33,7 +40,10 @@ public class IntakeSubsystem extends SubsystemBase{
     private TalonSRX intakeMotor = new TalonSRX(Constants.IntakeConstants.IntakeMotorID);
     private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(31, PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID2, IntakeConstants.IntakeSolenoidID);
 
-
+    /*private UsbCamera intakeCam = new UsbCamera("intakeCAM", 0);
+    private MjpegServer camServer = new MjpegServer("intakeCam Server", 1181);
+    private CvSink cvSink = new CvSink("USBCam OpenCV");
+    CvSource outputStream = new CvSource("Blur", PixelFormat.kMJPEG, 640, 480, 30);*/
     //private final Object stateLock = new Object();
 
  
@@ -55,6 +65,9 @@ public class IntakeSubsystem extends SubsystemBase{
         .withSize(1, 1)
         .getEntry();
         //intakeExtended = Value.kReverse;
+       // cvSink.setSource(intakeCam);
+       CameraServer.startAutomaticCapture();
+        
 
         intakeMotor.setNeutralMode(NeutralMode.Brake);
         intakeMotor.configPeakCurrentLimit(15);

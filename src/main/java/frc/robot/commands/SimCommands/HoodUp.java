@@ -20,7 +20,7 @@ public class HoodUp extends CommandBase{
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
         //subsystem.RunShooter(m_speed);
         //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
-        shooter.setHoodTargetAngle(newAngle);     
+        shooter.setHoodTargetAngle(shooter.getHoodTargetAngle().orElse(newAngle));     
     }
     @Override
     public void end(boolean interrupted){

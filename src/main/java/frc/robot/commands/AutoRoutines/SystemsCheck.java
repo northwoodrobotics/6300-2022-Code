@@ -6,7 +6,7 @@ import frc.robot.PathHolder;
 import frc.robot.commands.ActionCommands.DriveAndIntake;
 import frc.robot.commands.SimCommands.HoodUp;
 import frc.robot.commands.SimCommands.TuneTables;
-import frc.robot.commands.SubsystemCommands.AutoShoot;
+import frc.robot.commands.SubsystemCommands.AutoCommands.AutoShoot;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;

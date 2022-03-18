@@ -35,10 +35,11 @@ import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.FourBall;
 import frc.robot.commands.AutoRoutines.OneBall;
-import frc.robot.commands.AutoRoutines.OneBallRed;
+//import frc.robot.commands.AutoRoutines.OneBallRed;
 import frc.robot.commands.AutoRoutines.SystemsCheck;
+import frc.robot.commands.AutoRoutines.TopSideTwoBall;
 import frc.robot.commands.AutoRoutines.TwoBall;
-import frc.robot.commands.AutoRoutines.TwoBallRed;
+//import frc.robot.commands.AutoRoutines.TwoBallRed;
 //import frc.robot.commands.AutoRoutines.DemoSquare;
 //import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
 //import frc.robot.commands.AutoRoutines.RealSquare;
@@ -49,7 +50,6 @@ import frc.robot.commands.SimCommands.HoodUp;
 //import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
-import frc.robot.commands.SubsystemCommands.AutoFeedCommand;
 //import frc.robot.commands.SubsystemCommands.SetServoMax;
 //import frc.robot.commands.SubsystemCommands.SetServoMid;
 //import frc.robot.commands.SubsystemCommands.SetServoMin;
@@ -57,6 +57,7 @@ import frc.robot.commands.SubsystemCommands.HomeHood;
 import frc.robot.commands.SubsystemCommands.IntakeCommand;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
+import frc.robot.commands.SubsystemCommands.AutoCommands.AutoFeedCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -168,9 +169,9 @@ public class RobotContainer {
     autoChooser.setDefaultOption("TwoBall", new TwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("FourBall", new FourBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("SystemsCheck", new SystemsCheck(m_swerveSubsystem, shooter, blindlight, feeder, intake));
-    autoChooser.addOption("TwoBallRed", new TwoBallRed(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("TopSideTwoBall", new TopSideTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("OneBallBlue", new OneBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
-    autoChooser.addOption("OneBallRed", new OneBallRed(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    //autoChooser.addOption("OneBallRed", new OneBallRed(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     /*autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
     autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
@@ -235,7 +236,7 @@ public class RobotContainer {
       new CalibrateGyro(m_swerveSubsystem)
     );
     driveController.leftTriggerButton.whileHeld(
-      new ShooterCommand(shooter, blindlight).alongWith( new HoodUp(shooter, shooter.getHoodTargetAngle().orElse(37)),new WaitCommand(5), new PurgeFeeder(feeder, 1)));
+      new ShooterCommand(shooter, blindlight).alongWith(new HoodUp(shooter, 37) ,new WaitCommand(5), new PurgeFeeder(feeder, 1)));
     driveController.leftBumper.whileHeld(new RotateToTarget(m_swerveSubsystem, 
     () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
