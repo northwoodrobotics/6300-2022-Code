@@ -36,6 +36,7 @@ public class IntakeCommand extends CommandBase{
         m_intake.setIntakeExtension(Value.kReverse);
 
     }
+    
     @Override
     public void execute(){
         if(m_feeder.Stage2Loaded()){

@@ -24,6 +24,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ClimberSubsystem": "Subsystem",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
       "/LiveWindow/FeederSubsystem": "Subsystem",
       "/LiveWindow/IntakeSubsystem": "Subsystem",
@@ -62,11 +63,6 @@
         }
       },
       "/LiveWindow/SwerveSubsystem": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/LiveWindow/Ungrouped/navX-Sensor[4]": {
         "window": {
           "visible": true
         }

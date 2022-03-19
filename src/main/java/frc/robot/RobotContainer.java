@@ -39,6 +39,7 @@ import frc.robot.commands.AutoRoutines.OneBall;
 import frc.robot.commands.AutoRoutines.SystemsCheck;
 import frc.robot.commands.AutoRoutines.TopSideTwoBall;
 import frc.robot.commands.AutoRoutines.TwoBall;
+import frc.robot.commands.AutoRoutines.WackyTwoBall;
 //import frc.robot.commands.AutoRoutines.TwoBallRed;
 //import frc.robot.commands.AutoRoutines.DemoSquare;
 //import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
@@ -170,8 +171,8 @@ public class RobotContainer {
     autoChooser.addOption("FourBall", new FourBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("SystemsCheck", new SystemsCheck(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("TopSideTwoBall", new TopSideTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
-    autoChooser.addOption("OneBallBlue", new OneBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
-    //autoChooser.addOption("OneBallRed", new OneBallRed(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("OneBall", new OneBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("WackyTwoBall", new WackyTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     /*autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
     autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
     autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
@@ -209,7 +210,7 @@ public class RobotContainer {
 
     
    
-
+      
    
     
     
