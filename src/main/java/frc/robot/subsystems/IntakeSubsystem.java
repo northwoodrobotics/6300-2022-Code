@@ -67,10 +67,11 @@ public class IntakeSubsystem extends SubsystemBase{
         //intakeExtended = Value.kReverse;
        // cvSink.setSource(intakeCam);
        CameraServer.startAutomaticCapture();
+       intakeMotor.setStatusFramePeriod(3, 200);
         
 
         intakeMotor.setNeutralMode(NeutralMode.Brake);
-        intakeMotor.configPeakCurrentLimit(15);
+        intakeMotor.configPeakCurrentLimit(35);
         
         
     }

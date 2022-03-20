@@ -51,7 +51,7 @@ public class IntakeCommand extends CommandBase{
             Timer.delay(0.5);
             m_feeder.runFeeder(.7);
             m_intake.setMotorOutput(0.3);
-            Timer.delay(0.4);
+            Timer.delay(0.5);
         }else m_feeder.runFeeder(0);
 
 

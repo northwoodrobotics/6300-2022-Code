@@ -90,7 +90,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configFactoryDefault();
         //ShooterServo.setBounds(2.0,1.8,1.5, 1.2, 1.0);
         //ShooterServo2.setBounds(2.0,1.8,1.5, 1.2, 1.0);
-      
+        Shooter.setStatusFramePeriod(21, 200);
+        ShooterFollower.setStatusFramePeriod(21, 200);
 
 
 

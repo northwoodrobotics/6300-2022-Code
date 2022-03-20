@@ -51,6 +51,7 @@ import frc.robot.commands.SimCommands.HoodUp;
 //import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
+import frc.robot.commands.SubsystemCommands.FenderShot;
 //import frc.robot.commands.SubsystemCommands.SetServoMax;
 //import frc.robot.commands.SubsystemCommands.SetServoMid;
 //import frc.robot.commands.SubsystemCommands.SetServoMin;
@@ -236,8 +237,10 @@ public class RobotContainer {
     driveController.startButton.whenHeld(
       new CalibrateGyro(m_swerveSubsystem)
     );
+    driveController.rightTriggerButton.whileHeld(
+      new FenderShot(shooter, blindlight).alongWith(new PurgeFeeder(feeder, 1)));
     driveController.leftTriggerButton.whileHeld(
-      new ShooterCommand(shooter, blindlight).alongWith(new HoodUp(shooter, 37) ,new WaitCommand(5), new PurgeFeeder(feeder, 1)));
+      new ShooterCommand(shooter, blindlight).alongWith(new PurgeFeeder(feeder, 1)));
     driveController.leftBumper.whileHeld(new RotateToTarget(m_swerveSubsystem, 
     () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
@@ -254,16 +257,16 @@ public class RobotContainer {
       /*leftTrigger.whenPressed(
         new ShooterCommand(shooter, blindlight)
       );*/
-      DJController.bButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.5), true);
+      driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.5), true);
     // driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
       //driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45));
       driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
       driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
-      DJController.leftBumper.whileHeld(()->feeder.runFeeder(0.45));
-      DJController.leftBumper.whenReleased(()-> feeder.runFeeder(0));
+      driveController.aButton.whileHeld(()->feeder.runFeeder(0.45));
+      driveController.aButton.whenReleased(()-> feeder.runFeeder(0));
       //DJController.leftBumper.whenReleased(new PurgeFeeder(feeder, 0));
-      DJController.rightBumper.whileHeld(()-> feeder.runFeeder(0.-45));
-      DJController.rightBumper.whenReleased(()-> feeder.runFeeder(0));
+      driveController.yButton.whileHeld(()-> feeder.runFeeder(0.-45));
+      driveController.yButton.whenReleased(()-> feeder.runFeeder(0));
       //DJController.rightBumper.whenReleased(new PurgeFeeder(feeder, 0));
       //driveController.Dpad.Left.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));
       //driveController.Dpad.Right.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));

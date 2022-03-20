@@ -79,7 +79,7 @@ public final class Constants {
         public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(256.8); // FIXME Measure and set back left steer offset
 
         public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 15; // FIXME Set back right drive motor ID
-        public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 14; // FIXME Set back right steer motor ID
+        public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 31; // FIXME Set back right steer motor ID
         public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 16; // FIXME Set back right steer encoder ID
         public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(209.5 -180); // FIXME Measure and set back right steer offset        
 
@@ -255,19 +255,19 @@ public final class Constants {
             }
 
         public static final double HoodMinAngle = 0;
-        public static final double HoodMaxAngle = 40;
+        public static final double HoodMaxAngle = 70;
 
         public static final double HoodOffset = 0.0;
 
         public static final LookupTable HoodPositionTable = new LookupTable();
         static {
             //tune this for as many as you want
-            HoodPositionTable.put(3, -20);
-            HoodPositionTable.put(1.8, 5.5);
-            HoodPositionTable.put(3, 5.5);
-            
-            HoodPositionTable.put(4, -25);
-            HoodPositionTable.put(5, -30);
+            //HoodPositionTable.put(3, -20);
+            //HoodPositionTable.put(1.8, 5.5);
+            //HoodPositionTable.put(2.7, );
+            HoodPositionTable.put(2.4, 26.5);
+            HoodPositionTable.put(2.7, 31);
+            HoodPositionTable.put(3, 38.5);
         }
 
 

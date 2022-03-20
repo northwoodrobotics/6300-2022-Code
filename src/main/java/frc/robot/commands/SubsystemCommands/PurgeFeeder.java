@@ -19,7 +19,7 @@ public class PurgeFeeder extends CommandBase{
     }
     @Override
     public void execute(){
-        Timer.delay(0.5);
+        Timer.delay(0.7);
         m_feeder.runFeeder(speed);
        
 

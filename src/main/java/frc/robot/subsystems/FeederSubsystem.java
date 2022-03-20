@@ -37,7 +37,7 @@ public class FeederSubsystem extends SubsystemBase {
         FeederMotor.setNeutralMode(NeutralMode.Brake);
         TalonFXConfiguration FeederConfig = new TalonFXConfiguration();
         //FeederConfig.pr
-       
+        FeederMotor.setStatusFramePeriod(3, 150);
 
         ShuffleboardTab tab =Shuffleboard.getTab("Feeder");
         Stage1Loaded = tab.add("Do We Have 1 Ball", false)

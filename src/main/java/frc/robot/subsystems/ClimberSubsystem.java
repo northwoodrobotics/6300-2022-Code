@@ -70,7 +70,8 @@ public class ClimberSubsystem extends SubsystemBase{
         Climb1Config.supplyCurrLimit.enable = true; 
         Climb1Talon.configAllSettings(Climb1Config);
         Climb1Talon.setNeutralMode(NeutralMode.Brake);
-
+        Climb1Talon.setStatusFramePeriod(3, 200);
+        Climb2Talon.setStatusFramePeriod(3, 200);
         // fix me 
         Climb1Talon.setInverted(false);
         TalonFXConfiguration Climb2Config = new TalonFXConfiguration();
