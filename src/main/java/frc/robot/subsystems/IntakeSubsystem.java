@@ -37,6 +37,7 @@ import edu.wpi.first.cscore.VideoMode.PixelFormat;
 
 
 public class IntakeSubsystem extends SubsystemBase{
+    // thie intake consisted of a single double solenoid, and 775 pro run on a talon SRX 
     private TalonSRX intakeMotor = new TalonSRX(Constants.IntakeConstants.IntakeMotorID);
     private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(31, PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID2, IntakeConstants.IntakeSolenoidID);
 
@@ -67,11 +68,11 @@ public class IntakeSubsystem extends SubsystemBase{
         //intakeExtended = Value.kReverse;
        // cvSink.setSource(intakeCam);
        CameraServer.startAutomaticCapture();
-       intakeMotor.setStatusFramePeriod(3, 200);
+       intakeMotor.setStatusFramePeriod(3, 200); // slow down the motor updates, the inake has no control loop, so it doesn't need to update every 10ms
         
 
-        intakeMotor.setNeutralMode(NeutralMode.Brake);
-        intakeMotor.configPeakCurrentLimit(35);
+        intakeMotor.setNeutralMode(NeutralMode.Brake); // brake mode because it feels nice
+        intakeMotor.configPeakCurrentLimit(35); // current limit, as 775pros burn out like no tomorrow 
         
         
     }

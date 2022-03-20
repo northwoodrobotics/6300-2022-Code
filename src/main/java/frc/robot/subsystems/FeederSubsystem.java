@@ -19,6 +19,9 @@ import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
 
 
 public class FeederSubsystem extends SubsystemBase {
+    // the 2022 feeder consisted of 1 falcon 500, and 2 beam break sensors. 
+    // the beam breaks were used to detect and control the balls, so the driver could only focus on shooting and pickup. 
+    // the beam breaks used PWM output, and plugged into the analog ports of the roborio. 
     private TalonFX FeederMotor = new TalonFX(Constants.FeederConstants.FeederMotorID);
     //private AnalogInput FeederStage1Sensor = new AnalogInput(Constants.FeederConstants.FeederStage1Sensor);
     private AnalogInput FeederStage2Sensor = new AnalogInput(Constants.FeederConstants.FeederStage2Sensor);
@@ -33,11 +36,11 @@ public class FeederSubsystem extends SubsystemBase {
 
 
     public FeederSubsystem(){
-        FeederMotor.setInverted(false);
-        FeederMotor.setNeutralMode(NeutralMode.Brake);
+        FeederMotor.setInverted(false); 
+        FeederMotor.setNeutralMode(NeutralMode.Brake);// set to break, so it holds the balls, and stops them at the right positions
         TalonFXConfiguration FeederConfig = new TalonFXConfiguration();
         //FeederConfig.pr
-        FeederMotor.setStatusFramePeriod(3, 150);
+        FeederMotor.setStatusFramePeriod(3, 150); // slow down updates to the feeder, so CANBUS usage is relatively low. 
 
         ShuffleboardTab tab =Shuffleboard.getTab("Feeder");
         Stage1Loaded = tab.add("Do We Have 1 Ball", false)
@@ -51,7 +54,7 @@ public class FeederSubsystem extends SubsystemBase {
         ShouldAdvance = tab.add("ShouldAdvance", false).withPosition(1, 2).withSize(1, 1).getEntry();
     }
     public void runFeeder(double speed){
-        FeederMotor.set(ControlMode.PercentOutput, speed);
+        FeederMotor.set(ControlMode.PercentOutput, speed);// runs the feeder at set speeds, tuned during the season over and over again. 
     }
 
     /*public boolean Stage1Loaded(){
@@ -59,17 +62,17 @@ public class FeederSubsystem extends SubsystemBase {
 
     }*/
     public boolean Stage2Loaded(){
-        return FeederStage2Sensor.getVoltage() <0.1;
+        return FeederStage2Sensor.getVoltage() <0.1; // a true or false value, when the sensor is broken
     }
     public boolean IntakeHasBall(){
-        return IntakeSensor.getVoltage() <0.1;
+        return IntakeSensor.getVoltage() <0.1; // same as above
     }
 
     public boolean shouldAdvance(){
         if(Stage2Loaded()){
             return false;
         }
-        return IntakeHasBall();
+        return IntakeHasBall(); // checks stage 2 of the feeder, and the intake beam break. if the top is tripped, it will always be false, if not, it will be true when the intake is tripped. 
     }
 
     

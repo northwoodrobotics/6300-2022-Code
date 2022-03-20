@@ -16,7 +16,7 @@ public class TopSideTwoBall extends SequentialCommandGroup{
     public TopSideTwoBall(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(
             new DriveAndIntake(PathHolder.FourBall1, subsystem, intake, feeder), 
-            new AutoShoot(shooter, blindlight).alongWith(new HoodUp(shooter, 37), new PurgeFeeder(feeder, .75))
+            new AutoShoot(shooter, blindlight).alongWith(new HoodUp(shooter, 27.5), new PurgeFeeder(feeder, .75))
 
 
 

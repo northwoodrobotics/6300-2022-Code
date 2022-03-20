@@ -260,23 +260,14 @@ public class RobotContainer {
       driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.5), true);
     // driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
       //driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45));
-      driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
-      driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
+      //driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
+      //driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
       driveController.aButton.whileHeld(()->feeder.runFeeder(0.45));
       driveController.aButton.whenReleased(()-> feeder.runFeeder(0));
       //DJController.leftBumper.whenReleased(new PurgeFeeder(feeder, 0));
       driveController.yButton.whileHeld(()-> feeder.runFeeder(0.-45));
       driveController.yButton.whenReleased(()-> feeder.runFeeder(0));
-      //DJController.rightBumper.whenReleased(new PurgeFeeder(feeder, 0));
-      //driveController.Dpad.Left.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));
-      //driveController.Dpad.Right.whenPressed(()-> shooter.RunShooter(shooter.getShooterTargetVelocity()+500));
-    //driveController.aButton.whenHeld(new PurgeFeeder(feeder, 0.45));
-    //driveController.bButton.wxhenPressed(new LimelightSwitchLEDMode(LEDMode.LED_OFF));
-    //driveController.startButton.whenHeld(new ZeroGyro(m_swerveSubsystem));
-    //driveController.Dpad.Down.whenPressed(new SetServoMax(shooter), true);
-    //driveController.Dpad.Up.whenPressed(new SetServoMin(shooter), true);
-    //driveController.Dpad.Left.whenPressed(new SetServoMid(shooter), true);
-    //driveController.Dpad.Right.whenPressed(new HomeHood(shooter), true);
+      
 
     /*DJController.aButton.toggleWhenPressed(
       new PlaySelectedSong(shooter), true

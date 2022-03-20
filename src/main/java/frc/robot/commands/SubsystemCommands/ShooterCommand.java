@@ -5,8 +5,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 //import frc.ExternalLib.CitrusLib.CitrusConstants.ShooterConstants;
-import frc.ExternalLib.JackInTheBotLib.util.InterpolatingDouble;
-import frc.ExternalLib.JackInTheBotLib.util.InterpolatingTreeMap;
+//import frc.ExternalLib.JackInTheBotLib.util.InterpolatingDouble;
+//import frc.ExternalLib.JackInTheBotLib.util.InterpolatingTreeMap;
+import frc.ExternalLib.PoofLib.util.InterpolatingDouble;
+import frc.ExternalLib.PoofLib.util.InterpolatingTreeMap;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
@@ -42,6 +44,7 @@ public class ShooterCommand extends CommandBase{
         
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
         subsystem.RunShooter(-5500);
+        subsystem.setHoodTargetAngle((ShooterConstants.HoodPositionTable.getInterpolated(new InterpolatingDouble(Blindight.getAvgDistance()))).value);
         //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
         //subsystem.setHoodTargetAngle((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));  
            
