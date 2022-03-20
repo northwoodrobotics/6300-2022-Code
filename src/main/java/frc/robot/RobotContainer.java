@@ -254,7 +254,7 @@ public class RobotContainer {
       /*leftTrigger.whenPressed(
         new ShooterCommand(shooter, blindlight)
       );*/
-      DJController.bButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.5), true);
+      driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.5), true);
     // driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
       //driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45));
       driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
