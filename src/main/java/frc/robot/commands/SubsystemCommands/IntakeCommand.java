@@ -1,9 +1,11 @@
          package frc.robot.commands.SubsystemCommands;
 
+//import java.util.Timer;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
 import frc.robot.subsystems.FeederSubsystem;
@@ -11,16 +13,16 @@ import frc.robot.subsystems.FeederSubsystem;
 
 public class IntakeCommand extends CommandBase{
     private final IntakeSubsystem m_intake;
-    private final FeederSubsystem m_feeder;
+    //private final FeederSubsystem m_feeder;
     //private SpectrumXboxController controller;
     private final double IntakeSpeed;
     private Timer feedTimer; 
     //private double speed;
     
-    public IntakeCommand(IntakeSubsystem intake,  FeederSubsystem feeder,double intakeSpeed){
+    public IntakeCommand(IntakeSubsystem intake, double intakeSpeed){
             this.IntakeSpeed = intakeSpeed;
             //this.controller = controller;
-            this.m_feeder = feeder;
+           // this.m_feeder = feeder;
             this.m_intake = intake;
             //this.speed = intakeSpeed;
             feedTimer = new Timer();
@@ -34,12 +36,13 @@ public class IntakeCommand extends CommandBase{
     @Override 
     public void initialize(){
         m_intake.setIntakeExtension(Value.kReverse);
+        
 
     }
     
     @Override
     public void execute(){
-        if(m_feeder.Stage2Loaded()){
+        /*if(m_feeder.Stage2Loaded()){
             m_intake.setMotorOutput(-IntakeSpeed);
             m_feeder.runFeeder(0);
         }
@@ -48,11 +51,16 @@ public class IntakeCommand extends CommandBase{
             //m_intake.setIntakeExtension(Value.kReverse);
         }
         if(m_feeder.shouldAdvance()){
-            Timer.delay(0.5);
+            feedTimer.start();
+        
+            //Timer.delay(0.3);
+            //new WaitCommand(0.5);
             m_feeder.runFeeder(.6);
             m_intake.setMotorOutput(0.3);
-            Timer.delay(0.5);
-        }else m_feeder.runFeeder(0);
+            //new WaitCommand(0.5);
+     
+        }*/
+        //else m_feeder.runFeeder(0);
 
 
             

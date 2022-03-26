@@ -51,16 +51,22 @@ import frc.robot.commands.SimCommands.HoodUp;
 //import frc.robot.commands.SimCommands.SimAuton;
 import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
+import frc.robot.commands.SubsystemCommands.RunFeeder;
 import frc.robot.commands.SubsystemCommands.FenderShot;
 //import frc.robot.commands.SubsystemCommands.SetServoMax;
 //import frc.robot.commands.SubsystemCommands.SetServoMid;
 //import frc.robot.commands.SubsystemCommands.SetServoMin;
 import frc.robot.commands.SubsystemCommands.HomeHood;
 import frc.robot.commands.SubsystemCommands.IntakeCommand;
+import frc.robot.commands.SubsystemCommands.LowShot;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.ShooterCommand;
+import frc.robot.commands.SubsystemCommands.WaitForBall;
 import frc.robot.commands.SubsystemCommands.AutoCommands.AutoFeedCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -237,14 +243,17 @@ public class RobotContainer {
     driveController.startButton.whenHeld(
       new CalibrateGyro(m_swerveSubsystem)
     );
+    driveController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1))));
     driveController.rightTriggerButton.whileHeld(
-      new FenderShot(shooter, blindlight).alongWith(new PurgeFeeder(feeder, 1)));
+      new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1))));
     driveController.leftTriggerButton.whileHeld(
-      new ShooterCommand(shooter, blindlight).alongWith(new PurgeFeeder(feeder, 1)));
-    driveController.leftBumper.whileHeld(new RotateToTarget(m_swerveSubsystem, 
+      new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1)))
+      );
+    driveController.bButton.whenPressed(()-> blindlight.setLEDMode(LEDMode.LED_OFF));
+    driveController.leftBumper.whileHeld(new ParallelDeadlineGroup(new RotateToTarget(m_swerveSubsystem, 
     () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
-          () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
+          () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC)), true);
     /*driveController.xButton.whileHeld(
       new RotateToTarget(m_swerveSubsystem,   
       () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
@@ -257,7 +266,8 @@ public class RobotContainer {
       /*leftTrigger.whenPressed(
         new ShooterCommand(shooter, blindlight)
       );*/
-      driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.5), true);
+      driveController.xButton.toggleWhenPressed(new IntakeMasterCommand(feeder, intake)/*new SortBall(feeder)*/);
+        //new IntakeMasterCommand(feeder, intake), true);
     // driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
       //driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45));
       //driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
@@ -272,10 +282,10 @@ public class RobotContainer {
     /*DJController.aButton.toggleWhenPressed(
       new PlaySelectedSong(shooter), true
     );*/
-    DJController.yButton.whileHeld(()-> climber.ExtendClimb() );
-    DJController.yButton.whenReleased(()-> climber.HoldClimb() );
-    DJController.aButton.whileHeld(()-> climber.Climb() );
-    DJController.aButton.whenReleased(()-> climber.HoldClimb() );
+    DJController.leftBumper.whileHeld(()-> climber.ExtendClimb() );
+    DJController.leftBumper.whenReleased(()-> climber.HoldClimb() );
+    DJController.rightBumper.whileHeld(()-> climber.Climb() );
+    DJController.rightBumper.whenReleased(()-> climber.HoldClimb() );
     
    
    
@@ -350,9 +360,9 @@ public class RobotContainer {
     master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
     master.addNumber("Gyro Angle", () -> dt.getAngle());
     master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
-    master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getEstPose().getX());
-    master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getEstPose().getY());
-    master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getEstPose().getRotation().getDegrees());
+    master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getPose().getX());
+    master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getPose().getY());
+    master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());
     master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed());
     //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
     //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());

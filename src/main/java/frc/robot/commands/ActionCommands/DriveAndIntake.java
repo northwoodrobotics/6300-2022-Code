@@ -17,7 +17,7 @@ public class DriveAndIntake extends ParallelDeadlineGroup{
         super(
             new SequentialCommandGroup(
                 new AutoDrive(swerve,path)
-            ), new IntakeCommand(intake, feeder, 0.45)
+            ), new IntakeMasterCommand(feeder, intake)
         );
 
     }

@@ -68,7 +68,7 @@ public class IntakeSubsystem extends SubsystemBase{
         //intakeExtended = Value.kReverse;
        // cvSink.setSource(intakeCam);
        CameraServer.startAutomaticCapture();
-       intakeMotor.setStatusFramePeriod(3, 200); // slow down the motor updates, the inake has no control loop, so it doesn't need to update every 10ms
+       intakeMotor.setStatusFramePeriod(1, 10); // slow down the motor updates, the inake has no control loop, so it doesn't need to update every 10ms
         
 
         intakeMotor.setNeutralMode(NeutralMode.Brake); // brake mode because it feels nice

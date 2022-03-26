@@ -34,7 +34,8 @@ public class DriveAutoRotate extends CommandBase {
         this.m_rotationSupplier = rotationSupplier;
 
         rotationController = new PIDController(Constants.DriveConstants.AimConstants.AimP, Constants.DriveConstants.AimConstants.AimI, Constants.DriveConstants.AimConstants.AimD);
-        rotationController.setTolerance(5);
+        rotationController.setTolerance(3);
+        rotationController.setIntegratorRange(-20, 20);
     }
 
     @Override
@@ -86,6 +87,6 @@ public class DriveAutoRotate extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return Math.abs(RobotContainer.blindlight.getTargetAngleX()) <= 1;
     }
 }

@@ -104,12 +104,12 @@ public class ClimberSubsystem extends SubsystemBase{
         
     }
     public void ExtendClimb(){
-        Climb1Talon.set(TalonFXControlMode.PercentOutput, -1);
-        Climb2Talon.set(TalonFXControlMode.PercentOutput, -1);
-    }
-    public void Climb(){
         Climb1Talon.set(TalonFXControlMode.PercentOutput, 1);
         Climb2Talon.set(TalonFXControlMode.PercentOutput, 1);
+    }
+    public void Climb(){
+        Climb1Talon.set(TalonFXControlMode.PercentOutput, -1);
+        Climb2Talon.set(TalonFXControlMode.PercentOutput, -1);
     }
     public void HoldClimb(){
         Climb1Talon.set(TalonFXControlMode.Disabled, 0);

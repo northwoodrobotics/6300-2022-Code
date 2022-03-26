@@ -2,6 +2,7 @@ package frc.robot.commands.SimCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.swervelib.SwerveSubsystem;
 
 public class HoodUp extends CommandBase{
     private ShooterSubsystem shooter; 

@@ -34,9 +34,9 @@ public final class Constants {
     }
     public static final class DriveConstants{
         public static final class AimConstants{ 
-            public static final double AimP =.75 ;           
-            public static final double AimI =0;
-            public static final double AimD =0.75;}
+            public static final double AimP =.006 ;           
+            public static final double AimI =0.003;
+            public static final double AimD =0.0025;}
         
         /**
      * The left-to-right distance between the drivetrain wheels
@@ -76,8 +76,8 @@ public final class Constants {
         public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 16; // FIXME Set back right steer encoder ID
         public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(209.5 -180); // FIXME Measure and set back right steer offset        
         // Drivetrain Performance Mechanical limits
-        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(6);
-        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(6);
+        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(4.5);
+        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(4.5);
         static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(90);
         static public final double MAX_TRANSLATE_ACCEL_MPS2 = MAX_FWD_REV_SPEED_MPS/0.25; //0-full time of 0.25 second
         static public final double MAX_ROTATE_ACCEL_RAD_PER_SEC_2 = MAX_ROTATE_SPEED_RAD_PER_SEC/0.25; //0-full time of 0.25 second
@@ -103,10 +103,10 @@ public final class Constants {
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond =Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-        public static final double TRAJECTORYXkP = 10;
+        public static final double TRAJECTORYXkP = 20;
         public static final double TRAJECTORYXkI = 0;
         public static final double TRAJECTORYXkD = 0;
-        public static final double TRAJECTORYYkP = 1;
+        public static final double TRAJECTORYYkP = 20;
         public static final double TRAJECTORYYkI = 0;
         public static final double TRAJECTORYYkD = 0;
         public static final double DriveKS = 1.1152;
@@ -204,10 +204,13 @@ public final class Constants {
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> ShooterVelocityTable = new InterpolatingTreeMap<>(6);
         static{
             // tune
-            ShooterVelocityTable.put(new InterpolatingDouble(1.8),new InterpolatingDouble(-5000.0));
-            ShooterVelocityTable.put(new InterpolatingDouble(1.9),new InterpolatingDouble(-5250.0));
-            ShooterVelocityTable.put(new InterpolatingDouble(2.2),new InterpolatingDouble(-5500.0));
-            ShooterVelocityTable.put(new InterpolatingDouble(3.0),new InterpolatingDouble(-7000.0));
+            
+           // ShooterVelocityTable.put(new InterpolatingDouble(1.3),new InterpolatingDouble(-5500.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(1.8),new InterpolatingDouble(-7500.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(1.9),new InterpolatingDouble(-7750.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(2.0),new InterpolatingDouble(-8500.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(2.2),new InterpolatingDouble(-8500.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(3.0),new InterpolatingDouble(-10000.0));
 
             }
         public static final double HoodMinAngle = 0;
@@ -219,7 +222,10 @@ public final class Constants {
             //HoodPositionTable.put(3, -20);
             //HoodPositionTable.put(1.8, 5.5);
             //HoodPositionTable.put(2.7, );
-            HoodPositionTable.put(new InterpolatingDouble(1.8), new InterpolatingDouble(20.5));
+            
+          //  HoodPositionTable.put(new InterpolatingDouble(1.3), new InterpolatingDouble(15.0));
+            HoodPositionTable.put(new InterpolatingDouble(1.6), new InterpolatingDouble(18.5));
+            HoodPositionTable.put(new InterpolatingDouble(1.8), new InterpolatingDouble(21.5));
             HoodPositionTable.put(new InterpolatingDouble(2.4), new InterpolatingDouble(26.5));
             HoodPositionTable.put(new InterpolatingDouble(2.7), new InterpolatingDouble(31.0));
             HoodPositionTable.put(new InterpolatingDouble(3.0), new InterpolatingDouble(38.5));

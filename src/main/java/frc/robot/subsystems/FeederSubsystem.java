@@ -40,7 +40,7 @@ public class FeederSubsystem extends SubsystemBase {
         FeederMotor.setNeutralMode(NeutralMode.Brake);// set to break, so it holds the balls, and stops them at the right positions
         TalonFXConfiguration FeederConfig = new TalonFXConfiguration();
         //FeederConfig.pr
-        FeederMotor.setStatusFramePeriod(3, 150); // slow down updates to the feeder, so CANBUS usage is relatively low. 
+        FeederMotor.setStatusFramePeriod(1, 150); // slow down updates to the feeder, so CANBUS usage is relatively low. 
 
         ShuffleboardTab tab =Shuffleboard.getTab("Feeder");
         Stage1Loaded = tab.add("Do We Have 1 Ball", false)
