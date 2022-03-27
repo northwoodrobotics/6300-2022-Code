@@ -15,52 +15,33 @@ public class navXFactoryBuilder {
     private static class GyroscopeImplementation implements Gyroscope {
         private final AHRS navX;
         private final SimDouble angleSim;
-        private final SimDouble FusedSim;
 
         private GyroscopeImplementation(AHRS navX) {
             this.navX = navX;
-            
-
-            navX.calibrate();
 
             int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
             angleSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
-            FusedSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "FusedHeading"));
         }
 
-        @Override public void calibrateGyroscope(){
-            navX.calibrate();
-        }
-
-        @Override   
+        @Override
         public Rotation2d getGyroHeading() {
-            if (navX.isMagnetometerCalibrated()){
-                return Rotation2d.fromDegrees(-navX.getFusedHeading());
+            if (navX.isMagnetometerCalibrated()) {
+               // We will only get valid fused headings if the magnetometer is calibrated
+               return Rotation2d.fromDegrees(navX.getFusedHeading());
             }
-     
-        return Rotation2d.fromDegrees(360-navX.getYaw());
-    }
+            // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
+            return Rotation2d.fromDegrees(360.0 - navX.getYaw());
+        }
+
+        @Override
+        public Boolean getGyroReady() {
+            return !navX.isCalibrating();
+        }
 
         @Override
         public void zeroGyroscope() {
-            navX.reset();
+            navX.zeroYaw();
         }
-
-        @Override
-        public double readGetAngle(){
-            return 360- navX.getAngle();
-        }
-        @Override
-        public Rotation2d readGetYaw(){
-            return Rotation2d.fromDegrees(navX.getYaw());
-        }
-        @Override
-        public Rotation2d readFused(){
-            return Rotation2d.fromDegrees(360-navX.getFusedHeading());
-        }
-        
-
-
 
         @Override
         public void setAngle(double angle) {

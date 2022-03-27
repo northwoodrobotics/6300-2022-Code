@@ -12,29 +12,10 @@ public class SwerveConstants {
     public static double MAX_VOLTAGE;
     public static Pose2d DFLT_START_POSE;
     
- 
-   
-
-    public static TrapezoidProfile.Constraints THETACONTROLLERCONSTRAINTS;
-
-    public static double TRAJECTORYXkP;
-    public static double TRAJECTORYXkI;
-    public static double TRAJECTORYXkD;
-
-   
-    public static double TRAJECTORYYkP;
-    public static double TRAJECTORYYkI;
-    public static double TRAJECTORYYkD;
-
     public static double THETACONTROLLERkP;
-    public static double THETACONTROLLERkI;
-    public static double THETACONTROLLERkD;
-
-    public static double DriveKs;
-    public static double DriveKv;
-    public static double DriveKa;
-
-
+    public static double TRAJECTORYXkP;
+    public static double TRAJECTORYYkP;
+    public static TrapezoidProfile.Constraints THETACONTROLLERCONSTRAINTS;
 
     public static double TRACKWIDTH_METERS;
     public static double TRACKLENGTH_METERS;
@@ -42,6 +23,6 @@ public class SwerveConstants {
     public static double MOI_KGM2;
     public static SwerveDriveKinematics KINEMATICS;
 
-    public static PIDController XPIDCONTROLLER = new PIDController(TRAJECTORYXkP, TRAJECTORYXkI, TRAJECTORYXkD);
-    public static PIDController YPIDCONTROLLER = new PIDController(TRAJECTORYYkP, TRAJECTORYYkI, TRAJECTORYYkD);
+    public static PIDController XPIDCONTROLLER = new PIDController(TRAJECTORYXkP, 0, 0);
+    public static PIDController YPIDCONTROLLER = new PIDController(TRAJECTORYYkP, 0, 0);
 }

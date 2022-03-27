@@ -7,7 +7,6 @@ public interface Gyroscope {
    * Gets the current heading (Yaw) as reported by the gyroscope.
    * @return The Rotation2d value of the heading.
    */
-  void calibrateGyroscope();
   Rotation2d getGyroHeading();
 
   /**
@@ -16,14 +15,15 @@ public interface Gyroscope {
   */
   void zeroGyroscope();
 
-double readGetAngle();
-
-Rotation2d readGetYaw();
-Rotation2d readFused();
-
   /**
    * Sets the simulated gyroscope to a specified angle
    * @param angle Angle to be set in degrees.
    */
   void setAngle(double angle);
+
+  /**
+   * Determines if the Gyro is ready to be used.
+   * @return True/False if the gyro is ready to be used.
+   */
+  Boolean getGyroReady();
 }

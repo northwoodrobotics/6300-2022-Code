@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.swervelib.DriveController;
 import frc.swervelib.DriveControllerFactory;
 import frc.swervelib.ModuleConfiguration;
@@ -17,9 +18,27 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
     private static final int CAN_TIMEOUT_MS = 250;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
+    private static final int CAN_TIMEOUT_MS_SIM = 100;
+    private static final int STATUS_FRAME_GENERAL_PERIOD_MS_SIM = 100;
+
+    // PID configuration
+    private double proportionalConstant = Double.NaN;
+    private double integralConstant = Double.NaN;
+    private double derivativeConstant = Double.NaN;
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
+
+    public Falcon500DriveControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) {
+        this.proportionalConstant = proportional;
+        this.integralConstant = integral;
+        this.derivativeConstant = derivative;
+        return this;
+    }
+
+    public boolean hasPidConstants() {
+        return Double.isFinite(proportionalConstant) && Double.isFinite(integralConstant) && Double.isFinite(derivativeConstant);
+    }
 
     public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) {
         this.nominalVoltage = nominalVoltage;
@@ -51,6 +70,12 @@ public final class Falcon500DriveControllerFactoryBuilder {
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / TICKS_PER_ROTATION;
             double sensorVelocityCoefficient = sensorPositionCoefficient * 10.0;
 
+            if (hasPidConstants()) {
+                motorConfiguration.slot0.kP = proportionalConstant;
+                motorConfiguration.slot0.kI = integralConstant;
+                motorConfiguration.slot0.kD = derivativeConstant;
+            }
+
             if (hasVoltageCompensation()) {
                 motorConfiguration.voltageCompSaturation = nominalVoltage;
             }
@@ -61,7 +86,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
             }
 
             WPI_TalonFX motor = new WPI_TalonFX(driveConfiguration);
-            
+            motor.configAllSettings(motorConfiguration);
 
             if (hasVoltageCompensation()) {
                 // Enable voltage compensation
@@ -74,7 +99,21 @@ public final class Falcon500DriveControllerFactoryBuilder {
             motor.setSensorPhase(true);
 
             // Reduce CAN status frame rates
-            
+            if (RobotBase.isSimulation()) {
+                motor.setStatusFramePeriod(
+                    StatusFrameEnhanced.Status_1_General,
+                    STATUS_FRAME_GENERAL_PERIOD_MS_SIM,
+                    CAN_TIMEOUT_MS_SIM
+                );
+            }
+            else {
+                motor.setStatusFramePeriod(
+                        StatusFrameEnhanced.Status_1_General,
+                        STATUS_FRAME_GENERAL_PERIOD_MS,
+                        CAN_TIMEOUT_MS
+                );
+            }
+
             return new ControllerImplementation(motor, sensorVelocityCoefficient);
         }
     }
@@ -92,6 +131,11 @@ public final class Falcon500DriveControllerFactoryBuilder {
         @Override
         public void setReferenceVoltage(double voltage) {
             motor.set(TalonFXControlMode.PercentOutput, voltage / nominalVoltage);
+        }
+
+        @Override
+        public void setVelocity(double velocity) {
+            motor.set(TalonFXControlMode.Velocity, velocity / sensorVelocityCoefficient);
         }
 
         @Override
