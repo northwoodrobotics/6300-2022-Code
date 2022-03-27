@@ -20,17 +20,21 @@ public class Pigeon2FactoryBuilder {
         private GyroscopeImplementation(WPI_Pigeon2 pigeon) {
             this.pigeon = pigeon;
            // pigeonSim = pigeon.getSimCollection();
-        }
+        }/*
         @Override 
         public void calibrateGyroscope(){
             pigeon.calibrate();
+        }*/
+        @Override
+        public Boolean getGyroReady() {
+            return true;
         }
 
         @Override
         public Rotation2d getGyroHeading() {
             return Rotation2d.fromDegrees(pigeon.getYaw());
         }
-        @Override
+        /*@Override
         public double readGetAngle(){
             return pigeon.getAngle();
         }
@@ -41,7 +45,7 @@ public class Pigeon2FactoryBuilder {
         @Override
         public Rotation2d readFused(){
             return Rotation2d.fromDegrees(pigeon.getYaw());
-        }
+        }*/
         
 
         @Override
