@@ -42,6 +42,6 @@ public class SwerveConstants {
     public static double MOI_KGM2;
     public static SwerveDriveKinematics KINEMATICS;
 
-    public static PIDController XPIDCONTROLLER = new PIDController(TRAJECTORYXkP, TRAJECTORYXkI, TRAJECTORYXkD);
-    public static PIDController YPIDCONTROLLER = new PIDController(TRAJECTORYYkP, TRAJECTORYYkI, TRAJECTORYYkD);
+    public static PIDController XPIDCONTROLLER = new PIDController(TRAJECTORYXkP, 0, 0);
+    public static PIDController YPIDCONTROLLER = new PIDController(TRAJECTORYYkP, 0, 0);
 }

@@ -10,7 +10,7 @@ import frc.swervelib.AbsoluteEncoderFactory;
 
 public class CanCoderFactoryBuilder {
     private Direction direction = Direction.COUNTER_CLOCKWISE;
-    private int periodMilliseconds = 10;
+    private int periodMilliseconds = 200;
 
     public CanCoderFactoryBuilder withReadingUpdatePeriod(int periodMilliseconds) {
         this.periodMilliseconds = periodMilliseconds;
@@ -38,7 +38,9 @@ public class CanCoderFactoryBuilder {
 
         private EncoderImplementation(CANCoder encoder) {
             this.encoder = encoder;
+            
         }
+        
 
         @Override
         public double getAbsoluteAngle() {

@@ -17,13 +17,26 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
     private static final int CAN_TIMEOUT_MS = 250;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
+    private double proportionalConstant = Double.NaN;
+    private double integralConstant = Double.NaN;
+    private double derivativeConstant = Double.NaN;
+
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
+    public Falcon500DriveControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) {
+        this.proportionalConstant = proportional;
+        this.integralConstant = integral;
+        this.derivativeConstant = derivative;
+        return this;
+    }
 
     public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) {
         this.nominalVoltage = nominalVoltage;
         return this;
+    }
+    public boolean hasPidConstants() {
+        return Double.isFinite(proportionalConstant) && Double.isFinite(integralConstant) && Double.isFinite(derivativeConstant);
     }
 
     public boolean hasVoltageCompensation() {
@@ -50,6 +63,11 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / TICKS_PER_ROTATION;
             double sensorVelocityCoefficient = sensorPositionCoefficient * 10.0;
+            if (hasPidConstants()) {
+                motorConfiguration.slot0.kP = proportionalConstant;
+                motorConfiguration.slot0.kI = integralConstant;
+                motorConfiguration.slot0.kD = derivativeConstant;
+            }
 
             if (hasVoltageCompensation()) {
                 motorConfiguration.voltageCompSaturation = nominalVoltage;
@@ -72,6 +90,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             motor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
             motor.setSensorPhase(true);
+            motor.setStatusFramePeriod(21, 250);
 
             // Reduce CAN status frame rates
             
@@ -87,6 +106,10 @@ public final class Falcon500DriveControllerFactoryBuilder {
         private ControllerImplementation(WPI_TalonFX motor, double sensorVelocityCoefficient) {
             this.motor = motor;
             this.sensorVelocityCoefficient = sensorVelocityCoefficient;
+        }
+        @Override
+        public void setVelocity(double velocity) {
+            motor.set(TalonFXControlMode.Velocity, velocity / sensorVelocityCoefficient);
         }
 
         @Override

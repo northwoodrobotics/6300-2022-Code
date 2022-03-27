@@ -20,7 +20,7 @@ public class HomeHood extends CommandBase{
         zeroVelocityTimestamp = System.currentTimeMillis();
     }*/
     public void execute(){
-        shooter.setHoodHomed(true);
+      //  shooter.setHoodHomed(true);
     }
     /*
     @Override

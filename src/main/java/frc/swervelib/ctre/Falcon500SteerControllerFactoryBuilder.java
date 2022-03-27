@@ -125,7 +125,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             motor.setInverted(TalonFXInvertType.CounterClockwise);
             motor.setNeutralMode(NeutralMode.Brake);
             motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS);
-
+            motor.setStatusFramePeriod(21, 250);
 
             
             

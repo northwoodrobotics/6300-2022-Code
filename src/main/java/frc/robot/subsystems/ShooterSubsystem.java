@@ -90,26 +90,33 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configFactoryDefault();
         //ShooterServo.setBounds(2.0,1.8,1.5, 1.2, 1.0);
         //ShooterServo2.setBounds(2.0,1.8,1.5, 1.2, 1.0);
-      
+        Shooter.setStatusFramePeriod(21, 200);
+        ShooterFollower.setStatusFramePeriod(21, 200);
 
+        
+        /* here we set up the flywheel control loop. the flywheel is run using PIDF closed loop control, this just means it follows a sensor.
+        If you are creating another flywheel shooter with Falcon500s, this code should work with minimal changes. 
+        Here we are using Velocity PIDF with the Falcon500s integrated sensor.
+        The Falcon 500 has a lot of horsepower behind it, and gets the flywheel up to speed rather quickly. if the 2022 bot is still around, 
+        Fire it up and hear the flywheel scream. 
 
-
+         */
         TalonFXConfiguration ShooterConfig = new TalonFXConfiguration();
-        ShooterConfig.slot0.kP = Constants.ShooterConstants.ShooterP;
-        ShooterConfig.slot0.kI = Constants.ShooterConstants.ShooterI;
-        ShooterConfig.slot0.kD = Constants.ShooterConstants.ShooterD;
-        ShooterConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
-        ShooterConfig.supplyCurrLimit.currentLimit = Constants.ShooterConstants.ShooterCurrentLimit;
-        ShooterConfig.supplyCurrLimit.enable = true;
-        ShooterConfig.voltageCompSaturation = 11.5;
-        ShooterConfig.slot0.kF = ShooterConstants.ShooterFF;
+        ShooterConfig.slot0.kP = Constants.ShooterConstants.ShooterP; // give the Falcon its P constant.
+        ShooterConfig.slot0.kI = Constants.ShooterConstants.ShooterI; // give the Falcon its I constant, this is at zero, just P was enough for this loop.
+        ShooterConfig.slot0.kD = Constants.ShooterConstants.ShooterD; // give the Falcon its D constant. again this is just zero
+        ShooterConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(); // telling the falcon to use its internal encoder
+        ShooterConfig.supplyCurrLimit.currentLimit = Constants.ShooterConstants.ShooterCurrentLimit; // this is for when the flywheel is off, we current limit to 10 amps, to keep it from randomly sucking power. 
+        ShooterConfig.supplyCurrLimit.enable = true; // turn on the current limt
+        ShooterConfig.voltageCompSaturation = 11.5; // what this does is attempt to allways apply the same voltage to the flywheel, regardless of battery voltage, this works until your battery getst down to 10ish amps
+        ShooterConfig.slot0.kF = ShooterConstants.ShooterFF; // F term for the PIDF loop
 
-        Shooter.configAllSettings(ShooterConfig);
-        ShooterFollower.configAllSettings(ShooterConfig);
+        Shooter.configAllSettings(ShooterConfig); // apply the configuration for the shooter 
+        ShooterFollower.configAllSettings(ShooterConfig); // apply the config to the follower motor (mostly for the current limit)
 
-        ShooterFollower.follow(Shooter);
-        ShooterFollower.setInverted(InvertType.InvertMotorOutput);
-        SongChooser.setDefaultOption("rick roll",rickroll);
+        ShooterFollower.follow(Shooter);// tells the follower motor to simply do whatever the master is doing 
+        ShooterFollower.setInverted(InvertType.InvertMotorOutput); // inverts the follower, so that they spin in the same dirrection 
+        SongChooser.setDefaultOption("rick roll",rickroll);// falcons can play music, this is just some fun stuff, not particulaly relevant 
         SongChooser.addOption("Gas Gas GAS!", gasgasgas);
         SongChooser.addOption("PokerFace", pokerface);
         SongChooser.addOption("Stayin Alive", stayinalive);
@@ -119,7 +126,24 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
        
         
 
+        /* the hood uses motion magic control. This is very similar to positon PIDF, but with some extra sauce added. 
+        Positon PIDF is basicaly just, YEET to the setpoint, so 
+        if the error is large, then 
+        P gets it mostly there, so { current point -------------> setpoint } its hard to get it to respond fast without having it overshoot and overcorrect
+        then D will curve it or slow it down (kind off)  {the D term is a constants, which is multiplied by the Derivative (slope) in change of position/error }, 
+        so you try to get this to zero as P sends you to your target. 
 
+        This means that your loop will end up in some unhappy medium between respose time and accuracy. if you want an super accurate loop, then you need slow ish P and small D terms to get a good loop. A fast responding loop may be unstable. 
+        Motion magic fixes this problem. what it is a velocity loop inside of a position loop. for example, 
+        if you are biking, you are going to start, then accelerate to a confortable speed, but when you get close to your destination, you are going to slow down. 
+        this is much more ideal, as your loop will respond faster, and be smoother. less overshooting if tuned properly, and far more accurate than a snappy PID loop. 
+        
+        Motion magic on a Falcon 500: 
+        tuning this is a bit of an art, and will be different based on your mechanism, but in code, the process is very similar to the shooter PIDF
+        the only added parameters are the acceleration and velocity parameters, so how fast can the mechanism accelerate, and how fast can it go. this is kept in Talon units.
+        because I am lazy. 
+
+        */
 
         
 
@@ -132,11 +156,11 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         HoodConfig.motionCruiseVelocity = ShooterConstants.MotionMagicVelocity;
         HoodConfig.motionCurveStrength = ShooterConstants.MotionMagicCurve;
         HoodConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
-        HoodConfig.supplyCurrLimit.currentLimit = 15; 
+        HoodConfig.supplyCurrLimit.currentLimit = 15;  // current limited, as its never going to need more than this
         HoodConfig.supplyCurrLimit.enable = true;
 
         HoodMotor.configAllSettings(HoodConfig);
-        HoodMotor.setNeutralMode(NeutralMode.Brake);
+        HoodMotor.setNeutralMode(NeutralMode.Brake); // set it in brake mode, essentaly lightly stalling the motor to keep in place. 
         //HoodController = HoodMotor.getPIDController();
         //HoodController.setFeedbackDevice(HoodEncoder);
         //HoodController.setP(Constants.ShooterConstants.HoodP);
@@ -149,30 +173,32 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         //HoodEncoder.setPositionConversionFactor(factor);*/
 
         ShooterOrchestra.addInstrument(Shooter);
-        //ShooterOrchestra.addInstrument(ShooterFollower);
+        ShooterOrchestra.addInstrument(ShooterFollower);
 
 
 
 
         //HoodEncoder = HoodMotor.getAlternateEncoder(encoderType, countsPerRev)
+
+        // shufflboard is used on the driverstation to see robot data. this page is for the shooter, mostly for tuning. 
         ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
         HoodAngleEntry = tab.add("Hood Angle", 0.0) 
         .withPosition(0, 0)
         .withSize(1, 1)
         .getEntry();
-        tab.addNumber("Hood Raw Encoder",()-> HoodMotor.getSelectedSensorPosition())
+        tab.addNumber("Hood Raw Encoder",()-> HoodMotor.getSelectedSensorPosition()) // gets the raw position of the hood in talon units
         .withPosition(0, 2)
         .withSize(1, 1);
-        tab.addString("HoodControlMode", ()-> getControlMode())
+        tab.addString("HoodControlMode", ()-> getControlMode()) // gets the control mode of the hood
         .withPosition(0, 3)
         .withSize(2, 2);
-        tab.addNumber("HoodControlAngle", ()-> getHoodTargetAngle().orElse(Double.NaN))
+        tab.addNumber("HoodControlAngle", ()-> getHoodTargetAngle().orElse(Double.NaN)) // gets the target angle, or "setpoint" of the hood
         .withPosition(1, 2)
         .withSize(1, 1);
-        tab.addBoolean("HoodIsHomed", ()->this.IsHoodHomed)
+        tab.addBoolean("HoodIsHomed", ()->this.IsHoodHomed) // checks if it has been zeroed. in 2022, we zeroed at the start of the match manualy before turing it on, in other years, we may use limit switches
         .withPosition(1, 2)
         .withSize(1, 1);
-        tab.addNumber("HoodConverted", ()-> getHoodAngle())
+        tab.addNumber("HoodConverted", ()-> getHoodAngle()) // converted true hood angle. 
         .withPosition(1, 3)
         .withSize(1, 1);
 
@@ -182,7 +208,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         
     }
-    public void setFlywheelCurrentLimitEnabled(boolean enabled) {
+    // function to turn on or off current limit
+    public void setFlywheelCurrentLimitEnabled(boolean enabled) { 
         SupplyCurrentLimitConfiguration config = new SupplyCurrentLimitConfiguration();
         config.currentLimit = Constants.ShooterConstants.ShooterCurrentLimit;
         config.enable = enabled;
@@ -190,11 +217,12 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterFollower.configSupplyCurrentLimit(config, 0);
         
     }
+    
    /* public void percentoutput(double speed){
         Shooter.set(ControlMode.PercentOutput, speed);
     }*/
 
-
+    // hood falcon to percent output control, largely unused
     public void setHoodMotorPower(double percent) {
         hoodControlMode = HoodControlMode.PERCENT_OUTPUT;
         hoodPercentOutput = percent;
@@ -207,7 +235,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
 
     
-
+    // runs shooter at set RPM
     public void RunShooter(double speed){
         //double feedForward = (Constants.ShooterConstants.ShooterFF*speed+Constants.ShooterConstants.StaticFriction)/RobotController.getBatteryVoltage();
         Shooter.set(ControlMode.Velocity, -speed/Constants.ShooterConstants.ShooterVelocitySensorCoffiecient);
@@ -231,7 +259,11 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     @Override
     public void update(double time, double dt) {
     }
-  
+    // checkes if the flywheel is within the target velocity 
+    public boolean isFlyWheelAtTargetVelocity(){
+        return MathUtils.epsilonEquals(shooterSpeed(), getShooterTargetVelocity(), 300);
+    }
+    // returns hood angle 
     public OptionalDouble getHoodTargetAngle() {
         if (Double.isFinite(hoodTargetPosition)) {
             return OptionalDouble.of(hoodTargetPosition);
@@ -239,27 +271,29 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
             return OptionalDouble.empty();
         }
     }
+    // sets hood target position 
     public void setHoodTargetAngle(double angle){
         hoodControlMode = HoodControlMode.POSITION;
         hoodTargetPosition = angle;
     }
-
+    // returns true hood RPM, used for tuning 
     public double shooterSpeed(){
         return Shooter.getSelectedSensorVelocity()*Constants.ShooterConstants.ShooterVelocitySensorCoffiecient;
     }   
 
-
+    // legacy, not used anymore. 
     public void MoveHood(double setpoint){
         //HoodMotor.getPIDController().setReference(setpoint, ControlType.kPosition);
         HoodMotor.set(ControlMode.MotionMagic, setpoint* ShooterConstants.HoodPositionSensorCoffiecient);
     }
+    // gets how fast the hood is moving, also used for troubleshooting. 
     public double getHoodVelocity(){
         return HoodMotor.getSelectedSensorVelocity()*ShooterConstants.HoodVelocitySensorCoffiecient;
 
     }
 
-    
-    public boolean isHoodAtTargetAngle() {
+    // checks if hood is at target angle, for shooter logic, but unused as of now
+   public boolean isHoodAtTargetAngle() {
         OptionalDouble targetAngle = getHoodTargetAngle();
         double currentAngle = getHoodTargetAngle().getAsDouble();
 
@@ -268,6 +302,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         }
 
         return MathUtils.epsilonEquals(targetAngle.getAsDouble(), currentAngle, Math.toRadians(1.0));
+    }
+    public double getShooterTargetVelocity(){
+        return Shooter.getClosedLoopTarget()*Constants.ShooterConstants.ShooterVelocitySensorCoffiecient;
     }
     /*
     @SuppressWarnings("SelfAssignment")
@@ -305,25 +342,29 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
     
     
-
+    // this function is called as part of the subssytem class. basically this is allways running, and therefor so is the hood. it checks its mode, and where it should be every 100ms, 
+    // this is done so that at no point the hood will not respond to commands. 
+    // this logic can be reused and renamed (aside from the period function, that kind of has to stay to work) for any sort of arm system. 
     @Override
     public void periodic() {
         switch (hoodControlMode) {
             case DISABLED:
             HoodMotor.set(ControlMode.Disabled, 0.0);
                 break;
-            case POSITION:
+            case POSITION: // if the hood is not zeroed, it will not run
                 if (!IsHoodHomed) {
                     break;
                 }
-
+                // if there is no target angle, the hood will stay at the zero
                 if (getHoodTargetAngle().isEmpty()) {
                     //HoodController.setReference(0, ControlType.kPosition);
                     HoodMotor.set(ControlMode.Disabled, 0.0);
                 } else { 
-                    double targetAngle = getHoodTargetAngle().getAsDouble();
-                    targetAngle = MathUtils.clamp(targetAngle, ShooterConstants.HoodMinAngle, ShooterConstants.HoodMaxAngle);
-                    HoodMotor.set(ControlMode.MotionMagic, angleToTalonUnits(targetAngle));
+                    
+                    double targetAngle = getHoodTargetAngle().getAsDouble(); // recives target angle 
+                    targetAngle = MathUtils.clamp(targetAngle, ShooterConstants.HoodMinAngle, ShooterConstants.HoodMaxAngle);// this function was borrowed from 2910 Jack-In-The-Bot, and simplly forces the hood to stay within its own min an max angles
+                
+                    HoodMotor.set(ControlMode.MotionMagic, angleToTalonUnits(targetAngle)); // Hood Falcon recives the target angle 
                     //HoodController.setReference(targetAngle, ControlType.kPosition);
                    
                      
@@ -337,7 +378,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
                 }
                 break;
             case PERCENT_OUTPUT:
-                this.HoodMotor.set(ControlMode.PercentOutput,hoodPercentOutput);;
+                this.HoodMotor.set(ControlMode.PercentOutput,hoodPercentOutput);; // runs hood at certain percent output
                 break;
         }
 
@@ -355,28 +396,30 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
     private double talonUnitsToHoodAngle(double talonUnits) {
         return -talonUnits / 2048 * (2 * Math.PI);
-    }
+    } // converts falcon 500 encoder reading to hood angle
 
     private double angleToTalonUnits(double angle) {
         return angle * 2048 / (2 * Math.PI) ;
-    }
+    }// reverse of above function 
+    
 
     public void disableHood() {
         hoodControlMode = HoodControlMode.DISABLED;
         hoodTargetPosition = Double.NaN;
-    }
+    }// turns hood off, and zeros the target position
     public void setHoodHomed(boolean target) {
         this.IsHoodHomed = target;
-    }
+    } 
     public boolean isHoodHomed() {
         return IsHoodHomed;
-    } 
-    /*public void zeroHoodMotor() {
+    } /*
+    public void zeroHoodMotor() {
         this.IsHoodHomed = true;
 
         double sensorPosition = (0);
         HoodEncoder.setPosition((int) sensorPosition);
     }*/
+    
     public String getControlMode(){
         return hoodControlMode.toString();
     }

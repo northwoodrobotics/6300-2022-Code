@@ -24,6 +24,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ClimberSubsystem": "Subsystem",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
       "/LiveWindow/FeederSubsystem": "Subsystem",
       "/LiveWindow/IntakeSubsystem": "Subsystem",
@@ -40,6 +41,7 @@
       "/LiveWindow/Ungrouped/Talon FX [11]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [14]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [15]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [31]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [4]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [5]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [7]": "Motor Controller",
@@ -62,11 +64,6 @@
         }
       },
       "/LiveWindow/SwerveSubsystem": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/LiveWindow/Ungrouped/navX-Sensor[4]": {
         "window": {
           "visible": true
         }

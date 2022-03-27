@@ -36,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
       modules.get(3).set(states[3].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[3].angle.getRadians());
       dt.Updateodometry();
     }
-    dt.updateTelemetry();
+    //dt.updateTelemetry();
     
     //dt.Updateodometry();
   }

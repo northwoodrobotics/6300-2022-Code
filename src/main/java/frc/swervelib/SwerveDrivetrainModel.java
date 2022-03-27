@@ -59,6 +59,7 @@ public class SwerveDrivetrainModel {
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
         this.realModules = realModules;
+        swerveOdometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
 
 
         if (RobotBase.isSimulation()) {
@@ -67,7 +68,7 @@ public class SwerveDrivetrainModel {
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(2)));
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(3)));
         }
-        swerveOdometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
+       
         
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         //thetaController.setIntegratorRange(-Units.degreesToRadians(30), Units.degreesToRadians(30));
@@ -130,7 +131,12 @@ public class SwerveDrivetrainModel {
         swerveOdometry.resetPosition(pose, getYaw());
     }
     public void Updateodometry(){
-        swerveOdometry.update(getGyroscopeRotation(), states[0], states[1], states[2], states[3]);
+        states[0].speedMetersPerSecond = Math.abs(realModules.get(0).getDriveVelocity());
+        states[1].speedMetersPerSecond = Math.abs(realModules.get(1).getDriveVelocity());
+        states[2].speedMetersPerSecond = Math.abs(realModules.get(2).getDriveVelocity());
+        states[3].speedMetersPerSecond = Math.abs(realModules.get(3).getDriveVelocity());
+        swerveOdometry.update(getGyroscopeRotation(), states);
+        //swerveOdometry.update(getGyroscopeRotation(), states);
     }
 
 
@@ -307,7 +313,7 @@ public class SwerveDrivetrainModel {
                 thetaController,
                 commandStates -> this.states = commandStates,
                 m_drive);
-        return swerveControllerCommand;
+        return swerveControllerCommand.andThen(()-> setModuleStates(new ChassisSpeeds(0, 0, 0)));
 
     }
 
