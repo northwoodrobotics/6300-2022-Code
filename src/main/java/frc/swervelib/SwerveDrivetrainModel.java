@@ -63,6 +63,7 @@ public class SwerveDrivetrainModel {
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
         this.realModules = realModules;
+        //swerveOdometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
 
         m_odometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
 

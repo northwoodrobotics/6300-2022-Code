@@ -19,6 +19,19 @@ public final class NeoDriveControllerFactoryBuilder {
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
+    /*private double pidProportional = Double.NaN;
+    private double pidIntegral = Double.NaN;
+    private double pidDerivative = Double.NaN;*/
+   /* public NeoDriveControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) {
+        this.pidProportional = proportional;
+        this.pidIntegral = integral;
+        this.pidDerivative = derivative;
+        return this;
+    }
+
+    public boolean hasPidConstants() {
+        return Double.isFinite(pidProportional) && Double.isFinite(pidIntegral) && Double.isFinite(pidDerivative);
+    }*/
 
     public NeoDriveControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) {
         this.pidProportional = proportional;
@@ -79,8 +92,15 @@ public final class NeoDriveControllerFactoryBuilder {
             double positionConversionFactor = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
             encoder.setPositionConversionFactor(positionConversionFactor);
             encoder.setVelocityConversionFactor(positionConversionFactor / 60.0);
-
             SparkMaxPIDController controller = motor.getPIDController();
+            if (hasPidConstants()) {
+                controller.setP(pidProportional);
+                controller.setI(pidIntegral);
+                controller.setD(pidDerivative);
+            }
+            controller.setFeedbackDevice(encoder);
+
+           // SparkMaxPIDController controller = motor.getPIDController();
             if (hasPidConstants()) {
                 controller.setP(pidProportional);
                 controller.setI(pidIntegral);
@@ -94,19 +114,26 @@ public final class NeoDriveControllerFactoryBuilder {
 
     private static class ControllerImplementation implements DriveController {
         private final CANSparkMax motor;
-        private final SparkMaxPIDController controller;
+        //private final SparkMaxPIDController controller;
         private final RelativeEncoder encoder;
+        private final SparkMaxPIDController controller;
 
         private ControllerImplementation(CANSparkMax motor, RelativeEncoder encoder) {
             this.motor = motor;
             this.controller = motor.getPIDController();
             this.encoder = encoder;
+           // this.controller = motor.getPIDController();
         }
 
         @Override
         public void setReferenceVoltage(double voltage) {
             motor.setVoltage(voltage);
-        }
+        }/*
+        @Override
+        public void setVelocity(double velocity) {
+            controller.setReference(velocity, ControlType.kVelocity);
+        }*/
+
 
         @Override
         public void setVelocity(double velocity) {

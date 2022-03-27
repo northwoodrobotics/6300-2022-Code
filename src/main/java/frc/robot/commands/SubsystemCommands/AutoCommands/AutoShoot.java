@@ -1,20 +1,18 @@
-package frc.robot.commands.SubsystemCommands;
+package frc.robot.commands.SubsystemCommands.AutoCommands;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 //import frc.ExternalLib.CitrusLib.CitrusConstants.ShooterConstants;
-//import frc.ExternalLib.JackInTheBotLib.util.InterpolatingDouble;
-//import frc.ExternalLib.JackInTheBotLib.util.InterpolatingTreeMap;
-import frc.ExternalLib.PoofLib.util.InterpolatingDouble;
-import frc.ExternalLib.PoofLib.util.InterpolatingTreeMap;
+import frc.ExternalLib.JackInTheBotLib.util.InterpolatingDouble;
+import frc.ExternalLib.JackInTheBotLib.util.InterpolatingTreeMap;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
 
 
-public class ShooterCommand extends CommandBase{
+public class AutoShoot extends CommandBase{
     //private static final InterpolatingTreeMap<InterpolatingDouble, Translation2d> ShooterTuning = new InterpolatingTreeMap<>();
 
     private final ShooterSubsystem subsystem; 
@@ -23,11 +21,11 @@ public class ShooterCommand extends CommandBase{
     private Timer timer;
 
 
-    public ShooterCommand(ShooterSubsystem shooter, Vision blindlight){
+    public AutoShoot(ShooterSubsystem shooter, Vision blindlight){
         this.subsystem = shooter;
         //this.speed = speed;
         this.Blindight = blindlight;
-      
+        timer = new Timer();
 
         addRequirements(shooter);
 
@@ -36,15 +34,16 @@ public class ShooterCommand extends CommandBase{
     @Override
     public void initialize() {
         subsystem.setFlywheelCurrentLimitEnabled(false);
+        timer.start();
  
     }
     @Override
     public void execute() {
+        //timer.start();
         //subsystem.percentoutput(1);   
         
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
-        subsystem.RunShooter(ShooterConstants.ShooterVelocityTable.getInterpolated(new InterpolatingDouble(Blindight.getAvgDistance())).value);
-        subsystem.setHoodTargetAngle((ShooterConstants.HoodPositionTable.getInterpolated(new InterpolatingDouble(Blindight.getAvgDistance()))).value);
+        subsystem.RunShooter(-9000);
         //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
         //subsystem.setHoodTargetAngle((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));  
            
@@ -54,7 +53,11 @@ public class ShooterCommand extends CommandBase{
     public void end(boolean interrupted) {
         subsystem.setFlywheelCurrentLimitEnabled(true);
         subsystem.stopFlywheel();
-       
+        
+    }
+    @Override 
+    public boolean isFinished(){
+        return timer.get()>4.0;
     }
 }
     

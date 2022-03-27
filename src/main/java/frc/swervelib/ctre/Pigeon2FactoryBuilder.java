@@ -16,6 +16,7 @@ public class Pigeon2FactoryBuilder {
 
     private static class GyroscopeImplementation implements Gyroscope {
         private final WPI_Pigeon2 pigeon;
+        
 
         private GyroscopeImplementation(WPI_Pigeon2 pigeon) {
             this.pigeon = pigeon;

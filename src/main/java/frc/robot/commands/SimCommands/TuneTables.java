@@ -10,18 +10,18 @@ public class TuneTables extends CommandBase{
     //private final Vision Blindight; 
     private double m_speed;
     
-    private double m_angle;
+    
 
 
-    public TuneTables(double speed, double angle, ShooterSubsystem shooter){
-        this.m_angle = angle;
+    public TuneTables(double speed, ShooterSubsystem shooter){
+       
         this.m_speed = speed;
         this.subsystem = shooter;
     }
 
     @Override
     public void initialize() {
-        subsystem.setFlywheelCurrentLimitEnabled(false);
+       // subsystem.setFlywheelCurrentLimitEnabled(false);
     }
         
     @Override
@@ -34,8 +34,8 @@ public class TuneTables extends CommandBase{
     }
     @Override
     public void end(boolean interrupted) {
-        subsystem.setFlywheelCurrentLimitEnabled(true);
-        subsystem.stopFlywheel();
+        //subsystem.setFlywheelCurrentLimitEnabled(true);
+        //subsystem.stopFlywheel();
        
     }
 

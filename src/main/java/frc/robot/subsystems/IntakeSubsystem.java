@@ -25,16 +25,27 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
+
 
 
 
 
 public class IntakeSubsystem extends SubsystemBase{
+    // thie intake consisted of a single double solenoid, and 775 pro run on a talon SRX 
     private TalonSRX intakeMotor = new TalonSRX(Constants.IntakeConstants.IntakeMotorID);
     private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(31, PneumaticsModuleType.REVPH, Constants.IntakeConstants.IntakeSolenoidID2, IntakeConstants.IntakeSolenoidID);
 
-
-    private final Object stateLock = new Object();
+    /*private UsbCamera intakeCam = new UsbCamera("intakeCAM", 0);
+    private MjpegServer camServer = new MjpegServer("intakeCam Server", 1181);
+    private CvSink cvSink = new CvSink("USBCam OpenCV");
+    CvSource outputStream = new CvSource("Blur", PixelFormat.kMJPEG, 640, 480, 30);*/
+    //private final Object stateLock = new Object();
 
  
     private double motorOutput = 0.0;
@@ -55,8 +66,14 @@ public class IntakeSubsystem extends SubsystemBase{
         .withSize(1, 1)
         .getEntry();
         //intakeExtended = Value.kReverse;
+       // cvSink.setSource(intakeCam);
+       CameraServer.startAutomaticCapture();
+       intakeMotor.setStatusFramePeriod(1, 10); // slow down the motor updates, the inake has no control loop, so it doesn't need to update every 10ms
+        
 
-        intakeMotor.setNeutralMode(NeutralMode.Brake);
+        intakeMotor.setNeutralMode(NeutralMode.Brake); // brake mode because it feels nice
+        intakeMotor.configPeakCurrentLimit(35); // current limit, as 775pros burn out like no tomorrow 
+        
         
     }
 

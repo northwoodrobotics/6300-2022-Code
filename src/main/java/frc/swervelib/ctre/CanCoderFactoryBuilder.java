@@ -47,7 +47,9 @@ public class CanCoderFactoryBuilder {
 
         private EncoderImplementation(CANCoder encoder) {
             this.encoder = encoder;
+            
         }
+        
 
         @Override
         public double getAbsoluteAngleRetry() {
