@@ -20,10 +20,11 @@ public class PigeonFactoryBuilder {
             this.pigeon = pigeon;
            // pigeonSim = pigeon.getSimCollection();
         }
+        /*
         @Override 
         public void calibrateGyroscope(){
             pigeon.calibrate();
-        }
+        }*/
 
         @Override
         public Rotation2d getGyroHeading() {

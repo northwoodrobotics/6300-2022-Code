@@ -1,6 +1,7 @@
 package frc.swervelib;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
@@ -27,14 +28,18 @@ public final class GyroscopeHelper {
         return new PigeonFactoryBuilder().build(pigeon);
     }
     
-    public static Gyroscope createPigeon2CAN(Integer id) {
+   /* public static Gyroscope createPigeon2CAN(Integer id) {
         WPI_Pigeon2 pigeon = new WPI_Pigeon2(id);
         return new Pigeon2FactoryBuilder().build(pigeon);
     }
-
+*/
     public static Gyroscope createnavXMXP() {
         AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200);
         return new navXFactoryBuilder().build(navx);
+    }
+    public static Gyroscope createPigeon2CAN(Integer id) {
+        WPI_Pigeon2 pigeon = new WPI_Pigeon2(id);
+        return new Pigeon2FactoryBuilder().build(pigeon);
     }
 
     public static Gyroscope createnavXUSB() {

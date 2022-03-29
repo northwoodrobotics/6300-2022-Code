@@ -184,15 +184,14 @@ public class SwerveDrivetrainModel {
         // robot should have moved to.
         Pose2d prevEstPose = curEstPose;
         if (states != null) {
-            curEstPose = m_poseEstimator.update(getGyroscopeRotation(), states[0], states[1], states[2], states[3]);
+            curEstPose = m_poseEstimator.getEstimatedPosition();
         
             // Calculate a "speedometer" velocity in ft/sec
             Transform2d chngPose = new Transform2d(prevEstPose, curEstPose);
             curSpeed = Units.metersToFeet(chngPose.getTranslation().getNorm()) / SimConstants.CTRLS_SAMPLE_RATE_SEC;
-
-            updateDownfieldFlag();
         }
     }
+    
 
     /**
      * Sets the swerve ModuleStates.
@@ -261,16 +260,15 @@ public class SwerveDrivetrainModel {
       pointedDownfield = (curRotDeg > -90 && curRotDeg < 90);
     }
 
-    public void zeroGyroscope() {
-        gyro.zeroGyroscope();
-    }
+
 
     public Rotation2d getGyroscopeRotation() {
         return gyro.getGyroHeading();
     }
+    /*
     public void calibrateGyroscope(){
         gyro.calibrateGyroscope();
-    }
+    }*/
 
 
     public Rotation2d getYaw(){

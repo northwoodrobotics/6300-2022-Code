@@ -13,7 +13,7 @@ public class CalibrateGyro extends CommandBase{
     }
     @Override
     public void execute(){
-        m_swerveSubsystem.dt.calibrateGyroscope();
+      //  m_swerveSubsystem.dt.calibrateGyroscope();
     }
 
     

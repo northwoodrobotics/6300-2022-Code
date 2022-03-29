@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.swervelib.Gyroscope;
 
 public class navXFactoryBuilder {
+    
     public Gyroscope build(AHRS navX) {
         return new GyroscopeImplementation(navX);
     }
@@ -28,9 +29,9 @@ public class navXFactoryBuilder {
             FusedSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "FusedHeading"));
         }
 
-        @Override public void calibrateGyroscope(){
+     /*   @Override public void calibrateGyroscope(){
             navX.calibrate();
-        }
+        }*/
 
         @Override   
         public Rotation2d getGyroHeading() {

@@ -7,7 +7,7 @@ public interface Gyroscope {
    * Gets the current heading (Yaw) as reported by the gyroscope.
    * @return The Rotation2d value of the heading.
    */
-  void calibrateGyroscope();
+ // void calibrateGyroscope();
   Rotation2d getGyroHeading();
 
   /**

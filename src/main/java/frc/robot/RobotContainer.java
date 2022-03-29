@@ -240,8 +240,8 @@ public class RobotContainer {
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));*/
-    driveController.startButton.whenHeld(
-      new CalibrateGyro(m_swerveSubsystem)
+    driveController.startButton.whenPressed(()->
+      m_swerveSubsystem.dt.zeroGyroscope()
     );
     driveController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1))));
     driveController.rightTriggerButton.whileHeld(
