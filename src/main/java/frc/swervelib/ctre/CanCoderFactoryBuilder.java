@@ -5,6 +5,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.swervelib.AbsoluteEncoder;
@@ -31,7 +32,8 @@ public class CanCoderFactoryBuilder {
             config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
             config.magnetOffsetDegrees = Math.toDegrees(configuration.getOffset());
             config.sensorDirection = direction == Direction.CLOCKWISE;
-            config.initializationStrategy = configuration.getInitStrategy();
+            config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+            //config.initializationStrategy = configuration.getInitStrategy();
 
             CANCoder encoder = new CANCoder(configuration.getId());
             encoder.configAllSettings(config, 250);
