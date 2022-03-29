@@ -240,9 +240,9 @@ public class RobotContainer {
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));*/
-    driveController.startButton.whenPressed(()->
+    /*driveController.startButton.whenPressed(()->
       m_swerveSubsystem.dt.zeroGyroscope()
-    );
+    );*/
     driveController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1))));
     driveController.rightTriggerButton.whileHeld(
       new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1))));
@@ -357,9 +357,9 @@ public class RobotContainer {
     master.addNumber("X Input", ()-> -modifyAxis(driveController.leftStick.getX()));
     master.addNumber("Y Input", () -> -modifyAxis(driveController.leftStick.getY()));
     master.addNumber("GyroReading", () -> dt.getGyroscopeRotation().getDegrees());
-    master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
-    master.addNumber("Gyro Angle", () -> dt.getAngle());
-    master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
+    //master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
+    //master.addNumber("Gyro Angle", () -> dt.getAngle());
+    //master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
     master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getPose().getX());
     master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getPose().getY());
     master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());

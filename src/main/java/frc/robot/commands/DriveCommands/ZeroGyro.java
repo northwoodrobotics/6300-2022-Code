@@ -12,6 +12,6 @@ public class ZeroGyro extends CommandBase{
     }
     @Override
     public void execute(){
-        m_swerveSubsystem.dt.zeroGyroscope();
+      //  m_swerveSubsystem.dt.zeroGyroscope();
     }
 }

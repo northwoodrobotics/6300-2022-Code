@@ -7,7 +7,6 @@ import frc.swervelib.*;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
-
 public final class NeoSteerControllerFactoryBuilder {
     // PID configuration
     private double pidProportional = Double.NaN;
@@ -68,12 +67,31 @@ public final class NeoSteerControllerFactoryBuilder {
             AbsoluteEncoder absoluteEncoder = encoderFactory.create(steerConfiguration.getEncoderConfiguration());
 
             CANSparkMax motor = new CANSparkMax(steerConfiguration.getMotorPort(), CANSparkMaxLowLevel.MotorType.kBrushless);
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100);
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20);
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20);
+            motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
             motor.setInverted(!moduleConfiguration.isSteerInverted());
-           
+            if (hasVoltageCompensation()) {
+                motor.enableVoltageCompensation(nominalVoltage);
+            }
+            if (hasCurrentLimit()) {
+                motor.setSmartCurrentLimit((int) Math.round(currentLimit));
+            }
+
             RelativeEncoder integratedEncoder = motor.getEncoder();
-           
+            integratedEncoder.setPositionConversionFactor(2.0 * Math.PI * moduleConfiguration.getSteerReduction());
+            integratedEncoder.setVelocityConversionFactor(2.0 * Math.PI * moduleConfiguration.getSteerReduction() / 60.0);
+            integratedEncoder.setPosition(absoluteEncoder.getAbsoluteAngle());
+
             SparkMaxPIDController controller = motor.getPIDController();
-           
+            if (hasPidConstants()) {
+                controller.setP(pidProportional);
+                controller.setI(pidIntegral);
+                controller.setD(pidDerivative);
+            }
+            controller.setFeedbackDevice(integratedEncoder);
+
             return new ControllerImplementation(motor, absoluteEncoder);
         }
     }
@@ -153,7 +171,6 @@ public final class NeoSteerControllerFactoryBuilder {
         @Override
         public void setSteerEncoder(double position, double velocity) {
             motor.getEncoder().setPosition(position);
-            //motor.getEncoder()
         }
 
         @Override

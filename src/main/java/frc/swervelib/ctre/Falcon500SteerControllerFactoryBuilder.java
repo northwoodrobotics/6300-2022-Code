@@ -117,23 +117,28 @@ public final class Falcon500SteerControllerFactoryBuilder {
             }
 
             WPI_TalonFX motor = new WPI_TalonFX(steerConfiguration.getMotorPort());
-            
+            motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS);
+
             if (hasVoltageCompensation()) {
                 motor.enableVoltageCompensation(true);
             }
-                        motor.setSensorPhase(!moduleConfiguration.isSteerInverted());
-            motor.setInverted(TalonFXInvertType.CounterClockwise);
+            motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, CAN_TIMEOUT_MS);
+            motor.setSensorPhase(true);
+            motor.setInverted(moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
             motor.setNeutralMode(NeutralMode.Brake);
-            motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS);
-            motor.setStatusFramePeriod(21, 250);
 
-            
-            
+            motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngleRetry() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS);
 
             // Reduce CAN status frame rates on real robots
             // Don't do this in simulation, or it causes lag and quantization of the voltage
             // signals which cause the sim model to be inaccurate and unstable.
-                        return new ControllerImplementation(motor,
+            motor.setStatusFramePeriod(
+                    StatusFrameEnhanced.Status_1_General,
+                    RobotBase.isSimulation()?20:STATUS_FRAME_GENERAL_PERIOD_MS,
+                    CAN_TIMEOUT_MS
+            );
+
+            return new ControllerImplementation(motor,
                     sensorPositionCoefficient,
                     sensorVelocityCoefficient,
                     hasMotionMagic() ? TalonFXControlMode.MotionMagic : TalonFXControlMode.Position,
@@ -145,11 +150,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
         private final WPI_TalonFX motor;
         private final double motorEncoderPositionCoefficient;
         private final TalonFXControlMode motorControlMode;
-        private final double motorEncoderVelocityCoefficient;
         public final AbsoluteEncoder absoluteEncoder;
-        private static final int ENCODER_RESET_ITERATIONS = 500;
-        private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
-        private double resetIteration = 0;
 
         private double referenceAngleRadians = 0.0;
 
@@ -160,7 +161,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
                                          AbsoluteEncoder absoluteEncoder) {
             this.motor = motor;
             this.motorEncoderPositionCoefficient = motorEncoderPositionCoefficient;
-            this.motorEncoderVelocityCoefficient = motorEncoderVelocityCoefficient;
             this.motorControlMode = motorControlMode;
             this.absoluteEncoder = absoluteEncoder;
         }
@@ -173,17 +173,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
         @Override
         public void setReferenceAngle(double referenceAngleRadians) {
             double currentAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
-
-            if (motor.getSelectedSensorVelocity() * motorEncoderVelocityCoefficient < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
-                if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
-                    resetIteration = 0;
-                    double absoluteAngle = absoluteEncoder.getAbsoluteAngle();
-                    motor.setSelectedSensorPosition(absoluteAngle / motorEncoderPositionCoefficient);
-                    currentAngleRadians = absoluteAngle;
-                }
-            } else {
-                resetIteration = 0;
-            }
 
             double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
             if (currentAngleRadiansMod < 0.0) {

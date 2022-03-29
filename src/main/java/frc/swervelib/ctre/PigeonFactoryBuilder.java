@@ -1,13 +1,16 @@
 package frc.swervelib.ctre;
 
-//import com.ctre.phoenix.sensors.PigeonIMUSimCollection;
+import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU.PigeonState;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.swervelib.Gyroscope;
 
 public class PigeonFactoryBuilder {
-    //private static PigeonIMUSimCollection pigeonSim;
+    private static BasePigeonSimCollection pigeonSim;
+
+    private static double gyroOffset = 0.0;
 
     public Gyroscope build(WPI_PigeonIMU pigeon) {
         return new GyroscopeImplementation(pigeon);
@@ -18,40 +21,27 @@ public class PigeonFactoryBuilder {
 
         private GyroscopeImplementation(WPI_PigeonIMU pigeon) {
             this.pigeon = pigeon;
-           // pigeonSim = pigeon.getSimCollection();
+            pigeonSim = pigeon.getSimCollection();
         }
-        /*
-        @Override 
-        public void calibrateGyroscope(){
-            pigeon.calibrate();
-        }*/
 
         @Override
         public Rotation2d getGyroHeading() {
-            return Rotation2d.fromDegrees(pigeon.getFusedHeading());
+            return Rotation2d.fromDegrees(pigeon.getFusedHeading() + gyroOffset);
         }
-        @Override
-        public double readGetAngle(){
-            return pigeon.getAngle();
-        }
-        @Override
-        public Rotation2d readGetYaw(){
-            return Rotation2d.fromDegrees(pigeon.getYaw());
-        }
-        @Override
-        public Rotation2d readFused(){
-            return Rotation2d.fromDegrees(pigeon.getFusedHeading());
-        }
-        
 
         @Override
-        public void zeroGyroscope() {
-            pigeon.setFusedHeading(0.0);
+        public Boolean getGyroReady() {
+            return pigeon.getState().equals(PigeonState.Ready);
+        }
+
+        @Override
+        public void zeroGyroscope(double angle) {
+            gyroOffset = angle - getGyroHeading().getDegrees();
         }
 
         @Override
         public void setAngle(double angle) {
-            //pigeonSim.setRawHeading(angle);
+            pigeonSim.setRawHeading(angle);
         }
     }
 }

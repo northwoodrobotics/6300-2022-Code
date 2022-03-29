@@ -1,6 +1,5 @@
 package frc.swervelib;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -10,17 +9,13 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
     private final ModuleConfiguration moduleConfiguration;
     private final DriveControllerFactory<?, DriveConfiguration> driveControllerFactory;
     private final SteerControllerFactory<?, SteerConfiguration> steerControllerFactory;
-    private SimpleMotorFeedforward driveFF;
-    
 
     public SwerveModuleFactory(ModuleConfiguration moduleConfiguration,
                                DriveControllerFactory<?, DriveConfiguration> driveControllerFactory,
-                               SteerControllerFactory<?, SteerConfiguration> steerControllerFactory 
-                               ) {
+                               SteerControllerFactory<?, SteerConfiguration> steerControllerFactory) {
         this.moduleConfiguration = moduleConfiguration;
         this.driveControllerFactory = driveControllerFactory;
         this.steerControllerFactory = steerControllerFactory;
-        driveFF = new SimpleMotorFeedforward(SwerveConstants.DriveKs, SwerveConstants.DriveKs, SwerveConstants.DriveKa);
     }
 
     public SwerveModule create(DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration, String namePrefix) {
@@ -60,12 +55,11 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
             this.steerController = steerController;
 
             this.driveVoltageCmdEntry = tab.add(namePrefix + "Wheel Voltage Cmd V", 0).getEntry();
-            this.steerAngleCmdEntry = tab.add(namePrefix + "Azmth Des Angle Deg", 0).getEntry();
             this.driveVelocityCmdEntry = tab.add(namePrefix + "Wheel Velocity Cmd RPM", 0).getEntry();
+            this.steerAngleCmdEntry = tab.add(namePrefix + "Azmth Des Angle Deg", 0).getEntry();
     
     
         }
-        
 
         @Override
         public void resetWheelEncoder() {
@@ -132,14 +126,14 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
             if (steerAngle < 0.0) {
                 steerAngle += 2.0 * Math.PI;
             }
-            
+
             driveController.setReferenceVoltage(driveVoltage);
-            //driveController.setReferenceVoltage(driveFF.calculate(driveVoltage));
             steerController.setReferenceAngle(steerAngle);
 
             this.driveVoltageCmdEntry.setDouble(driveVoltage);
             this.steerAngleCmdEntry.setDouble(steerAngle*180/Math.PI);
         }
+
         @Override
         public void setVelocity(double driveVelocity, double steerAngle) {
             steerAngle %= (2.0 * Math.PI);

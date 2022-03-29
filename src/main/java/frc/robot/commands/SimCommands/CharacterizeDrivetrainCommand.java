@@ -35,7 +35,7 @@ public class CharacterizeDrivetrainCommand  extends CommandBase{
     @Override
     public void initialize(){
         subsystem.dt.setKnownPose(new Pose2d());
-        subsystem.dt.zeroGyroscope();
+      //  subsystem.dt.zeroGyroscope();
         NetworkTableInstance.getDefault().setUpdateRate(10.0e-3);
 
 
@@ -43,8 +43,8 @@ public class CharacterizeDrivetrainCommand  extends CommandBase{
     @Override
     public void execute(){
         double now = Timer.getFPGATimestamp();
-        double position = subsystem.dt.getCurActPose().getTranslation().getX();
-        double velocity = subsystem.dt.getAverageAbsoluteValueVelocity();
+        double position = subsystem.dt.getPose().getTranslation().getX();
+        double velocity = 0;//subsystem.dt.getAverageAbsoluteValueVelocity();
         double battery = RobotController.getBatteryVoltage();
         double motorVoltage = battery * Math.abs(priorAutospeed);
         double autospeed = autoSpeedEntry.getDouble(0.0);

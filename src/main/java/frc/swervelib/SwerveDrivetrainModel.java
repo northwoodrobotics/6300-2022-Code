@@ -3,6 +3,7 @@ package frc.swervelib;
 import java.util.ArrayList;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.VecBuilder;
@@ -13,21 +14,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
 
 public class SwerveDrivetrainModel {
-
-    SwerveDriveOdometry swerveOdometry;
 
     QuadSwerveSim swerveDt;
     ArrayList<SwerveModule> realModules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
@@ -50,17 +48,19 @@ public class SwerveDrivetrainModel {
     SwerveModuleState[] states;
     ProfiledPIDController thetaController =
         new ProfiledPIDController(
-            SwerveConstants.THETACONTROLLERkP, SwerveConstants.THETACONTROLLERkI, SwerveConstants.THETACONTROLLERkD, SwerveConstants.THETACONTROLLERCONSTRAINTS);
+            SwerveConstants.THETACONTROLLERkP, 0, 0, SwerveConstants.THETACONTROLLERCONSTRAINTS);
 
     HolonomicDriveController m_holo;
     
     private static final SendableChooser<String> orientationChooser = new SendableChooser<>();
 
+    private double forwardSlow = 1.0;
+    private double strafeSlow = 1.0;
+    private double rotateSlow = 1.0;
+
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
         this.realModules = realModules;
-        swerveOdometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
-
 
         if (RobotBase.isSimulation()) {
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(0)));
@@ -68,10 +68,8 @@ public class SwerveDrivetrainModel {
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(2)));
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(3)));
         }
-       
         
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        //thetaController.setIntegratorRange(-Units.degreesToRadians(30), Units.degreesToRadians(30));
         
         endPose = SwerveConstants.DFLT_START_POSE;
 
@@ -88,7 +86,6 @@ public class SwerveDrivetrainModel {
 
         // Trustworthiness of gyro in radians of standard deviation.
         var localMeasurementStdDevs = VecBuilder.fill(Units.degreesToRadians(0.1));
-        
 
         // Trustworthiness of the vision system
         // Measured in expected standard deviation (meters of position and degrees of
@@ -104,46 +101,27 @@ public class SwerveDrivetrainModel {
         dtPoseView = new PoseTelemetry(swerveDt, m_poseEstimator);
 
         // Control Orientation Chooser
-        
         orientationChooser.setDefaultOption("Field Oriented", "Field Oriented");
         orientationChooser.addOption("Robot Oriented", "Robot Oriented");
         SmartDashboard.putData("Orientation Chooser", orientationChooser);
-        //gyro.calibrateGyroscope();
 
         m_holo = new HolonomicDriveController(SwerveConstants.XPIDCONTROLLER, SwerveConstants.YPIDCONTROLLER, thetaController);
-        
     }
 
     /**
      * Handles discontinuous jumps in robot pose. Used at the start of
      * autonomous, if the user manually drags the robot across the field in the
      * Field2d widget, or something similar to that.
-     * @param pose
+     * @param pose The new pose the robot is "jumping" to.
      */
     public void modelReset(Pose2d pose){
         swerveDt.modelReset(pose);
     }
-    public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
-    }
-
-    public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(pose, getYaw());
-    }
-    public void Updateodometry(){
-        states[0].speedMetersPerSecond = Math.abs(realModules.get(0).getDriveVelocity());
-        states[1].speedMetersPerSecond = Math.abs(realModules.get(1).getDriveVelocity());
-        states[2].speedMetersPerSecond = Math.abs(realModules.get(2).getDriveVelocity());
-        states[3].speedMetersPerSecond = Math.abs(realModules.get(3).getDriveVelocity());
-        swerveOdometry.update(getGyroscopeRotation(), states);
-        //swerveOdometry.update(getGyroscopeRotation(), states);
-    }
-
 
     /**
      * Advance the simulation forward by one step
-     * @param isDisabled
-     * @param batteryVoltage
+     * @param isDisabled Boolean that indicates if the robot is in the disabled mode
+     * @param batteryVoltage Amount of voltage available to the drivetrain at the current step.
      */
     public void update(boolean isDisabled, double batteryVoltage){
         // Calculate and update input voltages to each motor.
@@ -178,7 +156,7 @@ public class SwerveDrivetrainModel {
         }
 
         // Update associated devices based on drivetrain motion
-        gyro.setAngle(swerveDt.getCurPose().getRotation().getDegrees());
+        gyro.setAngle(-swerveDt.getCurPose().getRotation().getDegrees());
 
         // Based on gyro and measured module speeds and positions, estimate where our
         // robot should have moved to.
@@ -191,7 +169,6 @@ public class SwerveDrivetrainModel {
             curSpeed = Units.metersToFeet(chngPose.getTranslation().getNorm()) / SimConstants.CTRLS_SAMPLE_RATE_SEC;
         }
     }
-    
 
     /**
      * Sets the swerve ModuleStates.
@@ -199,7 +176,7 @@ public class SwerveDrivetrainModel {
      * @param desiredStates The desired SwerveModule states.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        this.states = desiredStates;
+        states = desiredStates;
     }
 
     /**
@@ -208,17 +185,19 @@ public class SwerveDrivetrainModel {
      * @param chassisSpeeds The desired SwerveModule states.
      */
     public void setModuleStates(ChassisSpeeds chassisSpeeds) {
-        this.states = SwerveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        states = SwerveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
     }
 
     public void setModuleStates(SwerveInput input) {
+        input = handleStationary(input);
+
         switch (orientationChooser.getSelected()) {
             case "Field Oriented":
                 states = SwerveConstants.KINEMATICS.toSwerveModuleStates(
                         ChassisSpeeds.fromFieldRelativeSpeeds(
-                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS,
-                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS,
-                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC,
+                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS * forwardSlow,
+                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS * strafeSlow,
+                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC * rotateSlow,
                                 getGyroscopeRotation()
                         )    
                 );
@@ -226,9 +205,9 @@ public class SwerveDrivetrainModel {
             case "Robot Oriented":
                 states = SwerveConstants.KINEMATICS.toSwerveModuleStates(
                         new ChassisSpeeds(
-                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS,
-                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS,
-                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
+                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS * forwardSlow,
+                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS * strafeSlow,
+                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC * rotateSlow
                         )  
                 );
                 break;
@@ -239,56 +218,40 @@ public class SwerveDrivetrainModel {
       return states;
     }
 
-    public Pose2d getCurActPose(){
-        return dtPoseView.getFieldPose();
-    }
-
-    public Pose2d getEstPose() {
-        return curEstPose;
+    public Pose2d getPose(){
+        return m_poseEstimator.getEstimatedPosition();
     }
 
     public void setKnownPose(Pose2d in) {
         resetWheelEncoders();
-        // No need to reset gyro, pose estimator does that.
+        gyro.zeroGyroscope(in.getRotation().getDegrees());
         m_poseEstimator.resetPosition(in, getGyroscopeRotation());
-        updateDownfieldFlag();
         curEstPose = in;
     }
 
-    public void updateDownfieldFlag() {
-      double curRotDeg = curEstPose.getRotation().getDegrees();
-      pointedDownfield = (curRotDeg > -90 && curRotDeg < 90);
+    public void setKnownState(PathPlannerState initialState) {
+        Pose2d startingPose = new Pose2d(initialState.poseMeters.getTranslation(), initialState.holonomicRotation);
+        setKnownPose(startingPose);
     }
 
-
+    public void zeroGyroscope() {
+        gyro.zeroGyroscope(0.0);
+    }
 
     public Rotation2d getGyroscopeRotation() {
+        SmartDashboard.putNumber("Gyro Angle", gyro.getGyroHeading().getDegrees());
         return gyro.getGyroHeading();
     }
-    /*
-    public void calibrateGyroscope(){
-        gyro.calibrateGyroscope();
-    }*/
 
-
-    public Rotation2d getYaw(){
-        return gyro.readGetYaw();
+    public Boolean getGyroReady() {
+        return gyro.getGyroReady();
     }
-    public double getAngle(){
-        return gyro.readGetAngle();
-    }
-
-    public Rotation2d getFused(){
-        return gyro.readFused();
-    }
-    
 
     public void updateTelemetry(){
         dtPoseView.update(Timer.getFPGATimestamp()*1000);
-        //dtPoseView.m_poseEstimator.update(getGyroscopeRotation(), states);
-        
     }
-    public Field2d getField(){
+
+    public Field2d getField() {
         return dtPoseView.getField();
     }
 
@@ -307,14 +270,12 @@ public class SwerveDrivetrainModel {
 
                 // Position controllers
                 SwerveConstants.XPIDCONTROLLER,
-                SwerveConstants.YPIDCONTROLLER, 
+                SwerveConstants.YPIDCONTROLLER,
                 thetaController,
                 commandStates -> this.states = commandStates,
                 m_drive);
-        return swerveControllerCommand.andThen(()-> setModuleStates(new ChassisSpeeds(0, 0, 0)));
-
+        return swerveControllerCommand.andThen(() -> setModuleStates(new SwerveInput(0,0,0)));
     }
-
 
     public ArrayList<SwerveModule> getRealModules() {
         return realModules;
@@ -325,17 +286,20 @@ public class SwerveDrivetrainModel {
     }
 
     public void goToPose(Pose2d desiredPose, double angle) {
-        setModuleStates(m_holo.calculate(getCurActPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
+        setModuleStates(m_holo.calculate(getPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
     }
-    public double getAverageAbsoluteValueVelocity() {
-        double averageVelocity = 0;
-        for (var module : realModules) {
-            averageVelocity += Math.abs(module.getDriveVelocity());
+
+    public void setMaxSpeeds(double forwardSlow, double strafeSlow, double rotateSlow) {
+        this.forwardSlow = forwardSlow;
+        this.strafeSlow = strafeSlow;
+        this.rotateSlow = rotateSlow;
+    }
+
+    private SwerveInput handleStationary(SwerveInput input) {
+        if (input.m_rotation == 0 && input.m_translationX == 0 && input.m_translationY == 0) {
+            // Hopefully this will turn all of the modules to the "turning" configuration so being pushed is more difficult
+            input.m_rotation = 0.0; //001;
         }
-        return averageVelocity / 4;
+        return input;
     }
-    
-    
-    
-    
 }

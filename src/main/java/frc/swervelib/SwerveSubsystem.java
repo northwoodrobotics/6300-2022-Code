@@ -34,11 +34,11 @@ public class SwerveSubsystem extends SubsystemBase {
       modules.get(1).set(states[1].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[1].angle.getRadians());
       modules.get(2).set(states[2].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[2].angle.getRadians());
       modules.get(3).set(states[3].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[3].angle.getRadians());
-      dt.Updateodometry();
+
+      dt.m_poseEstimator.update(dt.getGyroscopeRotation(), states[0], states[1], states[2], states[3]);
     }
-    //dt.updateTelemetry();
-    
-    //dt.Updateodometry();
+
+    dt.updateTelemetry();
   }
 
   @Override

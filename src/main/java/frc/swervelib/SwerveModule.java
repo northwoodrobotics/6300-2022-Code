@@ -12,10 +12,10 @@ public interface SwerveModule {
     SteerController getSteerController();
 
     AbsoluteEncoder getAbsoluteEncoder();
-    
 
     void resetWheelEncoder();
-    void setVelocity(double driveVelocity, double steerAngle);
 
     void set(double driveVoltage, double steerAngle);
+
+    void setVelocity(double driveVelocity, double steerAngle);
 }

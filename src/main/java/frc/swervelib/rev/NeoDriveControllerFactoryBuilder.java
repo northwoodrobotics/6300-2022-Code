@@ -11,13 +11,15 @@ import frc.swervelib.DriveController;
 import frc.swervelib.DriveControllerFactory;
 import frc.swervelib.ModuleConfiguration;
 
-
 public final class NeoDriveControllerFactoryBuilder {
-    private double nominalVoltage = Double.NaN;
-    private double currentLimit = Double.NaN;
+    // PID configuration
     private double pidProportional = Double.NaN;
     private double pidIntegral = Double.NaN;
     private double pidDerivative = Double.NaN;
+
+    private double nominalVoltage = Double.NaN;
+    private double currentLimit = Double.NaN;
+
     public NeoDriveControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) {
         this.pidProportional = proportional;
         this.pidIntegral = integral;
@@ -58,9 +60,17 @@ public final class NeoDriveControllerFactoryBuilder {
             motor.setInverted(moduleConfiguration.isDriveInverted());
 
             // Setup voltage compensation
-            
+            if (hasVoltageCompensation()) {
+                motor.enableVoltageCompensation(nominalVoltage);
+            }
 
-            
+            if (hasCurrentLimit()) {
+                motor.setSmartCurrentLimit((int) currentLimit);
+            }
+
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100);
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20);
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20);
             // Set neutral mode to brake
             motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
@@ -69,6 +79,7 @@ public final class NeoDriveControllerFactoryBuilder {
             double positionConversionFactor = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
             encoder.setPositionConversionFactor(positionConversionFactor);
             encoder.setVelocityConversionFactor(positionConversionFactor / 60.0);
+
             SparkMaxPIDController controller = motor.getPIDController();
             if (hasPidConstants()) {
                 controller.setP(pidProportional);
@@ -83,24 +94,24 @@ public final class NeoDriveControllerFactoryBuilder {
 
     private static class ControllerImplementation implements DriveController {
         private final CANSparkMax motor;
-        private final RelativeEncoder encoder;
         private final SparkMaxPIDController controller;
+        private final RelativeEncoder encoder;
 
         private ControllerImplementation(CANSparkMax motor, RelativeEncoder encoder) {
             this.motor = motor;
-            this.encoder = encoder;
             this.controller = motor.getPIDController();
+            this.encoder = encoder;
         }
 
         @Override
         public void setReferenceVoltage(double voltage) {
             motor.setVoltage(voltage);
         }
+
         @Override
         public void setVelocity(double velocity) {
             controller.setReference(velocity, ControlType.kVelocity);
         }
-
 
         @Override
         public void resetEncoder() {
