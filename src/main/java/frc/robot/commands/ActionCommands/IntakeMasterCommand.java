@@ -15,7 +15,7 @@ public class IntakeMasterCommand extends ParallelCommandGroup{
     public IntakeMasterCommand(FeederSubsystem feeder, IntakeSubsystem intake){
 
 
-        addCommands( new IntakeCommand(intake,0.7 ),
+        addCommands( new IntakeCommand(intake,-0.7 ),
         new SortBall(feeder)
         //new SortBall(feeder)
            //new SortBall(feeder)

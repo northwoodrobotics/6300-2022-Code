@@ -76,8 +76,8 @@ public final class Constants {
         public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 16; // FIXME Set back right steer encoder ID
         public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(208.65); // FIXME Measure and set back right steer offset        
         // Drivetrain Performance Mechanical limits
-        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(14.4);
-        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(14.4); 
+        static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(14.65);
+        static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(14.65  ); 
         static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(90);
         static public final double MAX_TRANSLATE_ACCEL_MPS2 = MAX_FWD_REV_SPEED_MPS/0.25; //0-full time of 0.25 second
         static public final double MAX_ROTATE_ACCEL_RAD_PER_SEC_2 = MAX_ROTATE_SPEED_RAD_PER_SEC/0.25; //0-full time of 0.25 second

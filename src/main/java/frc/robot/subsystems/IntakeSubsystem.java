@@ -72,8 +72,10 @@ public class IntakeSubsystem extends SubsystemBase{
         
 
         intakeMotor.setNeutralMode(NeutralMode.Brake); // brake mode because it feels nice
-        intakeMotor.configPeakCurrentLimit(15); // current limit, as 775pros burn out like no tomorrow 
-        
+        intakeMotor.configPeakCurrentLimit(25); // current limit, as 775pros burn out like no tomorrow 
+        intakeMotor.configPeakCurrentDuration(200);
+        intakeMotor.configContinuousCurrentLimit(15);
+        intakeMotor.enableCurrentLimit(true);
         
     }
 
