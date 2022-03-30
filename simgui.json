@@ -1,11 +1,6 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "Pigeon 2[28]": {
-        "header": {
-          "open": true
-        }
-      },
       "navX-Sensor[0]": {
         "header": {
           "open": true
@@ -68,17 +63,7 @@
           "visible": true
         }
       },
-      "/Shuffleboard/Music/SendableChooser[2]": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Auto Chooser": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DriveModeChooser": {
         "window": {
           "visible": true
         }
@@ -127,10 +112,13 @@
           "open": true
         }
       },
-      "Vision": {
+      "Feeder": {
         "open": true
       },
-      "master": {
+      "Intake": {
+        "open": true
+      },
+      "Vision": {
         "open": true
       },
       "open": true

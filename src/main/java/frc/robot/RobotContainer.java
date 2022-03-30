@@ -357,6 +357,7 @@ public class RobotContainer {
     master.addNumber("X Input", ()-> -modifyAxis(driveController.leftStick.getX()));
     master.addNumber("Y Input", () -> -modifyAxis(driveController.leftStick.getY()));
     master.addNumber("GyroReading", () -> dt.getGyroscopeRotation().getDegrees());
+    master.addBoolean("OnTarget", ()->blindlight.isOnTarget());
     //master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
     //master.addNumber("Gyro Angle", () -> dt.getAngle());
     //master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
