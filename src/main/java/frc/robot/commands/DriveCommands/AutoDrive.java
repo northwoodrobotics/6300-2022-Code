@@ -12,7 +12,7 @@ import frc.swervelib.SwerveSubsystem;
 public class AutoDrive extends SequentialCommandGroup{
     
     public AutoDrive(SwerveSubsystem subsystem, PathPlannerTrajectory trajectory){
-        addCommands(new InstantCommand(() -> subsystem.dt.setKnownPose(trajectory.getInitialPose())),
+        addCommands(
         subsystem.dt.createCommandForTrajectory(trajectory, subsystem)
         );
             

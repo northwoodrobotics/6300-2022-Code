@@ -18,8 +18,8 @@ public class SystemsCheck extends SequentialCommandGroup{
        addCommands(
            new ParallelCommandGroup(new DriveAndIntake(PathHolder.FourBall1, subsystem, intake, feeder), 
            new HoodUp(shooter, 40)), 
-           new DriveAndIntake(PathHolder.FourBall2, subsystem, intake, feeder), 
-           new HoodUp(shooter, 4).alongWith(new AutoShoot( shooter, blindlight))
+           new DriveAndIntake(PathHolder.FourBall2, subsystem, intake, feeder)
+           //new HoodUp(shooter, 4).alongWith(new AutoShoot( shooter, blindlight))
            
        );
 

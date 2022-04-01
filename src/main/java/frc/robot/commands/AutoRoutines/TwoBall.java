@@ -1,5 +1,6 @@
 package frc.robot.commands.AutoRoutines;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -22,10 +23,11 @@ import frc.swervelib.SwerveSubsystem;
 public class TwoBall extends SequentialCommandGroup{
     public TwoBall(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(    
+            new InstantCommand(() -> subsystem.dt.setKnownPose(PathHolder.TwoBall.getInitialPose())),
             new AutoDrive(subsystem, PathHolder.TwoBall), 
             //new ShooterCommand(shooter, blindlight).alongWith(new PurgeFeeder(feeder, 0.3)),
             new DriveAndIntake(PathHolder.TwoBall2, subsystem, intake, feeder),
-            new ParallelCommandGroup(new AutoShoot(shooter, blindlight), new HoodUp(shooter, 25.5), new SequentialCommandGroup(new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
+            new ParallelCommandGroup(new AutoShoot(shooter, blindlight, 24.5), new SequentialCommandGroup(new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
             //new DriveAndIntake(PathHolder.TwoBallExtended, subsystem, intake, feeder)
             
             

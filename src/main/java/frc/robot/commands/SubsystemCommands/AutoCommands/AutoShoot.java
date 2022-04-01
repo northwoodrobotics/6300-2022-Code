@@ -17,13 +17,13 @@ public class AutoShoot extends CommandBase{
 
     private final ShooterSubsystem subsystem; 
     private final Vision Blindight; 
-    private double speed;
+    private double angle;
     private Timer timer;
 
 
-    public AutoShoot(ShooterSubsystem shooter, Vision blindlight){
+    public AutoShoot(ShooterSubsystem shooter, Vision blindlight, double HoodAngle){
         this.subsystem = shooter;
-        //this.speed = speed;
+        this.angle = HoodAngle;
         this.Blindight = blindlight;
         timer = new Timer();
 
@@ -34,6 +34,7 @@ public class AutoShoot extends CommandBase{
     @Override
     public void initialize() {
         subsystem.setFlywheelCurrentLimitEnabled(false);
+        timer.reset();
         timer.start();
  
     }
@@ -43,7 +44,8 @@ public class AutoShoot extends CommandBase{
         //subsystem.percentoutput(1);   
         
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
-        subsystem.RunShooter(-9000);
+        subsystem.RunShooter(-5500);
+        subsystem.setHoodTargetAngle(angle);
         //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
         //subsystem.setHoodTargetAngle((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));  
            
