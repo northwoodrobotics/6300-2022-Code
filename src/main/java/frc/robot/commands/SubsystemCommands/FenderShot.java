@@ -37,7 +37,7 @@ public void execute() {
     
     //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
     subsystem.RunShooter(-5000);
-    subsystem.setHoodTargetAngle(13);
+    subsystem.setHoodTargetAngle(15);
     //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
     //subsystem.setHoodTargetAngle((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));  
        

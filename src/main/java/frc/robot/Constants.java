@@ -201,7 +201,7 @@ public final class Constants {
         public static final double ShooterVelocitySensorCoffiecient = ShooterPositonSensorCoffiecient* (1000/100)*60;
         public static final double ShooterFF = 0.05;
         public static final double StaticFriction = 0.54;
-        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> ShooterVelocityTable = new InterpolatingTreeMap<>(6);
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> ShooterVelocityTable = new InterpolatingTreeMap<>(30);
         static{
             // tune
             
@@ -211,12 +211,13 @@ public final class Constants {
             ShooterVelocityTable.put(new InterpolatingDouble(2.0),new InterpolatingDouble(-6500.0));
             ShooterVelocityTable.put(new InterpolatingDouble(2.2),new InterpolatingDouble(-6500.0));
             ShooterVelocityTable.put(new InterpolatingDouble(3.0),new InterpolatingDouble(-8000.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(3.5),new InterpolatingDouble(-9000.0));
 
             }
         public static final double HoodMinAngle = 0;
         public static final double HoodMaxAngle = 70;
         public static final double HoodOffset = 0.0;
-        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> HoodPositionTable = new InterpolatingTreeMap<>(6);
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> HoodPositionTable = new InterpolatingTreeMap<>(30);
         static {
             //tune this for as many as you want
             //HoodPositionTable.put(3, -20);
@@ -224,13 +225,15 @@ public final class Constants {
             //HoodPositionTable.put(2.7, );
             
           //  HoodPositionTable.put(new InterpolatingDouble(1.3), new InterpolatingDouble(15.0));
-            HoodPositionTable.put(new InterpolatingDouble(1.6), new InterpolatingDouble(13.0));
-            HoodPositionTable.put(new InterpolatingDouble(1.8), new InterpolatingDouble(14.5));
-            HoodPositionTable.put(new InterpolatingDouble(2.4), new InterpolatingDouble(15.5));
-            HoodPositionTable.put(new InterpolatingDouble(2.7), new InterpolatingDouble(17.0));
-            HoodPositionTable.put(new InterpolatingDouble(3.0), new InterpolatingDouble(25.5));
-            HoodPositionTable.put(new InterpolatingDouble(3.5), new InterpolatingDouble(27.0));
-            HoodPositionTable.put(new InterpolatingDouble(4.0), new InterpolatingDouble(30.5));            
+            HoodPositionTable.put(new InterpolatingDouble(1.6), new InterpolatingDouble(15.0));
+            HoodPositionTable.put(new InterpolatingDouble(1.8), new InterpolatingDouble(15.5));
+            HoodPositionTable.put(new InterpolatingDouble(2.1), new InterpolatingDouble(18.5)); 
+            HoodPositionTable.put(new InterpolatingDouble(2.4), new InterpolatingDouble(25.5));
+            HoodPositionTable.put(new InterpolatingDouble(2.5), new InterpolatingDouble(26.5));
+            HoodPositionTable.put(new InterpolatingDouble(2.7), new InterpolatingDouble(27.0));
+            HoodPositionTable.put(new InterpolatingDouble(3.0), new InterpolatingDouble(29.5));
+            HoodPositionTable.put(new InterpolatingDouble(3.5), new InterpolatingDouble(35.0));
+            HoodPositionTable.put(new InterpolatingDouble(4.0), new InterpolatingDouble(37.5));            
         }
     }
 }

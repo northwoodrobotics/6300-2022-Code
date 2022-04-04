@@ -18,9 +18,9 @@ import frc.swervelib.SwerveSubsystem;
 public class TopSideTwoBall extends SequentialCommandGroup{
     public TopSideTwoBall(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(
-            new InstantCommand(() -> subsystem.dt.setKnownPose(PathHolder.FourBall1.getInitialPose())),
+            new InstantCommand(() -> subsystem.dt.setKnownState(PathHolder.FourBall1.getInitialState())),
             new DriveAndIntake(PathHolder.FourBall1, subsystem, intake, feeder), 
-            new ParallelCommandGroup(new AutoShoot(shooter, blindlight, 21.5), new SequentialCommandGroup(new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
+            new ParallelCommandGroup(new AutoShoot(shooter, blindlight, 21.5, -5500), new SequentialCommandGroup(new WaitCommand(0.65), new PurgeFeeder(feeder, 1)))
             //new ParallelCommandGroup(new AutoShoot(shooter, blindlight), new HoodUp(shooter, 23.5), new SequentialCommandGroup(new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
 
             //new InstantCommand(()-> subsystem.dt.plusNinetyGyroscope())

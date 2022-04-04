@@ -240,12 +240,12 @@ public class RobotContainer {
     () -> -modifyAxis(-driveController.leftStick.getY()) * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS ,
     () -> -modifyAxis(driveController.leftStick.getX()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS
     ));*/
-    /*driveController.startButton.whenPressed(()->
+    driveController.startButton.whenPressed(()->
       m_swerveSubsystem.dt.zeroGyroscope()
-    );*/
-    driveController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1))));
+    );
+    driveController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.35), new PurgeFeeder(feeder, 1))));
     driveController.rightTriggerButton.whileHeld(
-      new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1))));
+      new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.45), new PurgeFeeder(feeder, 1))));
     driveController.leftTriggerButton.whileHeld(
       new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1)))
       );
@@ -272,8 +272,9 @@ public class RobotContainer {
       //driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45));
       //driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
       //driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
-      driveController.aButton.whileHeld(()->feeder.runFeeder(0.45));
-      driveController.aButton.whenReleased(()-> feeder.runFeeder(0));
+      //driveController.aButton.whileHeld(()->feeder.runFeeder(0.45));
+      driveController.aButton.whenPressed(new IndexToReady(feeder));
+      //driveController.aButton.whenReleased(()-> feeder.runFeeder(0));
       //DJController.leftBumper.whenReleased(new PurgeFeeder(feeder, 0));
       driveController.yButton.whileHeld(()-> feeder.runFeeder(0.-45));
       driveController.yButton.whenReleased(()-> feeder.runFeeder(0));

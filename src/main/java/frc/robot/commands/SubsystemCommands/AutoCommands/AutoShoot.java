@@ -4,9 +4,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.ExternalLib.PoofLib.util.InterpolatingDouble;
 //import frc.ExternalLib.CitrusLib.CitrusConstants.ShooterConstants;
-import frc.ExternalLib.JackInTheBotLib.util.InterpolatingDouble;
-import frc.ExternalLib.JackInTheBotLib.util.InterpolatingTreeMap;
+//import frc.ExternalLib.JackInTheBotLib.util.InterpolatingDouble;
+//import frc.ExternalLib.JackInTheBotLib.util.InterpolatingTreeMap;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
@@ -18,13 +19,15 @@ public class AutoShoot extends CommandBase{
     private final ShooterSubsystem subsystem; 
     private final Vision Blindight; 
     private double angle;
+    private double speed;
     private Timer timer;
 
 
-    public AutoShoot(ShooterSubsystem shooter, Vision blindlight, double HoodAngle){
+    public AutoShoot(ShooterSubsystem shooter, Vision blindlight, double HoodAngle, double speed){
         this.subsystem = shooter;
         this.angle = HoodAngle;
         this.Blindight = blindlight;
+        this.speed = speed;
         timer = new Timer();
 
         addRequirements(shooter);
@@ -44,8 +47,8 @@ public class AutoShoot extends CommandBase{
         //subsystem.percentoutput(1);   
         
         //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
-        subsystem.RunShooter(-5500);
-        subsystem.setHoodTargetAngle(angle);
+        subsystem.RunShooter(ShooterConstants.ShooterVelocityTable.getInterpolated(new InterpolatingDouble(Blindight.getAvgDistance())).value);
+        subsystem.setHoodTargetAngle((ShooterConstants.HoodPositionTable.getInterpolated(new InterpolatingDouble(Blindight.getAvgDistance()))).value);
         //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
         //subsystem.setHoodTargetAngle((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));  
            
@@ -59,7 +62,7 @@ public class AutoShoot extends CommandBase{
     }
     @Override 
     public boolean isFinished(){
-        return timer.get()>4.0;
+        return timer.get()>3;
     }
 }
     
