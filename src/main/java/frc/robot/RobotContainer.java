@@ -247,7 +247,7 @@ public class RobotContainer {
     driveController.rightTriggerButton.whileHeld(
       new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.45), new PurgeFeeder(feeder, 1))));
     driveController.leftTriggerButton.whileHeld(
-      new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new SequentialCommandGroup(new WaitCommand(1), new PurgeFeeder(feeder, 1)))
+      new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new SequentialCommandGroup(new WaitCommand(0.6), new PurgeFeeder(feeder, 1)))
       );
     driveController.bButton.whenPressed(()-> blindlight.setLEDMode(LEDMode.LED_OFF));
     driveController.leftBumper.whileHeld(new ParallelDeadlineGroup(new RotateToTarget(m_swerveSubsystem, 
