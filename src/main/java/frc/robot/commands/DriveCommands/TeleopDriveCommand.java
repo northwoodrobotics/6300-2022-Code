@@ -18,6 +18,7 @@ import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
 
 
 public class TeleopDriveCommand extends CommandBase{
+  // transfers X, Y and Rotation commands to drivetrain. Uses the plug and play libary for this. 
     private final SwerveSubsystem m_SwerveSubsystem;
     
     private final DoubleSupplier m_translationXSupplier;

@@ -33,18 +33,8 @@ public class ClimberSubsystem extends SubsystemBase{
     private TalonFX Climb1Talon = new TalonFX(ClimberConstants.ClimbMotor1);
     private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor2);
     private Servo BalanceServo = new Servo(ClimberConstants.ClimbServo);
-    //private DoubleSolenoid lockSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.ClimbSolenoid,ClimberConstants.ClimbSolenoid2);
-    //private DoubleSolenoid BalanceSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.BalanceSolenoid, ClimberConstants.BalanceSolenoid2);
-    //private Solenoid CatchSolenoid = new Solenoid(PneumaticsModuleType.REVPH, ClimberConstants.CatchSolenoid);
-    //private SparkMaxPIDController Climb1Controller;
-    //private SparkMaxPIDController Climb2Controller;
-    //private RelativeEncoder Climb1Encoder;
-    //private RelativeEncoder Climb2Encoder;
-    //private final Object stateLock = new Object();
+   
 
-    //@GuardedBy("stateLock")
-    //private boolean LatchOn = false;
-    //@GuardedBy("stateLock")
     private boolean ClimbUp = false;
     // fix me values
     private double Climb1Out = 0;
@@ -88,7 +78,7 @@ public class ClimberSubsystem extends SubsystemBase{
         Climb2Talon.configAllSettings(Climb1Config);
         Climb2Talon.setNeutralMode(NeutralMode.Brake);
 
-        // fix me 
+        
         Climb2Talon.setInverted(false);
         Climb1Talon.setInverted(false);
 
@@ -143,6 +133,7 @@ public class ClimberSubsystem extends SubsystemBase{
     @Override 
     public void periodic(){
         /*
+         Theoretical Traversal climb State Machine. 
         switch (state){
             case Stowed:
              Climb1ToPositoin(0);

@@ -21,6 +21,7 @@ import frc.robot.subsystems.Vision;
 import frc.swervelib.SwerveSubsystem;
 
 public class FourBall extends SequentialCommandGroup{
+    // actually a 3 ball auto. 
 
     public FourBall(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(

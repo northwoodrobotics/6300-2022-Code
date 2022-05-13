@@ -7,6 +7,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.FeederSubsystem;
 
 public class RunFeeder extends CommandBase{
+    // runs feeder for half a second 
     Timer timer;
     FeederSubsystem m_feeder; 
     public RunFeeder(FeederSubsystem feeder){

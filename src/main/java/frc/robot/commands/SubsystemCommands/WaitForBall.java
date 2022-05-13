@@ -5,6 +5,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.FeederSubsystem;
 
 public class WaitForBall extends CommandBase{
+    // waits for the intake to recive a ball
     private FeederSubsystem m_feeder; 
     public WaitForBall(FeederSubsystem feeder){
         m_feeder = feeder;

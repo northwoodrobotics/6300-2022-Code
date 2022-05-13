@@ -26,7 +26,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class DrivetrainSubsystem {
-        public static double SwerveVelocity;
+        // in house plug and play swerve code. Copy and paste this file, along with the drivetrain constants section as long as you are using SDS MK4 Modules. 
+        // all you need to do is change the constants to the ones that apply to your robot, and drive around. 
+        
     
 
     public static SwerveDrivetrainModel  createSwerveModel(){

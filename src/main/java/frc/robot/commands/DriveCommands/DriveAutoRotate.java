@@ -12,9 +12,7 @@ import frc.robot.RobotContainer;
 import frc.swervelib.SwerveSubsystem;
 import java.util.function.DoubleSupplier;
 public class DriveAutoRotate extends CommandBase {
-    /**
-     * Creates a new DriveTurnToTarget
-     * */
+  // auto snap command, runing a PID loop based off of the limelight, auto corrects to the hub. 
 
     private ChassisSpeeds stop = new ChassisSpeeds(0, 0, 0);
  

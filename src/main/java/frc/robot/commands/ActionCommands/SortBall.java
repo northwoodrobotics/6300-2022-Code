@@ -8,6 +8,7 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class SortBall extends SequentialCommandGroup{
+    // this is a limitation of the physical 2022 robot, we cannot run a native state machine due to a delay requriement of the indexer. After 2 balls have been indexted, the driver must reset the command by actuating the intake. 
     public SortBall(FeederSubsystem feeder){
         addCommands(
             new WaitForBall(feeder), new RunFeeder(feeder), new WaitForBall(feeder),new RunFeeder(feeder)

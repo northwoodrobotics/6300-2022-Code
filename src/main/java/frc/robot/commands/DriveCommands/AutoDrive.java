@@ -10,6 +10,7 @@ import frc.swervelib.SwerveSubsystem;
 
 
 public class AutoDrive extends SequentialCommandGroup{
+    // feeds a trajectory into the pathfollowing. 
     
     public AutoDrive(SwerveSubsystem subsystem, PathPlannerTrajectory trajectory){
         addCommands(
