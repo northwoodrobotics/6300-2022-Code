@@ -22,6 +22,9 @@ public class SwerveConstants {
     public static double MASS_kg;
     public static double MOI_KGM2;
     public static SwerveDriveKinematics KINEMATICS;
+    
+    public static double kMinRotationCommand;
+    public static double kMinTranslationCommand;
 
     public static PIDController XPIDCONTROLLER = new PIDController(TRAJECTORYXkP, 0, 0);
     public static PIDController YPIDCONTROLLER = new PIDController(TRAJECTORYYkP, 0, 0);

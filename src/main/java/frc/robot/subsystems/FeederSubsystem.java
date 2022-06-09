@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.revrobotics.CANSparkMax;
@@ -11,85 +13,175 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.FeederConstants;
 import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
+import frc.ExternalLib.PicoPi.PicoColorSensor;
+import frc.ExternalLib.PicoPi.PicoColorSensor.RawColor;
+
 
 
 public class FeederSubsystem extends SubsystemBase {
-    // the 2022 feeder consisted of 1 falcon 500, and 2 beam break sensors. 
-    // the beam breaks were used to detect and control the balls, so the driver could only focus on shooting and pickup. 
-    // the beam breaks used PWM output, and plugged into the analog ports of the roborio. 
+    
     private TalonFX FeederMotor = new TalonFX(Constants.FeederConstants.FeederMotorID);
-    //private AnalogInput FeederStage1Sensor = new AnalogInput(Constants.FeederConstants.FeederStage1Sensor);
+    private TalonFX RejectMotor = new TalonFX(FeederConstants.RejectMotorID);
+    private PicoColorSensor BallSensor = new PicoColorSensor();
     private AnalogInput FeederStage2Sensor = new AnalogInput(Constants.FeederConstants.FeederStage2Sensor);
-    private AnalogInput IntakeSensor = new AnalogInput(Constants.FeederConstants.IntakeSensor);
-    //\private Timer AdvanceTimer = new Timer();
-    //private RelativeEncoder FeederEncoder;
-    private final NetworkTableEntry Stage1Loaded;
+    private RawColor sensorColors = new RawColor();
+    public AllianceColor feederMode; 
     private final NetworkTableEntry ShouldAdvance;
     private final NetworkTableEntry Stage2Loaded;
     private final NetworkTableEntry motorSpeed;
-    private final NetworkTableEntry IntakeHasBall;
-
-
+    private final NetworkTableEntry EjectorHasBall;
+    private FeedMode feedMode;
+    
     public FeederSubsystem(){
+        feedMode = FeedMode.IDLE;
         FeederMotor.setInverted(false); 
         FeederMotor.setNeutralMode(NeutralMode.Brake);// set to break, so it holds the balls, and stops them at the right positions
         TalonFXConfiguration FeederConfig = new TalonFXConfiguration();
-       
-        FeederMotor.setStatusFramePeriod(1, 150); // slow down updates to the feeder, so CANBUS usage is relatively low. 
-
+        FeederMotor.configAllSettings(FeederConfig);
+        RejectMotor.configAllSettings(FeederConfig);
+        FeederConfig.supplyCurrLimit.currentLimit = 20;
+        ShutTalonUP(FeederMotor);
+        ShutTalonUP(RejectMotor);
+        EnableCurrentLimit();
+        sensorColors = BallSensor.getRawColor0();
         ShuffleboardTab tab =Shuffleboard.getTab("Feeder");
-        Stage1Loaded = tab.add("Do We Have 1 Ball", false)
+        EjectorHasBall = tab.add("EjectorHasBall", false)
         .withPosition(0, 0).withSize(1, 1).getEntry();
-        Stage2Loaded = tab.add("Do We Have 2 Balls", false)
+        Stage2Loaded = tab.add("BallAtTurret", false)
         .withPosition(0, 1).withSize(1, 1).getEntry();
-        IntakeHasBall = tab.add("Does The Intake Have a Ball", false)
-        .withPosition(0, 3).withSize(1, 1).getEntry();
         motorSpeed = tab.add("MotorSpeed", 0.0)
         .withPosition(1, 0).withSize(1, 1).getEntry();
         ShouldAdvance = tab.add("ShouldAdvance", false).withPosition(1, 2).withSize(1, 1).getEntry();
     }
+    public void SetIndex(){
+        feedMode = FeedMode.INDEX;
+    }
+    public void SetFeed(){
+        feedMode = FeedMode.FEED;
+    }
+    public void SetIdle(){
+        feedMode = FeedMode.IDLE;
+    }
+
+    public void EnableCurrentLimit(){
+        SupplyCurrentLimitConfiguration config = new SupplyCurrentLimitConfiguration();
+        config.currentLimit = Constants.ShooterConstants.ShooterCurrentLimit;
+        config.enable = true;
+        FeederMotor.configSupplyCurrentLimit(config, 0);
+        RejectMotor.configSupplyCurrentLimit(config, 0);
+
+    }
+
+
     public void runFeeder(double speed){
         FeederMotor.set(ControlMode.PercentOutput, speed);// runs the feeder at set speeds, tuned during the season over and over again. 
     }
 
-    /*public boolean Stage1Loaded(){
-        return FeederStage1Sensor.getVoltage() < 0.1;
-
-    }*/
     public boolean Stage2Loaded(){
         return FeederStage2Sensor.getVoltage() <0.1; // a true or false value, when the sensor is broken
     }
-    public boolean IntakeHasBall(){
-        return IntakeSensor.getVoltage() <0.1; // same as above
+
+    public boolean BallAtEjector(){
+        if(BallSensor.getProximity1()>1){
+            return true;
+        }else return false;
     }
 
-    public boolean shouldAdvance(){
-        if(Stage2Loaded()){
-            return false;
+    public void SetFeederMode(){
+        if(BallSensor.isSensor0Connected() && DriverStation.isEnabled()){
+            switch (DriverStation.getAlliance()){
+                case Red: 
+                feederMode = AllianceColor.RED;
+                break;
+                case Blue: 
+                feederMode = AllianceColor.BLUE;
+                break;
+                default:
+                break;
+            }
         }
-        return IntakeHasBall(); // checks stage 2 of the feeder, and the intake beam break. if the top is tripped, it will always be false, if not, it will be true when the intake is tripped. 
     }
+    public void SortBalls(){
+        switch (feederMode){
+            case RED:
+            if(sensorColors.red<450 || sensorColors.green > sensorColors.red*2 && sensorColors.blue > 50){
+                RejectMotor.set(ControlMode.PercentOutput, 1);
+            }else if (sensorColors.red >130 ){
+                if(shouldAdvance()){
+                    FeederMotor.set(TalonFXControlMode.PercentOutput, 1);
+                }else FeederMotor.set(TalonFXControlMode.PercentOutput, 0);
+            }
+            case BLUE:
+            if(sensorColors.red >130){
+                RejectMotor.set(ControlMode.PercentOutput, 1);
+            }else if (sensorColors.red<450 || sensorColors.green > sensorColors.red*2 && sensorColors.blue > 50){
+                if(shouldAdvance()){
+                    FeederMotor.set(TalonFXControlMode.PercentOutput, 1);
+                }else FeederMotor.set(TalonFXControlMode.PercentOutput, 0);
+            }
+        }
+    }
+  
+    public boolean shouldAdvance(){
+        if (BallAtEjector()){
+            if(Stage2Loaded()){
+                return false;
+            }else return true;
+        }
+       return true;
+    }
+
+
+    public void ShutTalonUP(TalonFX targetTalon){
+        targetTalon.setStatusFramePeriod(4, 251);
+        targetTalon.setStatusFramePeriod(10,251);
+        targetTalon.setStatusFramePeriod(12,251);
+        targetTalon.setStatusFramePeriod(13,251);
+        targetTalon.setStatusFramePeriod(21,251);
+        targetTalon.setStatusFramePeriod(4, 251);
+    }
+
+
+
 
     
    
 
     @Override
     public void periodic() {
-        //Stage1Loaded.setBoolean(Stage1Loaded());
         Stage2Loaded.setBoolean(Stage2Loaded());
-        IntakeHasBall.setBoolean(IntakeHasBall());
+        EjectorHasBall.setBoolean(BallAtEjector());
         ShouldAdvance.setBoolean(shouldAdvance());
-            motorSpeed.setDouble(FeederMotor.getSelectedSensorVelocity());
-
-
-        
+        motorSpeed.setDouble(FeederMotor.getSelectedSensorVelocity());
+        switch (feedMode){
+            case IDLE: 
+            FeederMotor.set(ControlMode.Disabled, 0);
+            RejectMotor.set(ControlMode.Disabled, 0);
+            break; 
+            case INDEX:
+            SortBalls();
+            break; 
+            case FEED: 
+            FeederMotor.set(ControlMode.PercentOutput, 1);
+            break; 
+        }  
     }
 
+    public enum AllianceColor{
+        RED,BLUE
+    }
+    public enum FeedMode{
+        INDEX, FEED, IDLE
+    }
+    public int redBall;
+    public int blueBall;
     
 
     

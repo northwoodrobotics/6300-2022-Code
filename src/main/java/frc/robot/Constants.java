@@ -7,14 +7,12 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.ExternalLib.PoofLib.util.InterpolatingDouble;
 import frc.ExternalLib.PoofLib.util.InterpolatingTreeMap;
-import frc.ExternalLib.RangerLib.LookupTable;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -30,6 +28,7 @@ public final class Constants {
         public static final double TargetHeight = Units.inchesToMeters(102);
         public static final double blindlightHeight = Units.inchesToMeters(40);
         public static final double blindlightAngle = 23;
+        public static final Pose2d GoalPose = new Pose2d(4, 6, Rotation2d.fromDegrees(0));
 
     }
     public static final class DriveConstants{
@@ -120,16 +119,39 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+    public final static class TurretConstants{
+        public static final int TurretMotorID = 34; 
+        public static final int TurretZeroID = 6; 
+        public static final double TurretP = 0.5;
+        public static final double TurretI = 0;
+        public static final double TurretD = 0;
+        public static final double TurretIZone = 0;
+        public static final double TurretFF = 0.045;
+        public static final double TurretMaxOutput = 1;
+        public static final double MotionMagicAcceleration = 4096; 
+        public static final double MotionMagicVelocity = 8192;
+        public static final int MotionMagicCurve = 1;
+        public static final double TurretMinOutput = -1;
+        public static final double TurretGearRatio = 1/125.45;
+        public static final double TurretPostionCoffiecient =  TurretGearRatio/2048;
+        public static final double TurretForwardSoftLimit = 390; 
+        public static final double TurretReverseSoftLimit = -370;
+
+        public static final double rawVisionP = 1; 
+        public static final double rawVisionI = 0;
+        public static final double rawVisionD = 0.2;
+        public static final double turretMinRotation = 5;
+
+
+    
+
+    }
     public final static class ClimberConstants{
-        // most of this is currently unused, as setpoints for climbs have not been made. 
-        //public static final int RevEncoder_CountsPer_Rev = 8192;
+     
         public static final int ClimbMotor1 = 26;
         public static final int ClimbMotor2= 27;
-        public static final int ClimbServo = 3; 
-        //public static final int ClimbSolenoid = 2;
-        //public static final int ClimbSolenoid2 = 3;
-        //public static final int BalanceSolenoid =4;
-        //public static final int BalanceSolenoid2 = 5;
+      
+ 
         public static final double SpoolDiameter = Units.inchesToMeters(1);
         public static final double MidRungSetpoint = Units.inchesToMeters(0);
         public static final double Climb1P = 0.5;
@@ -154,27 +176,37 @@ public final class Constants {
 
     public final static class IntakeConstants{
         public static final int IntakeMotorID = 29;
-        public static final int IntakeSolenoidID = 1; 
-        public static final int IntakeSolenoidID2 = 0;
+        public static final int WristMotorID = 32; 
         public static final double IntakeMotorP = 0.01;
         public static final double IntakeMotorI = 0;
         public static final double IntakeMotorD = 0;
         public static final double IntakeMotorFF =0.5;
+        public static final int WristLimitSwitch = 6;
+        public static final double WristP = 0.5;
+        public static final double WristI = 0;
+        public static final double WristD = 0;
+        public static final double WristIZone = 0;
+        public static final double WristFF = 0.045;
+        public static final double WristMaxOutput = 1;
+        public static final double MotionMagicAcceleration = 4096; 
+        public static final double MotionMagicVelocity = 8192;
+        public static final int MotionMagicCurve = 1;
+        public static final double WristMinOutput = -1;
+        public static final double WristGearRatio = 48;
+        public static final double WristPositionSensorCoffiecient = 1/2048*WristGearRatio;
     }
     public final static class FeederConstants{
         public static final int FeederMotorID = 22;
+        public static final int RejectMotorID = 3;
         public static final int FeederStage1Sensor = 2;
         public static final int FeederStage2Sensor= 1;
-        public static final int IntakeSensor = 0;
+        //public static final int IntakeSensor = 0;
     }
 
     public final static class ShooterConstants{
         public static final int ShooterID = 20;
         public static final int ShooterFollowerID = 21;
         public static final int HoodID = 30;
-        //public static final int HoodServoID =0; Hood changed from using linear Servos to using Falcon 500 using motion magic loop
-        //public static final int HoodServo2ID = 2;
-        //public static final int HoodEncoderID = 0;
         public static final double HoodP = 0.5;
         public static final double HoodI = 0;
         public static final double HoodD = 0;
@@ -185,7 +217,8 @@ public final class Constants {
         public static final double MotionMagicVelocity = 8192;
         public static final int MotionMagicCurve = 1;
         public static final double HoodMinOutput = -1;
-        public static final double HoodPositionSensorCoffiecient = 1/2048 *36;
+        public static final double HoodGearRatio = 36;
+        public static final double HoodPositionSensorCoffiecient = 1/2048* HoodGearRatio;
          /* sensor position coficient is conversion from rotations to "talon units" CTRE devices like the falcon 500 and talon SRX measure in "encoder ticks" per 100ms,
          so we divide the position reading by the encoder's resolution. in the falcon 500 it is 2048 ticks per rotation */
         public static final double HoodVelocitySensorCoffiecient = HoodPositionSensorCoffiecient* (1000/100)*60; 
@@ -194,7 +227,7 @@ public final class Constants {
         public static final double ShooterP = 0.01;
         public static final double ShooterI = 0.0;
         public static final double ShooterD = 0.0;
-        //public static final double ShooerFF = .05;        
+    
         public static final double Shooter_AllowableError = 200;
         public static final double ShooterCurrentLimit = 10.0;
         public static final double ShooterPositonSensorCoffiecient = 1.0/2048 * 1.5;
@@ -219,12 +252,7 @@ public final class Constants {
         public static final double HoodOffset = 0.0;
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> HoodPositionTable = new InterpolatingTreeMap<>(30);
         static {
-            //tune this for as many as you want
-            //HoodPositionTable.put(3, -20);
-            //HoodPositionTable.put(1.8, 5.5);
-            //HoodPositionTable.put(2.7, );
             
-          //  HoodPositionTable.put(new InterpolatingDouble(1.3), new InterpolatingDouble(15.0));
             HoodPositionTable.put(new InterpolatingDouble(1.6), new InterpolatingDouble(15.0));
             HoodPositionTable.put(new InterpolatingDouble(1.8), new InterpolatingDouble(15.5));
             HoodPositionTable.put(new InterpolatingDouble(2.1), new InterpolatingDouble(18.5)); 

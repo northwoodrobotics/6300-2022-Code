@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import frc.swervelib.Gyroscope;
 import frc.swervelib.GyroscopeHelper;
 import frc.swervelib.Mk4SwerveModuleHelper;
+import frc.swervelib.WCPSSModuleHelper;
 import frc.swervelib.SwerveConstants;
 import frc.swervelib.SwerveModule;
 import frc.swervelib.SwerveSubsystem;
@@ -11,12 +12,18 @@ import frc.swervelib.SwerveDrivetrainModel;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -98,6 +105,7 @@ public class DrivetrainSubsystem {
         modules.add(m_backLeftModule);
         modules.add(m_backRightModule);
        
+    
 
         
         
@@ -116,6 +124,8 @@ public class DrivetrainSubsystem {
         return new SwerveSubsystem(dt);        
     }
 
+ 
+
 
     
     private static void passConstants() {
@@ -124,9 +134,6 @@ public class DrivetrainSubsystem {
         SwerveConstants.DFLT_START_POSE = Constants.DriveConstants.DFLT_START_POSE;
 
         SwerveConstants.THETACONTROLLERkP = Constants.AutoConstants.THETACONTROLLERkP;
-       // SwerveConstants.THETACONTROLLERkI = Constants.AutoConstants.THETACONTROLLERkI;
-        //SwerveConstants.THETACONTROLLERkD = Constants.AutoConstants.THETACONTROLLERkD;
-
         SwerveConstants.THETACONTROLLERCONSTRAINTS = Constants.AutoConstants.THETACONTROLLERCONSTRAINTS;
 
         SwerveConstants.TRACKWIDTH_METERS = Constants.DriveConstants.TRACKWIDTH_METERS;
@@ -138,17 +145,10 @@ public class DrivetrainSubsystem {
 
 
         SwerveConstants.TRAJECTORYXkP = Constants.AutoConstants.TRAJECTORYXkP;
-        //SwerveConstants.TRAJECTORYXkI = Constants.AutoConstants.TRAJECTORYXkI;
-        //SwerveConstants.TRAJECTORYXkD = Constants.AutoConstants.TRAJECTORYXkD;
-        //SwerveConstants.DriveKs = AutoConstants.DriveKS;
-        //SwerveConstants.DriveKv = AutoConstants.DriveKV;
-        //SwerveConstants.DriveKa = AutoConstants.DriveKA;
-
+   
 
         SwerveConstants.TRAJECTORYYkP = Constants.AutoConstants.TRAJECTORYYkP;
-       // SwerveConstants.TRAJECTORYYkI = Constants.AutoConstants.TRAJECTORYYkI; 
-       // SwerveConstants.TRAJECTORYYkD = Constants.AutoConstants.TRAJECTORYYkD;
-        
+   
     }
 
 

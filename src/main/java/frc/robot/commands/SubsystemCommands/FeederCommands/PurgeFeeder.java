@@ -1,4 +1,4 @@
-package frc.robot.commands.SubsystemCommands;
+package frc.robot.commands.SubsystemCommands.FeederCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -6,39 +6,36 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 public class PurgeFeeder extends CommandBase{
     private final FeederSubsystem m_feeder;
-    private final double speed; 
-    private Timer PurgeTimer;
-    public PurgeFeeder(FeederSubsystem feeder, double FeederSpeed ){
+
+
+    public PurgeFeeder(FeederSubsystem feeder){
         this.m_feeder = feeder;
-        this.speed = FeederSpeed;
-        PurgeTimer = new Timer();
-        
+      
     }
     
     @Override 
     public void initialize(){
-        PurgeTimer.reset();
-        PurgeTimer.start();
+
         //m_intake.setIntakeExtension(true);
 
     }
     @Override
     public void execute(){
         //Timer.delay(1);
-        m_feeder.runFeeder(speed);
+        m_feeder.SetFeed();
        
 
     }
     @Override 
     public void end(boolean interrupted){
-        m_feeder.runFeeder(0.0);
+        m_feeder.SetIdle();
         //m_intake.setMotorOutput(0.0);
         
     
     }
     @Override 
     public boolean isFinished(){
-        return PurgeTimer.get() > 2;
+        return (!m_feeder.BallAtEjector()&& !m_feeder.Stage2Loaded());
     }
 
 }

@@ -44,9 +44,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private TalonFX HoodMotor = new TalonFX(Constants.ShooterConstants.HoodID);
     private Orchestra ShooterOrchestra = new Orchestra();
-    //private Servo shooteServe1 = new Servo(ShooterConstants.HoodServoID);
-    //private Servo ShooterServo = new Servo(ShooterConstants.HoodServoID);
-    //private Servo ShooterServo2 = new Servo(ShooterConstants.HoodServo2ID);
+
     private static PeriodicIO mPeriodicIO = new PeriodicIO();
 
     
@@ -62,10 +60,6 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     
 
     
-    //private RelativeEncoder HoodEncoder;
-    //private RevThroughBore HoodAbsEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
-   // private SparkMaxAlternateEncoder HoodEncoder;
-    //private SparkMaxPIDController HoodController;
     private final NetworkTableEntry HoodAngleEntry;
     private boolean IsHoodHomed;
     private HoodControlMode hoodControlMode = HoodControlMode.DISABLED;
@@ -88,8 +82,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         Shooter.configFactoryDefault();
         ShooterFollower.configFactoryDefault();
-        //ShooterServo.setBounds(2.0,1.8,1.5, 1.2, 1.0);
-        //ShooterServo2.setBounds(2.0,1.8,1.5, 1.2, 1.0);
+    
         Shooter.setStatusFramePeriod(21, 200);
         ShooterFollower.setStatusFramePeriod(21, 200);
 
@@ -122,8 +115,6 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         SongChooser.addOption("Stayin Alive", stayinalive);
         music.add(SongChooser);
 
-        //HoodEncoder = HoodMotor.getEncoder();
-       
         
 
         /* the hood uses motion magic control. This is very similar to positon PIDF, but with some extra sauce added. 
@@ -161,16 +152,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         HoodMotor.configAllSettings(HoodConfig);
         HoodMotor.setNeutralMode(NeutralMode.Brake); // set it in brake mode, essentaly lightly stalling the motor to keep in place. 
-        //HoodController = HoodMotor.getPIDController();
-        //HoodController.setFeedbackDevice(HoodEncoder);
-        //HoodController.setP(Constants.ShooterConstants.HoodP);
-        //HoodController.setI(Constants.ShooterConstants.HoodI);
-        //HoodController.setD(Constants.ShooterConstants.HoodD);
-        //HoodController.setIZone(Constants.ShooterConstants.HoodIZone);
-        //HoodController.setFF(Constants.ShooterConstants.HoodFF);
-        //HoodController.setOutputRange(Constants.ShooterConstants.HoodMinOutput, Constants.ShooterConstants.HoodMaxOutput);
-        //HoodEncoder.setPositionConversionFactor(1/200);
-        //HoodEncoder.setPositionConversionFactor(factor);*/
+
 
         ShooterOrchestra.addInstrument(Shooter);
         ShooterOrchestra.addInstrument(ShooterFollower);
@@ -178,7 +160,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
 
 
-        //HoodEncoder = HoodMotor.getAlternateEncoder(encoderType, countsPerRev)
+        
 
         // shufflboard is used on the driverstation to see robot data. this page is for the shooter, mostly for tuning. 
         ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -306,39 +288,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     public double getShooterTargetVelocity(){
         return Shooter.getClosedLoopTarget()*Constants.ShooterConstants.ShooterVelocitySensorCoffiecient;
     }
-    /*
-    @SuppressWarnings("SelfAssignment")
-    public void setReferenceAngle(double refereneceAngleRadians){
-        double currentAngleRadians = HoodEncoder.getPosition();
-        if (HoodEncoder.getVelocity() < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
-            if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
-                resetIteration = 0;
-                double absoluteAngle = HoodAbsEncoder.getDistanceDegrees();
-                HoodEncoder.setPosition(absoluteAngle);
-                currentAngleRadians = absoluteAngle;
-            }
-        } else {
-            resetIteration = 0;
-        }
-        
-        double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
-        if (currentAngleRadiansMod < 0.0) {
-            currentAngleRadiansMod += 2.0 * Math.PI;
-        }
-
-        // The reference angle has the range [0, 2pi) but the Neo's encoder can go above that
-        double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
-        if (referenceAngleRadians - currentAngleRadiansMod > Math.PI) {
-            adjustedReferenceAngleRadians -= 2.0 * Math.PI;
-        } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
-            adjustedReferenceAngleRadians += 2.0 * Math.PI;
-        }
-
-        this.referenceAngleRadians = referenceAngleRadians;
-
-        HoodController.setReference(adjustedReferenceAngleRadians, ControlType.kPosition);
-
-    }*/
+  
 
     
     

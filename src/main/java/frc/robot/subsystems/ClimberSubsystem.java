@@ -28,11 +28,11 @@ import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase{
-    //private TalonSRX TestClimbMotor = new TalonSRX(31);
+   
     //real stuff
     private TalonFX Climb1Talon = new TalonFX(ClimberConstants.ClimbMotor1);
     private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor2);
-    private Servo BalanceServo = new Servo(ClimberConstants.ClimbServo);
+   
    
 
     private boolean ClimbUp = false;
@@ -44,7 +44,7 @@ public class ClimberSubsystem extends SubsystemBase{
     
 
     public ClimberSubsystem(){
-        BalanceServo.setBounds(2, 1.8, 1.5, 1.2, 1);
+        
         setBreakModes();
         //Climb1Controller = ClimbMotor1.getPIDController();
         TalonFXConfiguration Climb1Config = new TalonFXConfiguration();
@@ -214,6 +214,7 @@ public class ClimberSubsystem extends SubsystemBase{
             return true; 
         }else return false; 
     }
+    
  
 
 

@@ -1,4 +1,4 @@
-package frc.robot.commands.SubsystemCommands;
+package frc.robot.commands.SubsystemCommands.FeederCommands;
 
 
 import edu.wpi.first.wpilibj.Timer;
@@ -17,23 +17,19 @@ public class RunFeeder extends CommandBase{
     }
     @Override
     public void initialize() {
-        timer.reset();
-        timer.start();
+        
     }
     @Override
     public void execute() {
-        m_feeder.runFeeder(0.65);
-
+        m_feeder.SetIndex();
     }
     @Override
     public void end(boolean interrupted) {
-        m_feeder.runFeeder(0.0);
-        timer.reset();
+       m_feeder.SetIdle();
     }
     @Override
     public boolean isFinished() {
-        return timer.get()> 0.5;
-
+      return false;
     }
 
 

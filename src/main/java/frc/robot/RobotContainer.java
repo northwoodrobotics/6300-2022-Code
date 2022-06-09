@@ -21,60 +21,35 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.MusicMaker;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.Vision;
-//import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Vision.LEDMode;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.DriveAutoRotate;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
-//import frc.robot.commands.TurnToTarget;
-//import frc.robot.commands.AutoRoutines.DriveAndTurn;
-//import frc.robot.commands.AutoRoutines.JustSquare;
 import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.FourBall;
 import frc.robot.commands.AutoRoutines.OneBall;
-//import frc.robot.commands.AutoRoutines.OneBallRed;
 import frc.robot.commands.AutoRoutines.SystemsCheck;
 import frc.robot.commands.AutoRoutines.TopSideTwoBall;
 import frc.robot.commands.AutoRoutines.TwoBall;
 import frc.robot.commands.AutoRoutines.WackyTwoBall;
-//import frc.robot.commands.AutoRoutines.TwoBallRed;
-//import frc.robot.commands.AutoRoutines.DemoSquare;
-//import frc.robot.commands.AutoRoutines.DriveAndGoLeft;
-//import frc.robot.commands.AutoRoutines.RealSquare;
-import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
-import frc.robot.commands.DriveCommands.ZeroGyro;
-import frc.robot.commands.MusicLibary.PlaySelectedSong;
-import frc.robot.commands.SimCommands.HoodUp;
-//import frc.robot.commands.SimCommands.SimAuton;
-import frc.robot.commands.SimCommands.TuneTables;
-import frc.robot.commands.SubsystemCommands.PurgeFeeder;
-import frc.robot.commands.SubsystemCommands.RunFeeder;
-import frc.robot.commands.SubsystemCommands.FenderShot;
-//import frc.robot.commands.SubsystemCommands.SetServoMax;
-//import frc.robot.commands.SubsystemCommands.SetServoMid;
-//import frc.robot.commands.SubsystemCommands.SetServoMin;
-import frc.robot.commands.SubsystemCommands.HomeHood;
-import frc.robot.commands.SubsystemCommands.IntakeCommand;
-import frc.robot.commands.SubsystemCommands.LowShot;
-import frc.robot.commands.SubsystemCommands.PurgeFeeder;
-import frc.robot.commands.SubsystemCommands.ShooterCommand;
-import frc.robot.commands.SubsystemCommands.WaitForBall;
-import frc.robot.commands.SubsystemCommands.AutoCommands.AutoFeedCommand;
+import frc.robot.commands.SubsystemCommands.FeederCommands.PurgeFeeder;
+import frc.robot.commands.SubsystemCommands.FeederCommands.RunFeeder;
+import frc.robot.commands.SubsystemCommands.IntakeCommands.IntakeDeploy;
+import frc.robot.commands.SubsystemCommands.ShooterCommands.FenderShot;
+
+import frc.robot.commands.SubsystemCommands.ShooterCommands.LowShot;
+import frc.robot.commands.SubsystemCommands.ShooterCommands.ShooterCommand;
+import frc.robot.commands.SubsystemCommands.TurretCommands.TurretTrack;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
-import frc.robot.Constants.ShooterConstants;
 import frc.ExternalLib.SpectrumLib.controllers.SpectrumXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -93,29 +68,20 @@ public class RobotContainer {
   public static IntakeSubsystem intake; 
   public static ClimberSubsystem climber;
 
- // public static XboxController yeet = new XboxController (1);
-  //public static JoystickButton leftTrigger = new JoystickButton(yeet, XboxController.Button.kLeftBumper.value);
-  
+
 
   public static MusicMaker musicMaker;
   public static Compressor compressor;
+  public static TurretSubsystem turret;
 
-  private DrivetrainMode driveControlMode = DrivetrainMode.DRIVE;
-
-  //private DriveAndTurn driveandTurn;
-
+  
   public static ShooterSubsystem shooter;
   
  
   private static final SendableChooser<Command> autoChooser = new SendableChooser<>();
-  //private static final SendableChooser<DrivetrainMode> DriveModeChooser = new SendableChooser<>();
-  //private static final SendableChooser<Command> SongChooser = new SendableChooser<>();
-  //private static final SendableChooser<Double> SpeedChooser = new SendableChooser<>();
-  //public static VisionSubsystem blindlight = new VisionSubsystem(m_swerveSubsystem);
 
   public static Vision blindlight;
-  private NetworkTableEntry m_shooterSpeed = master.add("ShooterSpeed", -7000).getEntry();
-  private NetworkTableEntry m_hoodAngle = master.add("hoodAngle", 1).getEntry();
+
   double hoodAngle;
   double shooterSpeed;
 
@@ -133,7 +99,7 @@ public class RobotContainer {
   
 
   public static final SpectrumXboxController driveController = new SpectrumXboxController(0, .1, .1);
-  public static final SpectrumXboxController DJController = new SpectrumXboxController(1, 0.1, 0.1);
+  public static final SpectrumXboxController gunnerController = new SpectrumXboxController(1, 0.1, 0.1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -141,20 +107,16 @@ public class RobotContainer {
       blindlight = new Vision();
       shooter = new ShooterSubsystem();
       climber = new ClimberSubsystem();
+      turret = new TurretSubsystem();
 
       compressor = new Compressor(31, PneumaticsModuleType.REVPH);
-    //  yeet = new XboxController(1);
-    //shooter.setHoodTargetAngle(37);
-
-      //yeet.getAButtonPressed()
+  
 
 
       intake = new IntakeSubsystem();
       compressor.enabled();
       compressor.enableDigital();
-    //switch(driveControlMode){
-     // case DRIVE :
-     // musicMaker = null;
+  
       dt = DrivetrainSubsystem.createSwerveModel();
       m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
       m_swerveSubsystem.setDefaultCommand(new TeleopDriveCommand(  m_swerveSubsystem, 
@@ -168,10 +130,10 @@ public class RobotContainer {
     configureButtonBindings();
     ShowInputs();
     showBlindlight();
-    //driveandTurn = new DriveAndTurn(m_swerveSubsystem);
-    //SmartDashboard.putNumber("Shooter RPM", ShooterSpeed);
+    turret.setDefaultCommand(new TurretTrack(m_swerveSubsystem, turret, shooter, blindlight));
+    feeder.setDefaultCommand(new RunFeeder(feeder));
 
-    
+ 
     
     
     autoChooser.setDefaultOption("TwoBall", new TwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
@@ -180,37 +142,7 @@ public class RobotContainer {
     autoChooser.addOption("TopSideTwoBall", new TopSideTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("OneBall", new OneBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("WackyTwoBall", new WackyTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
-    /*autoChooser.addOption("DemoSquare", new DemoSquare(m_swerveSubsystem));
-    autoChooser.addOption("RealSquare", new RealSquare(m_swerveSubsystem));
-    autoChooser.addOption("No Rotation Square", new JustSquare(m_swerveSubsystem));
-    autoChooser.addOption("SimTrajectory", new SimAuton(m_s   werveSubsystem));
-    autoChooser.addOption("Training", new DriveAndGoLeft(m_swerveSubsystem));*/
-
-     //SmartDashboard.getNumber("Shooter RPM", 0);
-      
-
-    
    
-
-      //break;
-   // case MUSIC :
-    // dt = null;
-   //  m_swerveSubsystem = null;
-   //  musicMaker = new MusicMaker();
-    // getMusicBindings();
-
-
-     
-     
-    // break;
-    // }
-  //   SmartDashboard.putData("DriveModeChooser", DriveModeChooser);
-    // DriveModeChooser.setDefaultOption("DriveMode", DrivetrainMode.DRIVE);
-   //  DriveModeChooser.addOption("MusicMode", DrivetrainMode.MUSIC);
-  
-     SmartDashboard.putData("Auto Chooser", autoChooser);
-     //SmartDashboard.putData("Song", SongChooser);
-
 
    
     
@@ -243,70 +175,33 @@ public class RobotContainer {
     driveController.startButton.whenPressed(()->
       m_swerveSubsystem.dt.zeroGyroscope()
     );
-    driveController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.35), new PurgeFeeder(feeder, 1))));
-    driveController.rightTriggerButton.whileHeld(
-      new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.45), new PurgeFeeder(feeder, 1))));
-    driveController.leftTriggerButton.whileHeld(
-      new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new SequentialCommandGroup(new WaitCommand(0.6), new PurgeFeeder(feeder, 1)))
+    gunnerController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.35), new PurgeFeeder(feeder))));
+    gunnerController.rightTriggerButton.whileHeld(
+      new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.45), new PurgeFeeder(feeder))));
+      gunnerController.leftTriggerButton.whileHeld(
+      new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new SequentialCommandGroup(new WaitCommand(0.6), new PurgeFeeder(feeder)))
       );
-    driveController.bButton.whenPressed(()-> blindlight.setLEDMode(LEDMode.LED_OFF));
-    driveController.leftBumper.whileHeld(new ParallelDeadlineGroup(new RotateToTarget(m_swerveSubsystem, 
-    () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
-          () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
-          () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC)), true);
-    /*driveController.xButton.whileHeld(
-      new RotateToTarget(m_swerveSubsystem,   
-      () -> driveController.leftStick.getY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
-            () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
-            () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
+    
+       
+      driveController.xButton.toggleWhenPressed(new IntakeDeploy(intake, 1));
+     
 
-      ));*/
-      //driveController.xButton.toggleWhenPressed(new IntakeCommand(intake, feeder, 0.35), true);
-
-      /*leftTrigger.whenPressed(
-        new ShooterCommand(shooter, blindlight)
-      );*/
-      driveController.xButton.toggleWhenPressed(new IntakeMasterCommand(feeder, intake)/*new SortBall(feeder)*/);
-        //new IntakeMasterCommand(feeder, intake), true);
-    // driveController.rightBumper.whileHeld(new PurgeFeeder(feeder, 0.45), true);
-      //driveController.yButton.whileHeld(new PurgeFeeder(feeder, -45));
-      //driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
-      //driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
-      //driveController.aButton.whileHeld(()->feeder.runFeeder(0.45));
-      driveController.aButton.whenPressed(new IndexToReady(feeder));
-      //driveController.aButton.whenReleased(()-> feeder.runFeeder(0));
-      //DJController.leftBumper.whenReleased(new PurgeFeeder(feeder, 0));
-      driveController.yButton.whileHeld(()-> feeder.runFeeder(0.-45));
-      driveController.yButton.whenReleased(()-> feeder.runFeeder(0));
+     
+      gunnerController.yButton.whileHeld(()-> feeder.SetFeed());
+      gunnerController.yButton.whenReleased(()-> feeder.SetIdle());
       
 
-    /*DJController.aButton.toggleWhenPressed(
-      new PlaySelectedSong(shooter), true
-    );*/
-    DJController.leftBumper.whileHeld(()-> climber.ExtendClimb() );
-    DJController.leftBumper.whenReleased(()-> climber.HoldClimb() );
-    DJController.rightBumper.whileHeld(()-> climber.Climb() );
-    DJController.rightBumper.whenReleased(()-> climber.HoldClimb() );
+
+    gunnerController.leftBumper.whileHeld(()-> climber.ExtendClimb() );
+    gunnerController.leftBumper.whenReleased(()-> climber.HoldClimb() );
+    gunnerController.rightBumper.whileHeld(()-> climber.Climb() );
+    gunnerController.rightBumper.whenReleased(()-> climber.HoldClimb() );
     
    
    
 
   }
-  /*private void getMusicBindings(){
-    driveController.aButton.whenHeld(
-      new gasgasgas(musicMaker)
-    );
-    driveController.bButton.whenHeld(
-      new pokerface(musicMaker)
-    );
-    driveController.xButton.whenHeld(
-      new stayinalive(musicMaker)
-    );
-    driveController.yButton.whenHeld(
-      new rickroll(musicMaker)
-    );
-  }*/
-
+  
 
 
   /**
@@ -317,17 +212,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
 
-    // An ExampleCommand will run in autonomous
+    
   
  
   }
 
-  public static void UpdateTelemetry(){
-    dt.updateTelemetry();
-    //dt.Updateodometry();
-    //dt.update(false, RobotController.getBatteryVoltage());
-  }
-
+  
   
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
@@ -359,17 +249,12 @@ public class RobotContainer {
     master.addNumber("Y Input", () -> -modifyAxis(driveController.leftStick.getY()));
     master.addNumber("GyroReading", () -> dt.getGyroscopeRotation().getDegrees());
     master.addBoolean("OnTarget", ()->blindlight.isOnTarget());
-    //master.addNumber("Gyro Yaw", () -> dt.getYaw().getDegrees());
-    //master.addNumber("Gyro Angle", () -> dt.getAngle());
-    //master.addNumber("Gyro Fused", () -> dt.getFused().getDegrees());
+    
     master.addNumber("PoseX", ()-> m_swerveSubsystem.dt.getPose().getX());
     master.addNumber("PoseY", ()-> m_swerveSubsystem.dt.getPose().getY());
     master.addNumber("PoseRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());
     master.addNumber("Shooter Velocity", ()->shooter.shooterSpeed());
-    //master.addNumber("OdometryX", ()-> m_swerveSubsystem.dt.getPose().getX());
-    //master.addNumber("OdometryY", ()-> m_swerveSubsystem.dt.getPose().getY());
-    //master.addNumber("OdometryRotation", ()-> m_swerveSubsystem.dt.getPose().getRotation().getDegrees());z
-
+   
 
     
     
@@ -380,17 +265,7 @@ public class RobotContainer {
 
 
 
-  public enum DrivetrainMode{
-    DRIVE,
-    MUSIC
-  }
 
-  public void setDriveMode(){
-    driveControlMode = DrivetrainMode.DRIVE;
-  }
-  public void setMusicMode(){
-    driveControlMode = DrivetrainMode.MUSIC;
-  }
   
 
 
