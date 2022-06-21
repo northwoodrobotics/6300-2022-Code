@@ -27,6 +27,9 @@ public class PhotonCams extends SubsystemBase{
       return camToBall;
         
     }
+    public void setIntakeCam(VisionLEDMode mode){
+        intakeCam.setLED(mode);
+    }
 
 
 
