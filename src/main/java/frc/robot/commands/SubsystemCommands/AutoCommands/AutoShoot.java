@@ -14,20 +14,17 @@ import frc.robot.subsystems.Vision;
 
 
 public class AutoShoot extends CommandBase{
-    //private static final InterpolatingTreeMap<InterpolatingDouble, Translation2d> ShooterTuning = new InterpolatingTreeMap<>();
 
     private final ShooterSubsystem subsystem; 
     private final Vision Blindight; 
-    private double angle;
-    private double speed;
     private Timer timer;
 
 
-    public AutoShoot(ShooterSubsystem shooter, Vision blindlight, double HoodAngle, double speed){
+    public AutoShoot(ShooterSubsystem shooter, Vision blindlight){
         this.subsystem = shooter;
-        this.angle = HoodAngle;
+       
         this.Blindight = blindlight;
-        this.speed = speed;
+       
         timer = new Timer();
 
         addRequirements(shooter);
@@ -43,15 +40,9 @@ public class AutoShoot extends CommandBase{
     }
     @Override
     public void execute() {
-        //timer.start();
-        //subsystem.percentoutput(1);   
-        
-        //subsystem.RunShooter(Constants.ShooterConstants.ShooterVelocityTable.lookup(Blindight.getRobotToTargetDistance()));
+       
         subsystem.RunShooter(ShooterConstants.ShooterVelocityTable.getInterpolated(new InterpolatingDouble(Blindight.getAvgDistance())).value);
         subsystem.setHoodTargetAngle((ShooterConstants.HoodPositionTable.getInterpolated(new InterpolatingDouble(Blindight.getAvgDistance()))).value);
-        //subsystem.MoveHood((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));
-        //subsystem.setHoodTargetAngle((Constants.ShooterConstants.HoodPositionTable.lookup(Math.round(Blindight.getAvgDistance() *10/10))));  
-           
     }
 
     @Override

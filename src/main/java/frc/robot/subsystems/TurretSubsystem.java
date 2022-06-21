@@ -92,7 +92,6 @@ public class TurretSubsystem extends SubsystemBase{
             turretMotor.set(ControlMode.Disabled, 0);
             break; 
             case VISONPID: 
-
             double output = rawVisionController.calculate(targetAngle, 0);
             SmartDashboard.putNumber("Targeting Output", output);
             if(!rawVisionController.atSetpoint()) {

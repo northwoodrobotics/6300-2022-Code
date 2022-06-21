@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveCommands.AutoDrive;
-import frc.robot.commands.SubsystemCommands.IntakeCommand;
+import frc.robot.commands.SubsystemCommands.IntakeCommands.IntakeDeploy;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -17,7 +17,7 @@ public class DriveAndIntake extends ParallelDeadlineGroup{
         super(
             new SequentialCommandGroup(
                 new AutoDrive(swerve,path)
-            ), new IntakeMasterCommand(feeder, intake)
+            ), new IntakeDeploy(intake, 1)
         );
 
     }

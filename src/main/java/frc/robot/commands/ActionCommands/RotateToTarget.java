@@ -23,7 +23,7 @@ public class RotateToTarget extends SequentialCommandGroup{
             new LimelightWaitForTarget(),
             
                 
-               new DriveAutoRotate(subsystem, translationXSupplier, translationYSupplier, rotationSupplier)
+               new DriveAutoRotate(subsystem, translationXSupplier, translationYSupplier)
            )
        );
    }

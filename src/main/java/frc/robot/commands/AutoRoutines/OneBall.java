@@ -7,9 +7,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.PathHolder;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.DriveCommands.AutoDrive;
-import frc.robot.commands.SimCommands.HoodUp;
-import frc.robot.commands.SubsystemCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.AutoCommands.AutoShoot;
+import frc.robot.commands.SubsystemCommands.FeederCommands.PurgeFeeder;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -22,7 +21,7 @@ public class OneBall extends SequentialCommandGroup{
             new InstantCommand(() -> subsystem.dt.setKnownPose(PathHolder.OneBallBlue.getInitialPose())),
             new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
             new AutoDrive(subsystem, PathHolder.OneBallBlue), 
-            new ParallelDeadlineGroup(new AutoShoot(shooter, blindlight, 23.5, -5500), new SequentialCommandGroup( new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
+            new ParallelDeadlineGroup(new AutoShoot(shooter, blindlight), new SequentialCommandGroup( new WaitCommand(1.5), new PurgeFeeder(feeder)))
             
         );
     }
