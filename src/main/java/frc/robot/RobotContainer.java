@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.swervedrivespecialties.swervelib.DriveController;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
