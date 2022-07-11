@@ -29,6 +29,7 @@ public final class Constants {
         public static final double blindlightHeight = Units.inchesToMeters(40);
         public static final double blindlightAngle = 23;
         public static final Pose2d GoalPose = new Pose2d(4, 6, Rotation2d.fromDegrees(0));
+        public static final double intakeCamHeight = Units.inchesToMeters(38);
 
     }
     public static final class DriveConstants{
@@ -263,5 +264,6 @@ public final class Constants {
             HoodPositionTable.put(new InterpolatingDouble(3.5), new InterpolatingDouble(35.0));
             HoodPositionTable.put(new InterpolatingDouble(4.0), new InterpolatingDouble(37.5));            
         }
+        public static final double ShotTime = 3;
     }
 }

@@ -6,10 +6,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -19,7 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FeederConstants;
-import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
+
 import frc.ExternalLib.PicoPi.PicoColorSensor;
 import frc.ExternalLib.PicoPi.PicoColorSensor.RawColor;
 
@@ -68,6 +64,12 @@ public class FeederSubsystem extends SubsystemBase {
     }
     public void SetIdle(){
         feedMode = FeedMode.IDLE;
+    }
+    public void SetEmpty(){
+        feedMode = FeedMode.EMPTY;
+    }
+    public void SetAll(){
+        feedMode = FeedMode.HOLDALL;
     }
 
     public void EnableCurrentLimit(){
@@ -171,6 +173,15 @@ public class FeederSubsystem extends SubsystemBase {
             case FEED: 
             FeederMotor.set(ControlMode.PercentOutput, 1);
             break; 
+            case HOLDALL:
+            if(shouldAdvance()){
+                FeederMotor.set(ControlMode.PercentOutput, 1);
+            }
+            break;
+            case EMPTY:
+            FeederMotor.set(ControlMode.PercentOutput, -1);
+            RejectMotor.set(ControlMode.PercentOutput, -1);
+            break;
         }  
     }
 
@@ -178,7 +189,7 @@ public class FeederSubsystem extends SubsystemBase {
         RED,BLUE
     }
     public enum FeedMode{
-        INDEX, FEED, IDLE
+        INDEX, FEED, IDLE, HOLDALL, EMPTY
     }
     public int redBall;
     public int blueBall;

@@ -26,9 +26,6 @@ public class TeleopDriveCommand extends CommandBase{
     private final DoubleSupplier m_rotationSupplier;
 
 
-    private double m_translationY;
-    private double m_translationX;
-    private double m_rotation;
 
 
     public TeleopDriveCommand( SwerveSubsystem subsystem, DoubleSupplier translationXSupplier,
@@ -58,7 +55,7 @@ public class TeleopDriveCommand extends CommandBase{
       m_SwerveSubsystem.dt.driveClean(
         m_translationXSupplier.getAsDouble(), 
         m_translationYSupplier.getAsDouble(), 
-        -m_rotationSupplier.getAsDouble()
+        Math.toDegrees(-m_rotationSupplier.getAsDouble())
         );
 
 

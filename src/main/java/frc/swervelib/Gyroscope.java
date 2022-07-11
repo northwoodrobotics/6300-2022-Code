@@ -9,6 +9,8 @@ public interface Gyroscope {
    */
   Rotation2d getGyroHeading();
 
+  Double getGyroRoll();
+
   /**
   * Sets the gyroscope angle. This can be used to set the direction the robot is currently facing to the
   * 'forwards' direction.
@@ -20,6 +22,7 @@ public interface Gyroscope {
    * @param angle Angle to be set in degrees.
    */
   void setAngle(double angle);
+  
 
   /**
    * Determines if the Gyro is ready to be used.

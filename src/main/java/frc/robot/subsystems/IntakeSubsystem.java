@@ -129,15 +129,15 @@ public class IntakeSubsystem extends SubsystemBase{
 
 
     public void setMotorOutput(double Output){
-        //synchronized(stateLock){
+        
             this.motorOutput = Output;
             intakeMotor.set(ControlMode.PercentOutput, Output);
-        //}
+       
     }
     public double getMotorOutput(){
-        //synchronized(stateLock){
+       
             return motorOutput;
-        //}
+        
     }
 
     @Override 

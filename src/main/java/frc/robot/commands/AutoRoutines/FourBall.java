@@ -30,9 +30,11 @@ public class FourBall extends SequentialCommandGroup{
             new DriveAndIntake(PathHolder.FourBall1, subsystem, intake, feeder), 
             new ParallelDeadlineGroup(new AutoShoot(shooter, blindlight), new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder))),
             
-            new DriveAndIntake(PathHolder.FourBall2, subsystem, intake, feeder),//.alongWith(new IndexToReady(feeder)),
-            new ParallelCommandGroup(new AutoShoot(shooter, blindlight), new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder))),
-            new AutoDrive(subsystem, PathHolder.FourBall3)
+            new DriveAndIntake(PathHolder.FourBall2, subsystem, intake, feeder),
+            new WaitCommand(1.4),//.alongWith(new IndexToReady(feeder)),
+            
+            new AutoDrive(subsystem, PathHolder.FourBall3),
+            new ParallelCommandGroup(new AutoShoot(shooter, blindlight), new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder)))
             //new HoodUp(shooter,37).alongWith(new ShooterCommand(shooter, blindlight).alongWith(new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
         );
     }

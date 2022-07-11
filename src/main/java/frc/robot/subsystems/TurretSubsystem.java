@@ -34,6 +34,7 @@ public class TurretSubsystem extends SubsystemBase{
 
     public TurretSubsystem()
     {
+        rawVisionController.disableContinuousInput();
         turretMode = TurretControlMode.HOMING;
         isTurretZeroed =  false; 
         TalonFXConfiguration turretConfig = new TalonFXConfiguration();
@@ -46,6 +47,7 @@ public class TurretSubsystem extends SubsystemBase{
         turretConfig.motionCurveStrength= TurretConstants.MotionMagicCurve;
         turretConfig.forwardSoftLimitEnable = true; 
         turretConfig.reverseSoftLimitEnable = true; 
+        turretMotor.enableVoltageCompensation(true);
         turretConfig.forwardSoftLimitThreshold = TurretConstants.TurretForwardSoftLimit* TurretConstants.TurretPostionCoffiecient;
         turretConfig.reverseSoftLimitThreshold = TurretConstants.TurretReverseSoftLimit* TurretConstants.TurretPostionCoffiecient;
         turretConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
@@ -64,8 +66,9 @@ public class TurretSubsystem extends SubsystemBase{
             }
         }
     }
+
     public double getTurretAngle(){
-        return TurretTargetAngle;
+        return turretMotor.getSelectedSensorPosition()*TurretConstants.TurretPostionCoffiecient;
     }
     public void setTurretAngle(double angle){
         turretMode = TurretControlMode.TARGETANGLE; 
@@ -98,9 +101,14 @@ public class TurretSubsystem extends SubsystemBase{
                 if(output < 0) output = Math.min(-TurretConstants.turretMinRotation, output);
                 else output = Math.max(TurretConstants.turretMinRotation, output);
             }
-            if(!RobotContainer.blindlight.hasTarget()){
-                turretMotor.set(ControlMode.PercentOutput, output);
-            }
+            if (getTurretAngle()>(TurretConstants.TurretForwardSoftLimit-30)& getTurretAngle()<TurretConstants.TurretReverseSoftLimit ){
+                turretMotor.set(ControlMode.MotionMagic, (getTurretAngle()-360)/Constants.TurretConstants.TurretPostionCoffiecient);
+            }else if (getTurretAngle()<(TurretConstants.TurretForwardSoftLimit)& getTurretAngle()>(TurretConstants.TurretReverseSoftLimit-30) ){
+                turretMotor.set(ControlMode.MotionMagic, (getTurretAngle()+360)/Constants.TurretConstants.TurretPostionCoffiecient);}
+                else  if(RobotContainer.blindlight.hasTarget()){
+                    turretMotor.set(ControlMode.PercentOutput, output);
+                }
+           
             break; 
             case TARGETANGLE: 
             if (TurretTargetAngle < TurretConstants.TurretForwardSoftLimit&& TurretTargetAngle >TurretConstants.TurretReverseSoftLimit){

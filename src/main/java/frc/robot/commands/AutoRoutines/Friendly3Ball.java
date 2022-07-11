@@ -18,7 +18,9 @@ public class Friendly3Ball extends SequentialCommandGroup{
 
     public Friendly3Ball(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(
-            new DriveAndIntake(PathHolder.Friendly3Ball, subsystem, intake, feeder)
+            new DriveAndIntake(PathHolder.TwoBall, subsystem, intake, feeder),
+            new PurgeFeeder(feeder)
+
          
         );
     }

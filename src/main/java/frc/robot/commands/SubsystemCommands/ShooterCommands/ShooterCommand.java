@@ -15,8 +15,7 @@ import frc.robot.subsystems.Vision;
 
 
 public class ShooterCommand extends CommandBase{
-    //private static final InterpolatingTreeMap<InterpolatingDouble, Translation2d> ShooterTuning = new InterpolatingTreeMap<>();
-
+  
     private final ShooterSubsystem subsystem; 
     private final Vision Blindight; 
     private double speed;
@@ -25,7 +24,6 @@ public class ShooterCommand extends CommandBase{
 
     public ShooterCommand(ShooterSubsystem shooter, Vision blindlight){
         this.subsystem = shooter;
-        //this.speed = speed;
         this.Blindight = blindlight;
       
 

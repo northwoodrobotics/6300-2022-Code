@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
@@ -32,14 +33,9 @@ public class ClimberSubsystem extends SubsystemBase{
     //real stuff
     private TalonFX Climb1Talon = new TalonFX(ClimberConstants.ClimbMotor1);
     private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor2);
-   
+    private DigitalInput LatchLimit = new DigitalInput(7);
    
 
-    private boolean ClimbUp = false;
-    // fix me values
-    private double Climb1Out = 0;
-    private double Climb2Out = 0; 
-    private double Climb1Release = 0;
 
     
 
@@ -124,69 +120,61 @@ public class ClimberSubsystem extends SubsystemBase{
 
     private enum climbstate{
         Stowed,
-        StartClimb,
-        Climb,ToNextBar
-        ,lock, PercentOutput
+        StartClimb,WaitForSwing
+        ,
+        ToHighBar,ToTraverse
+        ,UnlatchHighBar, PercentOutput
     }
     public climbstate state = climbstate.Stowed;
 
     @Override 
     public void periodic(){
-        /*
-         Theoretical Traversal climb State Machine. 
+    
+     // State Machine for Citrus Climber 
         switch (state){
             case Stowed:
-             Climb1ToPositoin(0);
-             Climb2ToPosition(0);
-             //BalanceSolenoid.set(Value.kReverse);
-             lockClimb();
+            Climb1ToPositoin(0);
+            Climb2ToPosition(0);
+        
              
              break;
-             case StartClimb: 
-             Climb1ToPositoin(Climb1Out);
-             BalanceServo.setPosition(1.8);
-             
-            // BalanceSolenoid.set(Value.kForward);
-            // lockSolenoid.set(Value.kReverse);
-            // if (lockSolenoid.get() != Value.kReverse){
-                Climb2ToPosition(Climb2Out);
+          
+             case StartClimb:
+              Climb1ToPositoin(20000);
+      
              
              break; 
-             case Climb:
+             case WaitForSwing:
              Climb1ToPositoin(0);
-             if (Climb1Talon.getSelectedSensorPosition()< 300){
-                state = climbstate.ToNextBar;
-             }
+             Climb2ToPosition(15000);
+             break;
+             case ToHighBar:
+            
+             Climb2ToPosition(20000);
+             Climb1ToPositoin(15000);
           
              break; 
-             case ToNextBar: {
-                 Climb2ToPosition(0);
-                 if (IsHook2Climbing() != false){
-                    Climb1ToPositoin(Climb1Release);
-                 }
-                 if(Climb2Talon.getSelectedSensorPosition() < 300){
-                     state = climbstate.lock;
-                 }
-                 /*if(Climb1Encoder.getVelocity()> 0){
-                     Climb1ToPositoin(Climb1Release);
-                 }
-                 if(Climb2Encoder.getPosition()!= 0){
-                     state = climbstate.Stowed;
-                 }
+
+             case ToTraverse: {
+                Climb2ToPosition(0);
+                Climb1ToPositoin(20000);
+                
+                
+                
              }break;
-             case lock:{
-                 if (IsHook1Climbing() != false ){
-                     Climb1ToPositoin(0);
+             case UnlatchHighBar:{
+                 if(LatchLimit.get() != false){
+                    Climb1ToPositoin(20000);
                  }
-                 lockClimb();
-                 //BalanceSolenoid.set(Value.kReverse);
-                 Climb2ToPosition(0);
+               
+                 
+                 
                 
              }
              
              
             
-             }*/
+             }
         }
 
         public void StartClimb(){
@@ -198,11 +186,31 @@ public class ClimberSubsystem extends SubsystemBase{
         
     
 
-    public void lockClimb(){
+    public void GoClimb(){
+
+        state = climbstate.WaitForSwing;
        
-            //lockSolenoid.set(Value.kForward);
+        
         
     }
+    public void Transition1(){
+
+        state = climbstate.ToHighBar;
+       
+        
+        
+    }
+
+    public void Transistion2(){
+        state = climbstate.ToTraverse;
+    } 
+
+    public void Unhook(){
+        state = climbstate.UnlatchHighBar; 
+    }
+    
+
+
     public boolean IsHook1Climbing(){
         if(Climb1Talon.getStatorCurrent()> 20){
             return true; 

@@ -37,6 +37,10 @@ public class Pigeon2FactoryBuilder {
             return true;
           //  return pigeon.getState().equals(PigeonState.Ready);
         }
+        @Override 
+        public Double getGyroRoll(){
+            return pigeon.getRoll();
+        }
 
         @Override
         public Rotation2d getGyroHeading() {

@@ -39,6 +39,7 @@ import frc.robot.commands.AutoRoutines.WackyTwoBall;
 import frc.robot.commands.SubsystemCommands.FeederCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.FeederCommands.RunFeeder;
 import frc.robot.commands.SubsystemCommands.IntakeCommands.IntakeDeploy;
+import frc.robot.commands.SubsystemCommands.IntakeCommands.IntakeUp;
 import frc.robot.commands.SubsystemCommands.ShooterCommands.FenderShot;
 
 import frc.robot.commands.SubsystemCommands.ShooterCommands.LowShot;
@@ -67,14 +68,7 @@ public class RobotContainer {
   public static FeederSubsystem feeder; 
   public static IntakeSubsystem intake; 
   public static ClimberSubsystem climber;
-
-
-
-  public static MusicMaker musicMaker;
-  public static Compressor compressor;
   public static TurretSubsystem turret;
-
-  
   public static ShooterSubsystem shooter;
   
  
@@ -108,14 +102,10 @@ public class RobotContainer {
       shooter = new ShooterSubsystem();
       climber = new ClimberSubsystem();
       turret = new TurretSubsystem();
-
-      compressor = new Compressor(31, PneumaticsModuleType.REVPH);
   
 
 
       intake = new IntakeSubsystem();
-      compressor.enabled();
-      compressor.enableDigital();
   
       dt = DrivetrainSubsystem.createSwerveModel();
       m_swerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
@@ -130,8 +120,10 @@ public class RobotContainer {
     configureButtonBindings();
     ShowInputs();
     showBlindlight();
-    turret.setDefaultCommand(new TurretTrack(m_swerveSubsystem, turret, shooter, blindlight));
+    turret.setDefaultCommand(new AutoLead(m_swerveSubsystem, turret, shooter, blindlight, true));
     feeder.setDefaultCommand(new RunFeeder(feeder));
+
+    intake.setDefaultCommand(new IntakeDeploy(intake, 1));
 
  
     
@@ -175,27 +167,19 @@ public class RobotContainer {
     driveController.startButton.whenPressed(()->
       m_swerveSubsystem.dt.zeroGyroscope()
     );
-    gunnerController.rightBumper.whileHeld(new ParallelCommandGroup(new LowShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.35), new PurgeFeeder(feeder))));
-    gunnerController.rightTriggerButton.whileHeld(
-      new ParallelCommandGroup( new FenderShot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(0.45), new PurgeFeeder(feeder))));
-      gunnerController.leftTriggerButton.whileHeld(
-      new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new SequentialCommandGroup(new WaitCommand(0.6), new PurgeFeeder(feeder)))
-      );
+    driveController.rightTriggerButton.whenPressed(new PurgeFeeder(feeder));
+    
     
        
-      driveController.xButton.toggleWhenPressed(new IntakeDeploy(intake, 1));
+    driveController.xButton.toggleWhenPressed(new IntakeUp(intake, 1));
      
 
      
-      gunnerController.yButton.whileHeld(()-> feeder.SetFeed());
-      gunnerController.yButton.whenReleased(()-> feeder.SetIdle());
+     
       
 
 
-    gunnerController.leftBumper.whileHeld(()-> climber.ExtendClimb() );
-    gunnerController.leftBumper.whenReleased(()-> climber.HoldClimb() );
-    gunnerController.rightBumper.whileHeld(()-> climber.Climb() );
-    gunnerController.rightBumper.whenReleased(()-> climber.HoldClimb() );
+    
     
    
    

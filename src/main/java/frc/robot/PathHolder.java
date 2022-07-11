@@ -15,8 +15,8 @@ public class PathHolder {
     public static PathPlannerTrajectory FourBall3 = PathPlanner.loadPath("FourBallPart3", 4, 3);
     public static PathPlannerTrajectory OneBallBlue = PathPlanner.loadPath("BlueHappy1Ball", Units.feetToMeters(1), Units.feetToMeters(1));
     public static PathPlannerTrajectory WackyTwoBall = PathPlanner.loadPath("Wacky2Ball", 2, 1);
-    public static PathPlannerTrajectory Friendly3Ball = PathPlanner.loadPath("Friendly3BallPart1", 1, 0.5);
-    public static PathPlannerTrajectory Friendly3BallPart2 = PathPlanner.loadPath("Friendly3BallPart2", 1, 0.5);
-    public static PathPlannerTrajectory Friendly3BallPart3 = PathPlanner.loadPath("Friendly3BallPart3", 1, 0.5);
+    public static PathPlannerTrajectory BallSteal = PathPlanner.loadPath("Le3Ball", 4, 0.5);
+    public static PathPlannerTrajectory BallStealPart2 = PathPlanner.loadPath("Le3BallPart2", 4, 0.5);
+    public static PathPlannerTrajectory BallStealPart3 = PathPlanner.loadPath("Le3BallPart3", 4, 0.5);
   
 }

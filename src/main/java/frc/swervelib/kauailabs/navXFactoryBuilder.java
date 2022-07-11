@@ -44,6 +44,10 @@ public class navXFactoryBuilder {
         public void zeroGyroscope(double angle) {
             gyroOffset = angle - getGyroHeading().getDegrees();
         }
+        @Override 
+        public Double getGyroRoll(){
+            return Double.valueOf(navX.getRoll());
+        }
 
         @Override
         public void setAngle(double angle) {

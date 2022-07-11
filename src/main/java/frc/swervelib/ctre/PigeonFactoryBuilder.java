@@ -28,6 +28,11 @@ public class PigeonFactoryBuilder {
         public Rotation2d getGyroHeading() {
             return Rotation2d.fromDegrees(pigeon.getFusedHeading() + gyroOffset);
         }
+        @Override 
+        public Double getGyroRoll(){
+            return pigeon.getRoll();
+        }
+
 
         @Override
         public Boolean getGyroReady() {

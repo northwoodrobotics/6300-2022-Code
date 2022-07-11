@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.swervelib.SwerveConstants;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
 
@@ -290,6 +289,33 @@ public class SwerveDrivetrainModel {
         setKnownPose(startingPose);
         
     }
+    public ChassisSpeeds getChassisSpeed(){
+        return  SwerveConstants.KINEMATICS.toChassisSpeeds(states[0], states[1],states[2], states[3]);
+    }
+    public ChassisSpeeds getFieldRelativeSpeeds(){    
+        return getChassisSpeed();
+           
+      }
+    public ChassisSpeeds getFieldReltaiveAcceleration(){
+        double lastTime = Timer.getFPGATimestamp(); 
+        ChassisSpeeds PreviousSpeeds = getFieldRelativeSpeeds(); 
+        return new ChassisSpeeds(
+            (getFieldRelativeSpeeds().vxMetersPerSecond-PreviousSpeeds.vxMetersPerSecond)/Timer.getFPGATimestamp()-lastTime, 
+            (getFieldRelativeSpeeds().vyMetersPerSecond-PreviousSpeeds.vyMetersPerSecond)/Timer.getFPGATimestamp()-lastTime,
+            (getFieldRelativeSpeeds().omegaRadiansPerSecond -PreviousSpeeds.omegaRadiansPerSecond)/Timer.getFPGATimestamp()-lastTime
+        );
+    }
+    public ChassisSpeeds getFieldRelativeJerk(){
+        double lastTime = Timer.getFPGATimestamp(); 
+        ChassisSpeeds PreviousSpeeds = getFieldReltaiveAcceleration(); 
+        return new ChassisSpeeds(
+            (getFieldReltaiveAcceleration().vxMetersPerSecond-PreviousSpeeds.vxMetersPerSecond)/Timer.getFPGATimestamp()-lastTime, 
+            (getFieldReltaiveAcceleration().vyMetersPerSecond-PreviousSpeeds.vyMetersPerSecond)/Timer.getFPGATimestamp()-lastTime,
+            (getFieldReltaiveAcceleration().omegaRadiansPerSecond -PreviousSpeeds.omegaRadiansPerSecond)/Timer.getFPGATimestamp()-lastTime
+        );
+    }
+      
+    
 
     public void zeroGyroscope() {
         gyro.zeroGyroscope(0.0);
@@ -301,6 +327,10 @@ public class SwerveDrivetrainModel {
     public Rotation2d getGyroscopeRotation() {
         SmartDashboard.putNumber("Gyro Angle", gyro.getGyroHeading().getDegrees());
         return gyro.getGyroHeading();
+    }
+
+    public Double GyroRoll(){
+        return gyro.getGyroRoll();
     }
 
     public Boolean getGyroReady() {
@@ -332,6 +362,7 @@ public class SwerveDrivetrainModel {
                 SwerveConstants.XPIDCONTROLLER,
                 SwerveConstants.YPIDCONTROLLER,
                 thetaController,
+                // feed states into controller
                 commandStates -> this.states = commandStates,
                 m_drive);
         return swerveControllerCommand.andThen(() -> setModuleStates(new SwerveInput(0,0,0)));
