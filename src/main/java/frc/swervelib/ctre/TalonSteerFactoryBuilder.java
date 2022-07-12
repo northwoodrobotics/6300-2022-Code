@@ -12,6 +12,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import frc.swervelib.AbsoluteEncoderFactory;
 import frc.swervelib.EnclosedSteerController;
 import frc.swervelib.EnclosedSteerControllerFactory;
 import frc.swervelib.ModuleConfiguration;
@@ -74,12 +75,16 @@ public class TalonSteerFactoryBuilder {
     public boolean hasCurrentLimit() {
         return Double.isFinite(currentLimit);
     }
-    public <T> EnclosedSteerControllerFactory<ControllerImplementation, TalonSRXConfiguration<T>>{
-        return new FactoryImplementation<>();
+    public <T> EnclosedSteerControllerFactory<ControllerImplementation, TalonSteerConfiguration<T>>build(AbsoluteEncoderFactory<T> absoluteEncoderFactory){
+        return new FactoryImplementation<>(absoluteEncoderFactory);
     } 
 
     private class FactoryImplementation<T> implements EnclosedSteerControllerFactory<ControllerImplementation, TalonSteerConfiguration<T>> {
-        
+        private final AbsoluteEncoderFactory<T> encoderFactory;
+
+        private FactoryImplementation(AbsoluteEncoderFactory<T> encoderFactory) {
+            this.encoderFactory = encoderFactory;
+        }
 
     
         @Override
@@ -87,9 +92,7 @@ public class TalonSteerFactoryBuilder {
             EnclosedSteerControllerFactory.super.addDashboardEntries(container, controller);
             container.addNumber("Absolute Encoder Angle", () -> Math.toDegrees(controller.getStateAngle()));
         }
-        private FactoryImplementation(){
-
-        }
+   
 
         @Override
         public ControllerImplementation create(TalonSteerConfiguration<T> steerConfiguration, ModuleConfiguration moduleConfiguration) {
@@ -146,7 +149,7 @@ public class TalonSteerFactoryBuilder {
             return new ControllerImplementation(motor,
                     sensorPositionCoefficient,
                     sensorVelocityCoefficient,
-                    hasMotionMagic() ? TalonSRXControlMode.MotionMagic : TalonSRXControlMode.Position, DCMotor DCMotor.getVex775Pro(1), TalonSensorType TalonSensorType.Analog
+                    hasMotionMagic() ? TalonSRXControlMode.MotionMagic : TalonSRXControlMode.Position, DCMotor.getVex775Pro(1), TalonSensorType.Analog
                     );
         }
     }

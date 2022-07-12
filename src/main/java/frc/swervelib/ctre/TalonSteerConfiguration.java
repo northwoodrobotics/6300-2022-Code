@@ -2,13 +2,13 @@ package frc.swervelib.ctre;
 
 import java.util.Objects;
 
-public class TalonSteerConfiguration {
+public class TalonSteerConfiguration<TalonSensorType> {
     private final int motorPort;
     // encoder type, as in a CTRE MAG Encoder, or a MA3 Analog Encoder
-    private final EncoderType EncoderType;
+    private final TalonSensorType EncoderType;
 
     
-    public TalonSteerConfiguration(int motorPort, EncoderType type ){
+    public TalonSteerConfiguration(int motorPort, TalonSensorType type ){
         this.motorPort = motorPort; 
         this.EncoderType = type;
 
@@ -17,7 +17,7 @@ public class TalonSteerConfiguration {
         return motorPort;
     }
 
-    public EncoderType getEncoderConfiguration() {
+    public TalonSensorType getEncoderConfiguration() {
         return EncoderType;
     }
 
@@ -41,9 +41,6 @@ public class TalonSteerConfiguration {
                 '}';
     }
 
-    public enum EncoderType{
-        Analog, Digital
-    }
 
 
  
