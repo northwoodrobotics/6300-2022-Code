@@ -71,7 +71,7 @@ public class TalonSteerModuleConfiguration {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Mk4ModuleConfiguration that = (Mk4ModuleConfiguration) o;
+        TalonSteerModuleConfiguration that = (TalonSteerModuleConfiguration) o;
         return Double.compare(that.getNominalVoltage(), getNominalVoltage()) == 0 && Double.compare(that.getDriveCurrentLimit(), getDriveCurrentLimit()) == 0 && Double.compare(that.getSteerCurrentLimit(), getSteerCurrentLimit()) == 0;
     }
 

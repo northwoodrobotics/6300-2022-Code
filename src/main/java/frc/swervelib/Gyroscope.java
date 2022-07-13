@@ -3,6 +3,7 @@ package frc.swervelib;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public interface Gyroscope {
+  
   /**
    * Gets the current heading (Yaw) as reported by the gyroscope.
    * @return The Rotation2d value of the heading.
@@ -16,6 +17,10 @@ public interface Gyroscope {
   * 'forwards' direction.
   */
   void zeroGyroscope(double angle);
+
+
+
+
 
   /**
    * Sets the simulated gyroscope to a specified angle

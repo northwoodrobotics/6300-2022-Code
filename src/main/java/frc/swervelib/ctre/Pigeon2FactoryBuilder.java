@@ -24,10 +24,7 @@ public class Pigeon2FactoryBuilder {
             this.pigeon = pigeon;
            // pigeonSim = pigeon.getSimCollection();
         }
-     /*   @Override 
-        public void calibrateGyroscope(){
-            pigeon.calibrate();
-        }*/
+     
         @Override
         public void zeroGyroscope(double angle) {
             gyroOffset = angle - getGyroHeading().getDegrees();

@@ -22,7 +22,7 @@ public class TalonSteerFactoryBuilder {
     private static final int CAN_TIMEOUT_MS = 250;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
     
-    private static final double TICKS_PER_ROTATION = 2048.0;
+    private static final double TICKS_PER_ROTATION = 4028.0;
     private static final double SRX_MAG_TICS = 4028.0;
     private static final double VERSAPLANETARY_TICS = 2048.0;
 
@@ -97,9 +97,13 @@ public class TalonSteerFactoryBuilder {
         @Override
         public ControllerImplementation create(TalonSteerConfiguration<T> steerConfiguration, ModuleConfiguration moduleConfiguration) {
            
-
+            TalonSRXFeedbackDevice feedback = steerConfiguration.getEncoderConfiguration();
+            double offset = steerConfiguration.getOffset(); 
             final double sensorPositionCoefficient = 2.0 * Math.PI / TICKS_PER_ROTATION * moduleConfiguration.getSteerReduction();
             final double sensorVelocityCoefficient = sensorPositionCoefficient * 10.0;
+            
+            
+            
 
             TalonSRXConfiguration motorConfiguration = new TalonSRXConfiguration();
             if (hasPidConstants()) {
@@ -129,8 +133,38 @@ public class TalonSteerFactoryBuilder {
 
             if (hasVoltageCompensation()) {
                 motor.enableVoltageCompensation(true);
+
+            
             }
-            motor.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.Analog, 0, CAN_TIMEOUT_MS);
+           
+            switch(feedback){
+                default: 
+                motor.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.Analog, 0, CAN_TIMEOUT_MS);
+                case Analog: 
+                motor.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.Analog, 0, CAN_TIMEOUT_MS);
+                break; 
+                case  CTRE_MagEncoder_Absolute: 
+                motor.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, CAN_TIMEOUT_MS);
+                motor.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 1, CAN_TIMEOUT_MS);
+
+
+            }
+                       
+            switch(feedback){
+                default: 
+                motor.setSelectedSensorPosition(motor.getSelectedSensorPosition(0)- offset);
+                case Analog: 
+                motor.setSelectedSensorPosition(motor.getSelectedSensorPosition(0)- offset);
+                break; 
+                case  CTRE_MagEncoder_Absolute: 
+                motor.setSelectedSensorPosition(motor.getSelectedSensorPosition(0)/sensorPositionCoefficient- offset);
+                break;
+
+            }
+            
+
+            
+
             motor.setSensorPhase(true);
             motor.setInverted(moduleConfiguration.isSteerInverted() ? InvertType.InvertMotorOutput : InvertType.None);
             motor.setNeutralMode(NeutralMode.Brake);
@@ -149,7 +183,7 @@ public class TalonSteerFactoryBuilder {
             return new ControllerImplementation(motor,
                     sensorPositionCoefficient,
                     sensorVelocityCoefficient,
-                    hasMotionMagic() ? TalonSRXControlMode.MotionMagic : TalonSRXControlMode.Position, DCMotor.getVex775Pro(1), TalonSensorType.Analog
+                    hasMotionMagic() ? TalonSRXControlMode.MotionMagic : TalonSRXControlMode.Position, DCMotor.getVex775Pro(1), feedback
                     );
         }
     }
@@ -158,7 +192,7 @@ public class TalonSteerFactoryBuilder {
         private final WPI_TalonSRX motor;
         private final double motorEncoderPositionCoefficient;
         private final TalonSRXControlMode motorControlMode;
-        private final TalonSensorType sensor;
+        private final TalonSRXFeedbackDevice sensor;
         private final DCMotor motorType; 
 
 
@@ -169,7 +203,7 @@ public class TalonSteerFactoryBuilder {
         private ControllerImplementation(WPI_TalonSRX motor,
                                          double motorEncoderPositionCoefficient,
                                          double motorEncoderVelocityCoefficient,
-                                         TalonSRXControlMode motorControlMode, DCMotor motorType, TalonSensorType sensor
+                                         TalonSRXControlMode motorControlMode, DCMotor motorType, TalonSRXFeedbackDevice sensor
                                          ) {
             this.motor = motor;
             this.motorEncoderPositionCoefficient = motorEncoderPositionCoefficient;
@@ -189,14 +223,16 @@ public class TalonSteerFactoryBuilder {
 
             double currentAngleRadians;
 
-            switch(this.sensor){
+            switch(sensor){
                 default: 
-                currentAngleRadians = motor.getSelectedSensorPosition();
+                currentAngleRadians = Math.toRadians(motor.getSelectedSensorPosition());
                 case Analog: 
-                currentAngleRadians = motor.getSelectedSensorPosition();
+                currentAngleRadians = Math.toRadians(motor.getSelectedSensorPosition());
                 break; 
-                case Digital:
-                currentAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
+                case CTRE_MagEncoder_Absolute:
+                currentAngleRadians = Math.toRadians(motor.getSelectedSensorPosition(0) * motorEncoderPositionCoefficient);
+
+
                 break;
 
 
@@ -241,9 +277,9 @@ public class TalonSteerFactoryBuilder {
                 default: 
                 motorAngleRadians = motor.getSelectedSensorPosition();
                 case Analog: 
-                motorAngleRadians = motor.getSelectedSensorPosition();
+                motorAngleRadians = Math.toRadians(motor.getSelectedSensorPosition());
                 break; 
-                case Digital:
+                case CTRE_MagEncoder_Absolute:
                 motorAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
                 break;
 

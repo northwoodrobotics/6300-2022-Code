@@ -2,24 +2,35 @@ package frc.swervelib.ctre;
 
 import java.util.Objects;
 
-public class TalonSteerConfiguration<TalonSensorType> {
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
+
+public class TalonSteerConfiguration<EncoderType> {
     private final int motorPort;
     // encoder type, as in a CTRE MAG Encoder, or a MA3 Analog Encoder
-    private final TalonSensorType EncoderType;
+    private final EncoderType encoder;
+    private final TalonSRXFeedbackDevice encoderType;
+    private final double encoderOffset; 
 
     
-    public TalonSteerConfiguration(int motorPort, TalonSensorType type ){
+    public TalonSteerConfiguration(int motorPort, TalonSRXFeedbackDevice type, EncoderType sensor, double offset){
         this.motorPort = motorPort; 
-        this.EncoderType = type;
+        this.encoderType = type;
+        this.encoder = sensor;
+        this.encoderOffset = offset; 
+
 
     }
     public int getMotorPort() {
         return motorPort;
     }
-
-    public TalonSensorType getEncoderConfiguration() {
-        return EncoderType;
+    public double getOffset(){
+        return encoderOffset;
     }
+
+    public TalonSRXFeedbackDevice getEncoderConfiguration() {
+        return encoderType;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -35,9 +46,9 @@ public class TalonSteerConfiguration<TalonSensorType> {
     }
     @Override
     public String toString() {
-        return "Falcon500SteerConfiguration{" +
+        return "TalonSteerConfiguration{" +
                 "motorPort=" + motorPort +
-                ", encoderConfiguration=" + EncoderType +
+                ", encoderConfiguration=" + encoderType +
                 '}';
     }
 
