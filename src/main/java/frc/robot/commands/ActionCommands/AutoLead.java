@@ -28,6 +28,7 @@ public class AutoLead extends CommandBase{
     private final Timer m_timer = new Timer();
     private Pose2d RobotPose;
     private Transform2d vectorToGoal; 
+    private Transform2d vectorToPredicted;
     public AutoLead(SwerveSubsystem drive, TurretSubsystem turret, ShooterSubsystem shooter, Vision blindlight, boolean updatePose){
         this.m_drive = drive;
         this.m_turret = turret;
@@ -47,14 +48,16 @@ public class AutoLead extends CommandBase{
         ChassisSpeeds FieldVelocity = m_drive.dt.getFieldRelativeSpeeds();
         ChassisSpeeds FieldAccel = m_drive.dt.getFieldReltaiveAcceleration(); 
         ChassisSpeeds FieldJerk = m_drive.dt.getFieldRelativeJerk(); 
+        vectorToGoal = Constants.VisionConstants.GoalPose.minus(RobotPose);
 
-        double PredictedGoalX = VisionConstants.GoalPose.getX()-(FieldVelocity.vxMetersPerSecond*ShooterConstants.ShotTime+ (1/2*(FieldAccel.vxMetersPerSecond+(FieldJerk.vxMetersPerSecond*ShooterConstants.ShotTime)))*Math.pow(ShooterConstants.ShotTime, 2));
-        double PredictedGoalY = VisionConstants.GoalPose.getY()-(FieldVelocity.vyMetersPerSecond*ShooterConstants.ShotTime+ (1/2*(FieldAccel.vyMetersPerSecond+(FieldJerk.vyMetersPerSecond*ShooterConstants.ShotTime)))*Math.pow(ShooterConstants.ShotTime, 2));
+        double PredictedGoalX = VisionConstants.GoalPose.getX()-(FieldVelocity.vxMetersPerSecond*ShooterConstants.ShotTime.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value)+ (1/2*(FieldAccel.vxMetersPerSecond+(FieldJerk.vxMetersPerSecond*ShooterConstants.ShotTime.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value)))*Math.pow(ShooterConstants.ShotTime.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value, 2);
+        double PredictedGoalY = VisionConstants.GoalPose.getY()-(FieldVelocity.vyMetersPerSecond*ShooterConstants.ShotTime.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value)+ (1/2*(FieldAccel.vyMetersPerSecond+(FieldJerk.vyMetersPerSecond*ShooterConstants.ShotTime.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value)))*Math.pow(ShooterConstants.ShotTime.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value, 2);
 
         Pose2d PredictedGoal = new Pose2d(PredictedGoalX, PredictedGoalY, Rotation2d.fromDegrees(0)); 
 
         RobotPose = m_drive.dt.getPose(); 
-        vectorToGoal = PredictedGoal.minus(RobotPose);
+        vectorToGoal = Constants.VisionConstants.GoalPose.minus(RobotPose);
+        vectorToPredicted = PredictedGoal.minus(RobotPose);
         double turretToGoal = vectorToGoal.getRotation().getDegrees()-RobotPose.getRotation().getDegrees(); 
         if (!m_blindlight.hasTarget()){
             m_turret.setTurretAngle(turretToGoal);
@@ -62,8 +65,8 @@ public class AutoLead extends CommandBase{
             m_turret.setTurretAngle(turretToGoal- m_blindlight.getTargetAngleX());
 
         }
-        m_shooter.RunShooter(ShooterConstants.ShooterVelocityTable.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value);
-        m_shooter.setHoodTargetAngle((ShooterConstants.HoodPositionTable.getInterpolated(new InterpolatingDouble(vectorToGoal.getTranslation().getDistance(RobotPose.getTranslation()))).value));
+        m_shooter.RunShooter(ShooterConstants.ShooterVelocityTable.getInterpolated(new InterpolatingDouble(vectorToPredicted.getTranslation().getDistance(RobotPose.getTranslation()))).value);
+        m_shooter.setHoodTargetAngle((ShooterConstants.HoodPositionTable.getInterpolated(new InterpolatingDouble(vectorToPredicted.getTranslation().getDistance(RobotPose.getTranslation()))).value));
 
 
 

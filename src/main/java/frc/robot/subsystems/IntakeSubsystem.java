@@ -92,6 +92,7 @@ public class IntakeSubsystem extends SubsystemBase{
             
         }else if (WristLimit.get()){
             WristMotor.setSelectedSensorPosition(0);
+            isWristHome = true;
         }else if (!WristLimit.get()){
             WristMotor.set(ControlMode.PercentOutput, -wristPercentOutput);
         }

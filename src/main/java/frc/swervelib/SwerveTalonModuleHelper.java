@@ -14,7 +14,7 @@ public final  class SwerveTalonModuleHelper {
 
     }
 
-    private static  TalonSRXFeedbackDevice SwerveAndSteerDevice = TalonSRXFeedbackDevice.Analog;
+    private static TalonSRXFeedbackDevice SwerveAndSteerDevice = TalonSRXFeedbackDevice.Analog;
     private static TalonSRXFeedbackDevice TBDevice = TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute;
     private static GearRatio SwerveAndSteerRatio = GearRatio.SS; 
     private static GearRatio ThirftyRatio = GearRatio.TS; 
@@ -65,7 +65,6 @@ public final  class SwerveTalonModuleHelper {
             TalonSteerModuleConfiguration configuration,
             int driveMotorPort,
             int steerMotorPort,
-            int steerEncoderPort,
             double steerOffset,
             String namePrefix
     ) {
@@ -88,15 +87,14 @@ public final  class SwerveTalonModuleHelper {
     }
 
        /**
-     * Creates a AndyMark swerve module that uses Falcon 500s for driving and steering.
+     * Creates a AndyMark swerve module that uses Falcon 500s for driving and a Talon SRX for steering.
      * Module information is displayed in the specified ShuffleBoard container.
      *
      * @param container        The container to display module information in.
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
      * @param driveMotorPort   The CAN ID of the drive Falcon 500.
-     * @param steerMotorPort   The CAN ID of the steer Falcon 500.
-     * @param steerEncoderPort The CAN ID of the steer CANCoder.
+     * @param steerMotorPort   The CAN ID of the steer TalonSRX 500.
      * @param steerOffset      The offset of the CANCoder in radians.
      * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
@@ -104,10 +102,8 @@ public final  class SwerveTalonModuleHelper {
     public static SwerveModule createNEOSwerveAndSteer(
             ShuffleboardLayout container,
             TalonSteerModuleConfiguration configuration,
-            
             int driveMotorPort,
             int steerMotorPort,
-            int steerEncoderPort,
             double steerOffset,
             String namePrefix
     ) {
@@ -142,15 +138,13 @@ public final  class SwerveTalonModuleHelper {
      */
     public static SwerveModule createFalcon500SwerveAndSteer(
             ShuffleboardLayout container,
-            TalonSteerModuleConfiguration configuration,
             GearRatio gearRatio,
             int driveMotorPort,
             int steerMotorPort,
-            int steerEncoderPort,
             double steerOffset,
             String namePrefix
     ) {
-        return createFalconSwerveAndSteer(container, configuration, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset, namePrefix);
+        return createFalconSwerveAndSteer(container, new TalonSteerModuleConfiguration(), driveMotorPort, steerMotorPort, steerOffset, namePrefix);
     }
 
           /**
@@ -174,7 +168,6 @@ public final  class SwerveTalonModuleHelper {
         TalonSteerModuleConfiguration configuration,        
         int driveMotorPort,
         int steerMotorPort,
-        int steerEncoderPort,
         double steerOffset,
         String namePrefix
 ) {
@@ -191,7 +184,18 @@ public final  class SwerveTalonModuleHelper {
             ), namePrefix
             
     );
+
 }
+        public static SwerveModule createFalconThriftySwerve(
+        ShuffleboardLayout container,
+        GearRatio gearRatio,
+        int driveMotorPort,
+        int steerMotorPort,
+        double steerOffset,
+        String namePrefix
+        ) {
+        return createFalconThriftySwerve(container, new TalonSteerModuleConfiguration(), driveMotorPort, steerMotorPort, steerOffset, namePrefix);
+        }
 
 
 

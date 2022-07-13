@@ -9,6 +9,8 @@ import frc.swervelib.WCPSSModuleHelper;
 import frc.swervelib.SwerveConstants;
 import frc.swervelib.SwerveModule;
 import frc.swervelib.SwerveSubsystem;
+import frc.swervelib.SwerveTalonModuleHelper;
+import frc.swervelib.TalonSteerModuleConfiguration;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
@@ -29,9 +31,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 
 public class DrivetrainSubsystem {
         // in house plug and play swerve code. Copy and paste this file, along with the drivetrain constants section as long as you are using SDS MK4 Modules. 
@@ -98,6 +98,14 @@ public class DrivetrainSubsystem {
                 Constants.DriveConstants.BACK_RIGHT_MODULE_STEER_ENCODER,
                 Constants.DriveConstants.BACK_RIGHT_MODULE_STEER_OFFSET, "BR"
         );
+
+        SwerveModule testModule = SwerveTalonModuleHelper.createFalconThriftySwerve(
+                tab.getLayout("Test", BuiltInLayouts.kList), 
+                new TalonSteerModuleConfiguration(), 
+                5, 
+                6,  
+                Math.toRadians(180), 
+                "test");
 
         Gyroscope gyro = GyroscopeHelper.createPigeon2CAN(DriveConstants.PIGEON_ID);
 

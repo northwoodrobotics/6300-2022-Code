@@ -161,7 +161,7 @@ public final class Constants {
         public static final double Climb1F = 0.045;
         public static final double Climb1MotionAccel = 8192; 
         public static final double Climb1MotionVelocity =8192; 
-        public static final double Climb2P = 0.0;
+        public static final double Climb2P = 0.5;
         public static final double Climb2F = 0.045;
         public static final double Climb2D = 0.0;
         public static final double Climb2I = 0.0;
@@ -264,6 +264,20 @@ public final class Constants {
             HoodPositionTable.put(new InterpolatingDouble(3.5), new InterpolatingDouble(35.0));
             HoodPositionTable.put(new InterpolatingDouble(4.0), new InterpolatingDouble(37.5));            
         }
-        public static final double ShotTime = 3;
+        
+
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> ShotTime = new InterpolatingTreeMap<>(30);
+        static {
+            
+            ShotTime.put(new InterpolatingDouble(1.6), new InterpolatingDouble(2.0));
+            ShotTime.put(new InterpolatingDouble(1.8), new InterpolatingDouble(2.3));
+            ShotTime.put(new InterpolatingDouble(2.1), new InterpolatingDouble(2.5)); 
+            ShotTime.put(new InterpolatingDouble(2.4), new InterpolatingDouble(2.7));
+            ShotTime.put(new InterpolatingDouble(2.5), new InterpolatingDouble(2.8));
+            ShotTime.put(new InterpolatingDouble(2.7), new InterpolatingDouble(3.0));
+            ShotTime.put(new InterpolatingDouble(3.0), new InterpolatingDouble(3.4));
+            ShotTime.put(new InterpolatingDouble(3.5), new InterpolatingDouble(3.9));
+            ShotTime.put(new InterpolatingDouble(4.0), new InterpolatingDouble(4.2));            
+        }
     }
 }
