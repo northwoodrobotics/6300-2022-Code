@@ -5,9 +5,9 @@ import java.util.Objects;
 import edu.wpi.first.math.system.plant.DCMotor;
 
 /**
- * Additional Mk4 module configuration parameters.
+ * Additional WCP module configuration parameters.
  * <p>
- * The configuration parameters here are used to customize the behavior of the Mk4 swerve module.
+ * The configuration parameters here are used to customize the behavior of the WCP swerve module.
  * Each setting is initialized to a default that should be adequate for most use cases.
  */
 public class WCPSSModuleConfiguration {

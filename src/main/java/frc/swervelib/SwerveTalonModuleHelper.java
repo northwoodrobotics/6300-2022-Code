@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 public final  class SwerveTalonModuleHelper {
     private SwerveTalonModuleHelper(){
-
     }
 
     private static TalonSRXFeedbackDevice SwerveAndSteerDevice = TalonSRXFeedbackDevice.Analog;
     private static TalonSRXFeedbackDevice TBDevice = TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute;
+    private static TalonSRXFeedbackDevice TBDevice2 = TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative;
     private static GearRatio SwerveAndSteerRatio = GearRatio.SS; 
     private static GearRatio ThirftyRatio = GearRatio.TS; 
 

@@ -152,12 +152,12 @@ public class TalonSteerFactoryBuilder {
                        
             switch(feedback){
                 default: 
-                motor.setSelectedSensorPosition(motor.getSelectedSensorPosition(0)- offset);
+                motor.setSelectedSensorPosition(Math.toRadians(motor.getSelectedSensorPosition(0))- offset);
                 case Analog: 
-                motor.setSelectedSensorPosition(motor.getSelectedSensorPosition(0)- offset);
+                motor.setSelectedSensorPosition(Math.toRadians(motor.getSelectedSensorPosition(0))- offset);
                 break; 
                 case  CTRE_MagEncoder_Absolute: 
-                motor.setSelectedSensorPosition(motor.getSelectedSensorPosition(0)/sensorPositionCoefficient- offset);
+                motor.setSelectedSensorPosition(motor.getSelectedSensorPosition(0)*sensorPositionCoefficient- offset);
                 break;
 
             }
@@ -230,7 +230,7 @@ public class TalonSteerFactoryBuilder {
                 currentAngleRadians = Math.toRadians(motor.getSelectedSensorPosition());
                 break; 
                 case CTRE_MagEncoder_Absolute:
-                currentAngleRadians = Math.toRadians(motor.getSelectedSensorPosition(0) * motorEncoderPositionCoefficient);
+                currentAngleRadians = motor.getSelectedSensorPosition(0) * motorEncoderPositionCoefficient;
 
 
                 break;
