@@ -6,10 +6,12 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 
 public class TalonSteerConfiguration<EncoderType> {
     private final int motorPort;
-    // encoder type, as in a CTRE MAG Encoder, or a MA3 Analog Encoder
+    // encoder type, as in a CTRE MAG Encoder, or a MA3 Analog Encoder, only here for some funky paramater stuff
     private final EncoderType encoder;
+    // actual sensor type that the talon SRX recives 
     private final TalonSRXFeedbackDevice encoderType;
-    private final double encoderOffset; 
+    // encoder offset. 
+    private final double encoderOffset;
 
     
     public TalonSteerConfiguration(int motorPort, TalonSRXFeedbackDevice type, EncoderType sensor, double offset){
