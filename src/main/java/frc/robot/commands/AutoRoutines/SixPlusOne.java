@@ -8,22 +8,29 @@ import frc.robot.PathHolder;
 import frc.robot.commands.ActionCommands.DriveAndIntake;
 import frc.robot.commands.BlindLightCommands.LimelightSwitchLEDMode;
 import frc.robot.commands.SubsystemCommands.AutoCommands.AutoShoot;
+import frc.robot.commands.SubsystemCommands.AutoCommands.CheckVelocity;
 import frc.robot.commands.SubsystemCommands.FeederCommands.PurgeFeeder;
+import frc.robot.commands.SubsystemCommands.IntakeCommands.IntakeDeploy;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.swervelib.SwerveSubsystem;
 
-public class WackyTwoBall extends SequentialCommandGroup{
-   public  WackyTwoBall(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
+public class SixPlusOne extends SequentialCommandGroup{
+   public  SixPlusOne(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(
             
             new InstantCommand(() -> subsystem.dt.setKnownState(PathHolder.WackyTwoBall.getInitialState())),
             new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
-            new WaitCommand(3),
-            new DriveAndIntake(PathHolder.WackyTwoBall, subsystem, intake, feeder),
-            new ParallelDeadlineGroup(new AutoShoot(shooter, blindlight), new SequentialCommandGroup(new WaitCommand(.8), new PurgeFeeder(feeder)))
+            new DriveAndIntake(PathHolder.FourBall1, subsystem, intake, feeder),
+            new ParallelDeadlineGroup(new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder))),
+            new DriveAndIntake(PathHolder.FourBall2, subsystem, intake, feeder),
+            new WaitCommand(0.9),
+            new DriveAndIntake(PathHolder.SixBallPart1, subsystem, intake, feeder),
+            new ParallelDeadlineGroup(new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder))),
+            new DriveAndIntake(PathHolder.SixBallPart2, subsystem, intake, feeder),
+            new IntakeDeploy(intake, 1)
            
             
         );
