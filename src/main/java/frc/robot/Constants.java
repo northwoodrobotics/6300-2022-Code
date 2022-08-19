@@ -194,7 +194,7 @@ public final class Constants {
         public static final int MotionMagicCurve = 1;
         public static final double WristMinOutput = -1;
         public static final double WristGearRatio = 48;
-        public static final double WristPositionSensorCoffiecient = 1/2048*WristGearRatio;
+        public static final double WristPositionSensorCoffiecient = WristGearRatio/2048;
     }
     public final static class FeederConstants{
         public static final int FeederMotorID = 22;

@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -76,6 +75,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterConfig.supplyCurrLimit.enable = true; // turn on the current limt
         ShooterConfig.voltageCompSaturation = 11.5; // what this does is attempt to allways apply the same voltage to the flywheel, regardless of battery voltage, this works until your battery getst down to 10ish amps
         ShooterConfig.slot0.kF = ShooterConstants.ShooterFF; // F term for the PIDF loop
+        Shooter.enableVoltageCompensation(true);
+        ShooterFollower.enableVoltageCompensation(true);
 
         Shooter.configAllSettings(ShooterConfig); // apply the configuration for the shooter 
         ShooterFollower.configAllSettings(ShooterConfig); // apply the config to the follower motor (mostly for the current limit)

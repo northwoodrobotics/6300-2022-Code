@@ -31,10 +31,10 @@ import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 import frc.robot.commands.ActionCommands.*;
 import frc.robot.commands.AutoRoutines.FourBall;
 import frc.robot.commands.AutoRoutines.OneBall;
+import frc.robot.commands.AutoRoutines.SixPlusOne;
 import frc.robot.commands.AutoRoutines.SystemsCheck;
 import frc.robot.commands.AutoRoutines.TopSideTwoBall;
 import frc.robot.commands.AutoRoutines.TwoBall;
-import frc.robot.commands.AutoRoutines.WackyTwoBall;
 import frc.robot.commands.SubsystemCommands.FeederCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.FeederCommands.RunFeeder;
 import frc.robot.commands.SubsystemCommands.IntakeCommands.IntakeDeploy;
@@ -132,7 +132,7 @@ public class RobotContainer {
     autoChooser.addOption("SystemsCheck", new SystemsCheck(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("TopSideTwoBall", new TopSideTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("OneBall", new OneBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
-    autoChooser.addOption("WackyTwoBall", new WackyTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("SixPlusOne", new SixPlusOne(m_swerveSubsystem, shooter, blindlight, feeder, intake));
    
 
    

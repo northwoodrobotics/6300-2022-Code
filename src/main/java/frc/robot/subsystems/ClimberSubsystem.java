@@ -6,26 +6,10 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.google.errorprone.annotations.concurrent.GuardedBy;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase{
@@ -33,16 +17,10 @@ public class ClimberSubsystem extends SubsystemBase{
     //real stuff
     private TalonFX Climb1Talon = new TalonFX(ClimberConstants.ClimbMotor1);
     private TalonFX Climb2Talon = new TalonFX(ClimberConstants.ClimbMotor2);
-    private DigitalInput LatchLimit = new DigitalInput(7);
    
-
-
-    
-
     public ClimberSubsystem(){
         
         setBreakModes();
-        //Climb1Controller = ClimbMotor1.getPIDController();
         TalonFXConfiguration Climb1Config = new TalonFXConfiguration();
         Climb1Config.slot0.kP = ClimberConstants.Climb1P;
         Climb1Config.slot0.kI = ClimberConstants.Climb1I;
@@ -103,11 +81,9 @@ public class ClimberSubsystem extends SubsystemBase{
         
     }
 
-
-
     public void Climb1ToPositoin(double setpoint){
         Climb1Talon.set(ControlMode.MotionMagic, setpoint);
-       
+           
     }
 
     public void Climb2ToPosition(double setpoint){
@@ -115,12 +91,9 @@ public class ClimberSubsystem extends SubsystemBase{
         
     }
 
-
-
-
     private enum climbstate{
         Stowed,
-        StartClimb,WaitForSwing
+        StartClimb,ClimbMid,WaitForSwing
         ,
         ToHighBar,ToTraverse
         ,UnlatchHighBar, PercentOutput
@@ -132,54 +105,38 @@ public class ClimberSubsystem extends SubsystemBase{
     
      // State Machine for Citrus Climber 
         switch (state){
-            case Stowed:
-            Climb1ToPositoin(0);
-            Climb2ToPosition(0);
-        
-             
+             case Stowed:
+             Climb1ToPositoin(0);
+             Climb2ToPosition(0);
              break;
-          
              case StartClimb:
-              Climb1ToPositoin(20000);
-      
-             
+             Climb1ToPositoin(20000);
              break; 
-             case WaitForSwing:
+             case ClimbMid: 
              Climb1ToPositoin(0);
              Climb2ToPosition(15000);
              break;
-             case ToHighBar:
-            
+             case WaitForSwing:
              Climb2ToPosition(20000);
+             break;
+             case ToHighBar: 
+             Climb2ToPosition(0);
              Climb1ToPositoin(15000);
-          
              break; 
-
-             case ToTraverse: {
-                Climb2ToPosition(0);
-                Climb1ToPositoin(20000);
-                
-                
-                
-             }break;
-             case UnlatchHighBar:{
-                 if(LatchLimit.get() != false){
-                    Climb1ToPositoin(20000);
-                 }
-               
-                 
-                 
-                
+             case ToTraverse: 
+             Climb2ToPosition(0);
+             Climb1ToPositoin(20000);
+             break; 
+             case UnlatchHighBar:
+             Climb2ToPosition(4000);
+             break;
+                  
              }
-             
-             
-            
-             }
-        }
+    }
 
-        public void StartClimb(){
-            state = climbstate.StartClimb;
-        }
+    public void StartClimb(){
+        state = climbstate.StartClimb;
+    }
 
 
        
