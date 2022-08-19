@@ -48,8 +48,8 @@ public class TurretSubsystem extends SubsystemBase{
         turretConfig.forwardSoftLimitEnable = true; 
         turretConfig.reverseSoftLimitEnable = true; 
         turretMotor.enableVoltageCompensation(true);
-        turretConfig.forwardSoftLimitThreshold = TurretConstants.TurretForwardSoftLimit* TurretConstants.TurretPostionCoffiecient;
-        turretConfig.reverseSoftLimitThreshold = TurretConstants.TurretReverseSoftLimit* TurretConstants.TurretPostionCoffiecient;
+        turretConfig.forwardSoftLimitThreshold = TurretConstants.TurretForwardSoftLimit/ TurretConstants.TurretPostionCoffiecient;
+        turretConfig.reverseSoftLimitThreshold = TurretConstants.TurretReverseSoftLimit/ TurretConstants.TurretPostionCoffiecient;
         turretConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
         turretMotor.configAllSettings(turretConfig);
         turretMotor.setNeutralMode(NeutralMode.Brake);
