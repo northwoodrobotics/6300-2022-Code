@@ -18,5 +18,9 @@ public class PathHolder {
     public static PathPlannerTrajectory BallSteal = PathPlanner.loadPath("Le3Ball", 4, 0.5);
     public static PathPlannerTrajectory BallStealPart2 = PathPlanner.loadPath("Le3BallPart2", 4, 0.5);
     public static PathPlannerTrajectory BallStealPart3 = PathPlanner.loadPath("Le3BallPart3", 4, 0.5);
+    public static PathPlannerTrajectory SixBallPart1 = PathPlanner.loadPath("Six+Half Part 1", 4, 0.5);
+    public static PathPlannerTrajectory SixBallPart2 = PathPlanner.loadPath("Six+Half Part 2", 4, 0.5);
+    
+
   
 }

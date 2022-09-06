@@ -198,22 +198,6 @@ public final  class SwerveTalonModuleHelper {
         }
 
 
-
-    
-
-
-    
-
-    
-
-
-
-
-
-    
-
-
-
     public enum GearRatio {
         TS(TalonModuleConfigurations.ThriftySwerve),
         SS(TalonModuleConfigurations.SwerveAndSteer);

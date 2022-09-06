@@ -28,13 +28,13 @@ public class FourBall extends SequentialCommandGroup{
             new InstantCommand(() -> subsystem.dt.setKnownState(PathHolder.FourBall1.getInitialState())),
             new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
             new DriveAndIntake(PathHolder.FourBall1, subsystem, intake, feeder), 
-            new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder)),
+            new ParallelDeadlineGroup(new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder))),
             
             new DriveAndIntake(PathHolder.FourBall2, subsystem, intake, feeder),
-            new WaitCommand(1.5),//.alongWith(new IndexToReady(feeder)),
+            new WaitCommand(0.9),//.alongWith(new IndexToReady(feeder)),
             new AutoDrive(subsystem, PathHolder.FourBall3),
-            new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder))
-            //new HoodUp(shooter,37).alongWith(new ShooterCommand(shooter, blindlight).alongWith(new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
+            new ParallelCommandGroup( new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder)))
+           
         );
     }
 }

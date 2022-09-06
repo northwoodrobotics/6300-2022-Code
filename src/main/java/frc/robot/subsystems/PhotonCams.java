@@ -20,7 +20,6 @@ public class PhotonCams extends SubsystemBase{
 
     public Transform2d BallLocation(){
         var res = intakeCam.getLatestResult();
-        double imageCaptureTime = Timer.getFPGATimestamp() - res.getLatencyMillis();
         Transform2d camToBall = res.getBestTarget().getCameraToTarget();
         
 

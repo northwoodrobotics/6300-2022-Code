@@ -35,6 +35,7 @@ import frc.robot.commands.AutoRoutines.SixPlusOne;
 import frc.robot.commands.AutoRoutines.SystemsCheck;
 import frc.robot.commands.AutoRoutines.TopSideTwoBall;
 import frc.robot.commands.AutoRoutines.TwoBall;
+import frc.robot.commands.AutoRoutines.SixPlusOne;
 import frc.robot.commands.SubsystemCommands.FeederCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.FeederCommands.RunFeeder;
 import frc.robot.commands.SubsystemCommands.IntakeCommands.IntakeDeploy;

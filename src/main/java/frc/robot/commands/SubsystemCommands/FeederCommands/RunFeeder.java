@@ -17,6 +17,7 @@ public class RunFeeder extends CommandBase{
     }
     @Override
     public void initialize() {
+        m_feeder.SetFeederMode();
         
     }
     @Override
