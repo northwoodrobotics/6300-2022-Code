@@ -20,7 +20,7 @@ public class ClimberSubsystem extends SubsystemBase{
    
     public ClimberSubsystem(){
         
-        setBreakModes();
+       
         TalonFXConfiguration Climb1Config = new TalonFXConfiguration();
         Climb1Config.slot0.kP = ClimberConstants.Climb1P;
         Climb1Config.slot0.kI = ClimberConstants.Climb1I;
@@ -63,10 +63,7 @@ public class ClimberSubsystem extends SubsystemBase{
         
     }
     
-    public void setBreakModes(){
-        
-        
-    }
+   
     public void ExtendClimb(){
         Climb1Talon.set(TalonFXControlMode.PercentOutput, 1);
         Climb2Talon.set(TalonFXControlMode.PercentOutput, 1);

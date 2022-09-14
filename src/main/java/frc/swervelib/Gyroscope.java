@@ -10,6 +10,9 @@ public interface Gyroscope {
    */
   Rotation2d getGyroHeading();
 
+  Double getForwardAcceleration();
+  
+
   Double getGyroRoll();
 
   /**
@@ -34,4 +37,6 @@ public interface Gyroscope {
    * @return True/False if the gyro is ready to be used.
    */
   Boolean getGyroReady();
+
+  
 }

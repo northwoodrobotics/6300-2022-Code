@@ -21,7 +21,7 @@ public class SixPlusOne extends SequentialCommandGroup{
    public  SixPlusOne(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(
             
-            new InstantCommand(() -> subsystem.dt.setKnownState(PathHolder.WackyTwoBall.getInitialState())),
+            new InstantCommand(() -> subsystem.dt.setKnownState(PathHolder.FourBall1.getInitialState())),
             new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
             new DriveAndIntake(PathHolder.FourBall1, subsystem, intake, feeder),
             new ParallelDeadlineGroup(new SequentialCommandGroup(new CheckVelocity(), new PurgeFeeder(feeder))),
