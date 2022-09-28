@@ -3,39 +3,19 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.music.Orchestra;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
-import com.revrobotics.SparkMaxAnalogSensor;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAnalogSensor;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import frc.ExternalLib.CitrusLib.Subsystem;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.ExternalLib.CitrusLib.ServoMotorSubsystem.PeriodicIO;
 import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
 import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
-import com.revrobotics.AnalogInput;
+
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 import java.util.OptionalDouble;
 
-import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.LinearServo;
-import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.RevThroughBore;
 
 
 
@@ -43,12 +23,9 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     private TalonFX Shooter = new TalonFX(Constants.ShooterConstants.ShooterID);
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private TalonFX HoodMotor = new TalonFX(Constants.ShooterConstants.HoodID);
-    private Orchestra ShooterOrchestra = new Orchestra();
-    //private Servo shooteServe1 = new Servo(ShooterConstants.HoodServoID);
-    //private Servo ShooterServo = new Servo(ShooterConstants.HoodServoID);
-    //private Servo ShooterServo2 = new Servo(ShooterConstants.HoodServo2ID);
-    private static PeriodicIO mPeriodicIO = new PeriodicIO();
+  
 
+   
     
 
     private static final SendableChooser<String> SongChooser = new SendableChooser<>();
@@ -62,23 +39,12 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     
 
     
-    //private RelativeEncoder HoodEncoder;
-    //private RevThroughBore HoodAbsEncoder = new RevThroughBore(Constants.ShooterConstants.HoodEncoderID, "HoodEncoder",Constants.ShooterConstants.HoodOffset );
-   // private SparkMaxAlternateEncoder HoodEncoder;
-    //private SparkMaxPIDController HoodController;
     private final NetworkTableEntry HoodAngleEntry;
     private boolean IsHoodHomed;
     private HoodControlMode hoodControlMode = HoodControlMode.DISABLED;
     private double hoodTargetPosition = Double.NaN;
     private double hoodPercentOutput = 0.0;
-    private static final int ENCODER_RESET_ITERATIONS = 500;
-    private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
-    private double resetIteration = 0;
-    private double referenceAngleRadians = 0;
-    private double HoodZero = 0.0;
-    private double HoodHalf = 0.5;
-    private double HoodMax = 1.0;
-    private double HoodMin = -1.0;
+ 
 
 
 
@@ -88,8 +54,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         Shooter.configFactoryDefault();
         ShooterFollower.configFactoryDefault();
-        //ShooterServo.setBounds(2.0,1.8,1.5, 1.2, 1.0);
-        //ShooterServo2.setBounds(2.0,1.8,1.5, 1.2, 1.0);
+    
         Shooter.setStatusFramePeriod(21, 200);
         ShooterFollower.setStatusFramePeriod(21, 200);
 
@@ -110,6 +75,8 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         ShooterConfig.supplyCurrLimit.enable = true; // turn on the current limt
         ShooterConfig.voltageCompSaturation = 11.5; // what this does is attempt to allways apply the same voltage to the flywheel, regardless of battery voltage, this works until your battery getst down to 10ish amps
         ShooterConfig.slot0.kF = ShooterConstants.ShooterFF; // F term for the PIDF loop
+        Shooter.enableVoltageCompensation(true);
+        ShooterFollower.enableVoltageCompensation(true);
 
         Shooter.configAllSettings(ShooterConfig); // apply the configuration for the shooter 
         ShooterFollower.configAllSettings(ShooterConfig); // apply the config to the follower motor (mostly for the current limit)
@@ -122,8 +89,6 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         SongChooser.addOption("Stayin Alive", stayinalive);
         music.add(SongChooser);
 
-        //HoodEncoder = HoodMotor.getEncoder();
-       
         
 
         /* the hood uses motion magic control. This is very similar to positon PIDF, but with some extra sauce added. 
@@ -161,24 +126,14 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
 
         HoodMotor.configAllSettings(HoodConfig);
         HoodMotor.setNeutralMode(NeutralMode.Brake); // set it in brake mode, essentaly lightly stalling the motor to keep in place. 
-        //HoodController = HoodMotor.getPIDController();
-        //HoodController.setFeedbackDevice(HoodEncoder);
-        //HoodController.setP(Constants.ShooterConstants.HoodP);
-        //HoodController.setI(Constants.ShooterConstants.HoodI);
-        //HoodController.setD(Constants.ShooterConstants.HoodD);
-        //HoodController.setIZone(Constants.ShooterConstants.HoodIZone);
-        //HoodController.setFF(Constants.ShooterConstants.HoodFF);
-        //HoodController.setOutputRange(Constants.ShooterConstants.HoodMinOutput, Constants.ShooterConstants.HoodMaxOutput);
-        //HoodEncoder.setPositionConversionFactor(1/200);
-        //HoodEncoder.setPositionConversionFactor(factor);*/
 
-        ShooterOrchestra.addInstrument(Shooter);
-        ShooterOrchestra.addInstrument(ShooterFollower);
+
+       
 
 
 
 
-        //HoodEncoder = HoodMotor.getAlternateEncoder(encoderType, countsPerRev)
+        
 
         // shufflboard is used on the driverstation to see robot data. this page is for the shooter, mostly for tuning. 
         ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -218,9 +173,6 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
         
     }
     
-   /* public void percentoutput(double speed){
-        Shooter.set(ControlMode.PercentOutput, speed);
-    }*/
 
     // hood falcon to percent output control, largely unused
     public void setHoodMotorPower(double percent) {
@@ -237,22 +189,10 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     
     // runs shooter at set RPM
     public void RunShooter(double speed){
-        //double feedForward = (Constants.ShooterConstants.ShooterFF*speed+Constants.ShooterConstants.StaticFriction)/RobotController.getBatteryVoltage();
+       
         Shooter.set(ControlMode.Velocity, -speed/Constants.ShooterConstants.ShooterVelocitySensorCoffiecient);
     }
-    public void PauseMusic(){
-        ShooterOrchestra.pause();
-    }
-    public void LoadMusic(){
-        ShooterOrchestra.loadMusic(SongChooser.getSelected());
-    }
-    public void PlayMusic(){
-        ShooterOrchestra.play();
-    }
-    public void StopMusic(){
-        ShooterOrchestra.stop();
-        
-    }
+ 
     public void stopFlywheel() {
         Shooter.set(ControlMode.Disabled, 0);
     }
@@ -301,44 +241,12 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
             return false;
         }
 
-        return MathUtils.epsilonEquals(targetAngle.getAsDouble(), currentAngle, Math.toRadians(1.0));
+        return MathUtils.epsilonEquals(targetAngle.getAsDouble(), currentAngle, Math.toRadians(0.1));
     }
     public double getShooterTargetVelocity(){
         return Shooter.getClosedLoopTarget()*Constants.ShooterConstants.ShooterVelocitySensorCoffiecient;
     }
-    /*
-    @SuppressWarnings("SelfAssignment")
-    public void setReferenceAngle(double refereneceAngleRadians){
-        double currentAngleRadians = HoodEncoder.getPosition();
-        if (HoodEncoder.getVelocity() < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
-            if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
-                resetIteration = 0;
-                double absoluteAngle = HoodAbsEncoder.getDistanceDegrees();
-                HoodEncoder.setPosition(absoluteAngle);
-                currentAngleRadians = absoluteAngle;
-            }
-        } else {
-            resetIteration = 0;
-        }
-        
-        double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
-        if (currentAngleRadiansMod < 0.0) {
-            currentAngleRadiansMod += 2.0 * Math.PI;
-        }
-
-        // The reference angle has the range [0, 2pi) but the Neo's encoder can go above that
-        double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
-        if (referenceAngleRadians - currentAngleRadiansMod > Math.PI) {
-            adjustedReferenceAngleRadians -= 2.0 * Math.PI;
-        } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
-            adjustedReferenceAngleRadians += 2.0 * Math.PI;
-        }
-
-        this.referenceAngleRadians = referenceAngleRadians;
-
-        HoodController.setReference(adjustedReferenceAngleRadians, ControlType.kPosition);
-
-    }*/
+  
 
     
     
@@ -365,15 +273,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
                     targetAngle = MathUtils.clamp(targetAngle, ShooterConstants.HoodMinAngle, ShooterConstants.HoodMaxAngle);// this function was borrowed from 2910 Jack-In-The-Bot, and simplly forces the hood to stay within its own min an max angles
                 
                     HoodMotor.set(ControlMode.MotionMagic, angleToTalonUnits(targetAngle)); // Hood Falcon recives the target angle 
-                    //HoodController.setReference(targetAngle, ControlType.kPosition);
-                   
-                     
-                  //  double targetAngle = getHoodTargetAngle().getAsDouble();
-                   // targetAngle = MathUtils.clamp(targetAngle, Constants.ShooterConstants.HoodMinAngle, Constants.ShooterConstants.HoodMaxAngle);
-                    
-                   //Output = HoodController.calculate(HoodEncoder.getPosition(), targetAngle);
-                    //HoodMotor.set(Output);*//*
-                    //setReferenceAngle(Units.degreesToRadians(targetAngle));
+                 
 
                 }
                 break;
@@ -382,16 +282,10 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
                 break;
         }
 
-        //HoodAngleEntry.setDouble(getHoodTargetAngle().getAsDouble());
-
+       
         
     }
-    /*
-    public double getHoodMotorAngle(){
-        return HoodEncoder.getPosition();
-    }
-    */
-
+   
 
 
     private double talonUnitsToHoodAngle(double talonUnits) {
@@ -412,14 +306,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     } 
     public boolean isHoodHomed() {
         return IsHoodHomed;
-    } /*
-    public void zeroHoodMotor() {
-        this.IsHoodHomed = true;
-
-        double sensorPosition = (0);
-        HoodEncoder.setPosition((int) sensorPosition);
-    }*/
-    
+    } 
     public String getControlMode(){
         return hoodControlMode.toString();
     }

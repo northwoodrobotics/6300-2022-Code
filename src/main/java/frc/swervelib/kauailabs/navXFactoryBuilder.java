@@ -33,16 +33,25 @@ public class navXFactoryBuilder {
             }
             // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
             return Rotation2d.fromDegrees(360.0 - navX.getYaw() + gyroOffset);
+            
         }
 
         @Override
         public Boolean getGyroReady() {
             return !navX.isCalibrating();
         }
+        @Override 
+        public Double getForwardAcceleration(){
+            return (double) navX.getRawAccelX();
+        }
 
         @Override
         public void zeroGyroscope(double angle) {
             gyroOffset = angle - getGyroHeading().getDegrees();
+        }
+        @Override 
+        public Double getGyroRoll(){
+            return Double.valueOf(navX.getRoll());
         }
 
         @Override

@@ -37,6 +37,14 @@ public class SwerveDrivetrainModel {
 
     Gyroscope gyro;
 
+    Timer keepAngleTimer = new Timer();
+    double keepAngle = 0.0;       //Double to store the current target keepAngle in radians
+    double timeSinceRot = 0.0;    //Double to store the time since last rotation command
+    double lastRotTime = 0.0;     //Double to store the time of the last rotation command
+    double timeSinceDrive = 0.0;  //Double to store the time since last translation command
+    double lastDriveTime = 0.0;   //Double to store the time of the last translation command
+  
+
     Pose2d endPose;
     PoseTelemetry dtPoseView;
 
@@ -51,12 +59,25 @@ public class SwerveDrivetrainModel {
             SwerveConstants.THETACONTROLLERkP, 0, 0, SwerveConstants.THETACONTROLLERCONSTRAINTS);
 
     HolonomicDriveController m_holo;
+
+
     
     private static final SendableChooser<String> orientationChooser = new SendableChooser<>();
 
     private double forwardSlow = 1.0;
     private double strafeSlow = 1.0;
     private double rotateSlow = 1.0;
+
+
+    SwerveModuleState[] noPushStates;{
+        noPushStates[0] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+        noPushStates[1] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(315));
+        noPushStates[2] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(225));
+        noPushStates[3] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(135));
+        
+    }
+        
+   
 
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
@@ -177,6 +198,16 @@ public class SwerveDrivetrainModel {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         states = desiredStates;
+        
+    }
+    /** set modules to X pattern, which prevents  us from being pushed. */
+    public void setNoPush(){
+        states = noPushStates;
+        
+        
+    }
+    public void VisionPose(Pose2d VisionMeasurement){
+        m_poseEstimator.addVisionMeasurement(VisionMeasurement, Timer.getFPGATimestamp());
     }
 
     /**
@@ -186,6 +217,30 @@ public class SwerveDrivetrainModel {
      */
     public void setModuleStates(ChassisSpeeds chassisSpeeds) {
         states = SwerveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+    }
+    public void driveClean(double xTranslation, double yTranslation, double rotation){
+        double rot =KeepAngle(xTranslation, yTranslation, rotation);
+        setModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xTranslation, yTranslation, rot, getGyroscopeRotation()));
+    }
+    
+    public double KeepAngle(double xTranslation, double yTranslation, double rotation){
+        double output = rotation; //Output shouold be set to the input rot command unless the Keep Angle PID is called
+        if(Math.abs(rotation) >= SwerveConstants.kMinRotationCommand){  //If the driver commands the robot to rotate set the last rotate time to the current time
+          lastRotTime = keepAngleTimer.get();
+        }
+        if( Math.abs(xTranslation) >= SwerveConstants.kMinTranslationCommand  
+              || Math.abs(yTranslation) >= SwerveConstants.kMinTranslationCommand){ //if driver commands robot to translate set the last drive time to the current time
+          lastDriveTime = keepAngleTimer.get();
+        }
+        timeSinceRot = keepAngleTimer.get()-lastRotTime;      //update variable to the current time - the last rotate time
+        timeSinceDrive = keepAngleTimer.get()-lastDriveTime;  //update variable to the current time - the last drive time
+        if(timeSinceRot < 0.5){                               //Update keepAngle up until 0.5s after rotate command stops to allow rotation move to finish
+          keepAngle = getGyroscopeRotation().getDegrees();
+        }
+        else if(Math.abs(rotation) < SwerveConstants.kMinRotationCommand && timeSinceDrive < 0.25){ //Run Keep angle pid until 0.75s after drive command stops to combat decel drift
+          output = thetaController.calculate(getGyroscopeRotation().getDegrees(), keepAngle);               //Set output command to the result of the Keep Angle PID 
+        }
+        return output;
     }
 
     public void setModuleStates(SwerveInput input) {
@@ -232,7 +287,35 @@ public class SwerveDrivetrainModel {
     public void setKnownState(PathPlannerState initialState) {
         Pose2d startingPose = new Pose2d(initialState.poseMeters.getTranslation(), initialState.holonomicRotation);
         setKnownPose(startingPose);
+        
     }
+    public ChassisSpeeds getChassisSpeed(){
+        return  SwerveConstants.KINEMATICS.toChassisSpeeds(states[0], states[1],states[2], states[3]);
+    }
+    public ChassisSpeeds getFieldRelativeSpeeds(){    
+        return getChassisSpeed();
+           
+      }
+    public ChassisSpeeds getFieldReltaiveAcceleration(){
+        double lastTime = Timer.getFPGATimestamp(); 
+        ChassisSpeeds PreviousSpeeds = getFieldRelativeSpeeds(); 
+        return new ChassisSpeeds(
+            (getFieldRelativeSpeeds().vxMetersPerSecond-PreviousSpeeds.vxMetersPerSecond)/Timer.getFPGATimestamp()-lastTime, 
+            (getFieldRelativeSpeeds().vyMetersPerSecond-PreviousSpeeds.vyMetersPerSecond)/Timer.getFPGATimestamp()-lastTime,
+            (getFieldRelativeSpeeds().omegaRadiansPerSecond -PreviousSpeeds.omegaRadiansPerSecond)/Timer.getFPGATimestamp()-lastTime
+        );
+    }
+    public ChassisSpeeds getFieldRelativeJerk(){
+        double lastTime = Timer.getFPGATimestamp(); 
+        ChassisSpeeds PreviousSpeeds = getFieldReltaiveAcceleration(); 
+        return new ChassisSpeeds(
+            (getFieldReltaiveAcceleration().vxMetersPerSecond-PreviousSpeeds.vxMetersPerSecond)/Timer.getFPGATimestamp()-lastTime, 
+            (getFieldReltaiveAcceleration().vyMetersPerSecond-PreviousSpeeds.vyMetersPerSecond)/Timer.getFPGATimestamp()-lastTime,
+            (getFieldReltaiveAcceleration().omegaRadiansPerSecond -PreviousSpeeds.omegaRadiansPerSecond)/Timer.getFPGATimestamp()-lastTime
+        );
+    }
+      
+    
 
     public void zeroGyroscope() {
         gyro.zeroGyroscope(0.0);
@@ -244,6 +327,10 @@ public class SwerveDrivetrainModel {
     public Rotation2d getGyroscopeRotation() {
         SmartDashboard.putNumber("Gyro Angle", gyro.getGyroHeading().getDegrees());
         return gyro.getGyroHeading();
+    }
+
+    public Double GyroRoll(){
+        return gyro.getGyroRoll();
     }
 
     public Boolean getGyroReady() {
@@ -275,6 +362,7 @@ public class SwerveDrivetrainModel {
                 SwerveConstants.XPIDCONTROLLER,
                 SwerveConstants.YPIDCONTROLLER,
                 thetaController,
+                // feed states into controller
                 commandStates -> this.states = commandStates,
                 m_drive);
         return swerveControllerCommand.andThen(() -> setModuleStates(new SwerveInput(0,0,0)));

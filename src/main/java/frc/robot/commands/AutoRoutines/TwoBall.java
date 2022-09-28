@@ -27,24 +27,9 @@ public class TwoBall extends SequentialCommandGroup{
             new InstantCommand(() -> subsystem.dt.setKnownState(PathHolder.TwoBall.getInitialState())),
             new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
             new AutoDrive(subsystem, PathHolder.TwoBall), 
-            //new ShooterCommand(shooter, blindlight).alongWith(new PurgeFeeder(feeder, 0.3)),
             new DriveAndIntake(PathHolder.TwoBall2, subsystem, intake, feeder),
             new ParallelCommandGroup(new AutoShoot(shooter, blindlight, 24.5,-5500), new SequentialCommandGroup(new WaitCommand(1.5), new PurgeFeeder(feeder, 1)))
-            //new AutoDrive(subsystem, PathHolder.TwoBallExtended)
-            //new DriveAndIntake(PathHolder.TwoBallExtended, subsystem, intake, feeder)
-            
-            
-            //new AutoShoot(shooter, blindlight).alongWith(new HoodUp(shooter, 26.5)).alongWith( new PurgeFeeder(feeder, 0.5))
-            
-            //new AutoDrive(subsystem, PathHolder.TwoBall2).alongWith(new IntakeOutCommand(intake), new PurgeFeeder(feeder, 0.35), new ShooterCommand(shooter, blindlight) )
-
-           // new AutoDrive(subsystem, PathHolder.TwoBall2).alongWith(new IntakeOutCommand(intake)), 
-           // new ShooterCommand(shooter, blindlight).alongWith(new PurgeFeeder(feeder, 0.6))
-            
-            
-            /*new AutonTurnToTarget(subsystem).alongWith(new ShooterCommand(shooter, blindlight)).alongWith(
-                new WaitCommand(0.25).andThen(new PurgeFeeder(feeder, 0.5))*/
-            
+           
                       
         );
     }

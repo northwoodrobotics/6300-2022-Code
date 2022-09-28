@@ -11,6 +11,8 @@ public class PigeonFactoryBuilder {
     private static BasePigeonSimCollection pigeonSim;
 
     private static double gyroOffset = 0.0;
+    private static short[] AccelerationArray; 
+    private static double ForwardAcceleration;
 
     public Gyroscope build(WPI_PigeonIMU pigeon) {
         return new GyroscopeImplementation(pigeon);
@@ -22,12 +24,27 @@ public class PigeonFactoryBuilder {
         private GyroscopeImplementation(WPI_PigeonIMU pigeon) {
             this.pigeon = pigeon;
             pigeonSim = pigeon.getSimCollection();
+            
         }
 
         @Override
         public Rotation2d getGyroHeading() {
             return Rotation2d.fromDegrees(pigeon.getFusedHeading() + gyroOffset);
         }
+        @Override 
+        public Double getGyroRoll(){
+            return pigeon.getRoll();
+        
+
+        }
+        @Override
+        public Double getForwardAcceleration(){
+            pigeon.getBiasedAccelerometer(AccelerationArray);
+            ForwardAcceleration= AccelerationArray[0];
+            return ForwardAcceleration;
+       }
+
+
 
         @Override
         public Boolean getGyroReady() {

@@ -20,13 +20,7 @@ public class Vision extends SubsystemBase{
     NetworkTable limelight;
     ArrayList<Double> avgDistance = new ArrayList<>();
 
-	//RevThroughBore testEncoder = new RevThroughBore(1, "TestEncoder", 0);
-
-
-	/*public double getTestEncoderReading(){
-		return testEncoder.getDistanceDegrees();
-	}*/
-
+	
     public enum LEDMode {
 		PIPELINE(0),
 		LED_OFF(1),

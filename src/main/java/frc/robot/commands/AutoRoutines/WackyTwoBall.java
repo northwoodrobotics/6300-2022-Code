@@ -19,8 +19,7 @@ import frc.swervelib.SwerveSubsystem;
 public class WackyTwoBall extends SequentialCommandGroup{
    public  WackyTwoBall(SwerveSubsystem subsystem, ShooterSubsystem shooter, Vision blindlight, FeederSubsystem feeder, IntakeSubsystem intake){
         addCommands(
-            //new InstantCommand(() -> subsystem.dt.setKnownPose(PathH))),
-            //new InstantCommand(()-> subsystem.dt.setKnownPose(PathHolder.WackyTwoBall.getInitialPose())),
+            
             new InstantCommand(() -> subsystem.dt.setKnownState(PathHolder.WackyTwoBall.getInitialState())),
             new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
             new WaitCommand(3),

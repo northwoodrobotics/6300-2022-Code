@@ -4,13 +4,8 @@ import java.util.Objects;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 
-/**
- * Additional WCP module configuration parameters.
- * <p>
- * The configuration parameters here are used to customize the behavior of the WCP swerve module.
- * Each setting is initialized to a default that should be adequate for most use cases.
- */
-public class WCPSSModuleConfiguration {
+public class TalonSteerModuleConfiguration {
+
     private double nominalVoltage = 12.0;
     private double driveCurrentLimit = 80.0;
     private double steerCurrentLimit = 20.0;
@@ -76,7 +71,7 @@ public class WCPSSModuleConfiguration {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Mk4ModuleConfiguration that = (Mk4ModuleConfiguration) o;
+        TalonSteerModuleConfiguration that = (TalonSteerModuleConfiguration) o;
         return Double.compare(that.getNominalVoltage(), getNominalVoltage()) == 0 && Double.compare(that.getDriveCurrentLimit(), getDriveCurrentLimit()) == 0 && Double.compare(that.getSteerCurrentLimit(), getSteerCurrentLimit()) == 0;
     }
 
@@ -87,7 +82,7 @@ public class WCPSSModuleConfiguration {
 
     @Override
     public String toString() {
-        return "Mk4ModuleConfiguration{" +
+        return "SwerveSteerModuleConfiguration{" +
                 "nominalVoltage=" + nominalVoltage +
                 ", driveCurrentLimit=" + driveCurrentLimit +
                 ", steerCurrentLimit=" + steerCurrentLimit +
@@ -95,4 +90,5 @@ public class WCPSSModuleConfiguration {
                 ", driveMotor=" + driveMotor +
                 '}';
     }
+    
 }
