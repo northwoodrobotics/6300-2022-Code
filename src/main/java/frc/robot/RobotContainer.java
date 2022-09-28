@@ -51,7 +51,7 @@ import frc.robot.commands.SimCommands.TuneTables;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
 import frc.robot.commands.SubsystemCommands.RunFeeder;
 import frc.robot.commands.SubsystemCommands.FenderShot;
-
+import frc.robot.commands.SubsystemCommands.IdleFlyWheel;
 import frc.robot.commands.SubsystemCommands.IntakeCommand;
 import frc.robot.commands.SubsystemCommands.LowShot;
 import frc.robot.commands.SubsystemCommands.PurgeFeeder;
@@ -158,6 +158,7 @@ public class RobotContainer {
 
 
            // Configure the button bindings
+      shooter.setDefaultCommand(new IdleFlyWheel(shooter, blindlight));
 
     configureButtonBindings();
     ShowInputs();
