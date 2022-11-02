@@ -22,6 +22,20 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+
+  public enum RobotState {
+    DISABLED, AUTONOMOUS, TELEOP, TEST
+  }
+
+  public static RobotState s_robot_state = RobotState.DISABLED;
+
+  public static RobotState getState() {
+    return s_robot_state;
+  }
+
+  public static void setState(final RobotState state) {
+    s_robot_state = state;  
+  }
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.

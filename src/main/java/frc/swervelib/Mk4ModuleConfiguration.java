@@ -12,7 +12,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
  */
 public class Mk4ModuleConfiguration {
     private double nominalVoltage = 12.0;
-    private double driveCurrentLimit = 80.0;
+    private double driveCurrentLimit = 50.0;
     private double steerCurrentLimit = 20.0;
 
     private DCMotor driveMotor;

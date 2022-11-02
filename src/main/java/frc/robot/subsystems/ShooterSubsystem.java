@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.ExternalLib.JackInTheBotLib.math.MathUtils;
-import frc.ExternalLib.JackInTheBotLib.robot.UpdateManager;
+
 
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
@@ -19,7 +19,7 @@ import java.util.OptionalDouble;
 
 
 
-public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Updatable{
+public class ShooterSubsystem extends SubsystemBase {
     private TalonFX Shooter = new TalonFX(Constants.ShooterConstants.ShooterID);
     private TalonFX ShooterFollower = new TalonFX(Constants.ShooterConstants.ShooterFollowerID);
     private TalonFX HoodMotor = new TalonFX(Constants.ShooterConstants.HoodID);
@@ -196,9 +196,7 @@ public class ShooterSubsystem extends SubsystemBase implements UpdateManager.Upd
     public void stopFlywheel() {
         Shooter.set(ControlMode.Disabled, 0);
     }
-    @Override
-    public void update(double time, double dt) {
-    }
+
     // checkes if the flywheel is within the target velocity 
     public boolean isFlyWheelAtTargetVelocity(){
         return MathUtils.epsilonEquals(shooterSpeed(), getShooterTargetVelocity(), 300);

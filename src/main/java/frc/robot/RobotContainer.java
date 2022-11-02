@@ -215,7 +215,7 @@ public class RobotContainer {
     driveController.leftBumper.whileHeld(new ParallelDeadlineGroup(new RotateToTarget(m_swerveSubsystem, 
     () -> getDriveY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
           () -> driveController.leftStick.getX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
-          () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC)), true);
+          () -> driveController.rightStick.getX() *Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC, blindlight)), true);
     
       driveController.xButton.toggleWhenPressed(new IntakeMasterCommand(feeder, intake));
      

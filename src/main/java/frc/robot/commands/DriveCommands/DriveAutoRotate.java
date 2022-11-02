@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.Vision;
 import frc.swervelib.SwerveSubsystem;
 import java.util.function.DoubleSupplier;
 public class DriveAutoRotate extends CommandBase {
@@ -22,14 +23,16 @@ public class DriveAutoRotate extends CommandBase {
     
     private final DoubleSupplier m_translationXSupplier;
     private final DoubleSupplier m_translationYSupplier;
+    private final Vision m_Limelight;
     
     private Transform2d vectorToGoal; 
     public DriveAutoRotate( SwerveSubsystem subsystem, DoubleSupplier translationXSupplier,
-    DoubleSupplier translationYSupplier) {
+    DoubleSupplier translationYSupplier, Vision LimeLight) {
         addRequirements(subsystem);
         this.m_SwerveSubsystem = subsystem;
         this.m_translationXSupplier = translationXSupplier;
         this.m_translationYSupplier = translationYSupplier;
+        this.m_Limelight = LimeLight;
        
 
        
@@ -47,7 +50,7 @@ public class DriveAutoRotate extends CommandBase {
         double XTranslation = m_translationXSupplier.getAsDouble();
         double YTranslation = m_translationYSupplier.getAsDouble();
        
-        double angleToGoal = vectorToGoal.getRotation().getDegrees(); 
+        double angleToGoal = vectorToGoal.getRotation().getDegrees()-m_Limelight.getTargetAngleX(); 
         vectorToGoal = VisionConstants.GoalPose.minus(m_SwerveSubsystem.dt.getPose());
 
 

@@ -16,14 +16,14 @@ public class RotateToTarget extends SequentialCommandGroup{
 
    public RotateToTarget(SwerveSubsystem subsystem, DoubleSupplier translationXSupplier,
     DoubleSupplier translationYSupplier,
-    DoubleSupplier rotationSupplier){
+    DoubleSupplier rotationSupplier, Vision blindlight){
        addCommands(
            new LimelightSwitchLEDMode(Vision.LEDMode.LED_ON),
            new ParallelCommandGroup(
             new LimelightWaitForTarget(),
             
                 
-               new DriveAutoRotate(subsystem, translationXSupplier, translationYSupplier, rotationSupplier)
+               new DriveAutoRotate(subsystem, translationXSupplier, translationYSupplier, blindlight)
            )
        );
    }
