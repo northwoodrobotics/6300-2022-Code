@@ -207,9 +207,9 @@ public final class Constants {
         static{
             // tune
             
-            ShooterVelocityTable.put(new InterpolatingDouble(1.3),new InterpolatingDouble(-5000.0));
-            ShooterVelocityTable.put(new InterpolatingDouble(1.8),new InterpolatingDouble(-5500.0));
-            ShooterVelocityTable.put(new InterpolatingDouble(1.9),new InterpolatingDouble(-5750.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(1.3),new InterpolatingDouble(-5500.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(1.8),new InterpolatingDouble(-6000.0));
+            ShooterVelocityTable.put(new InterpolatingDouble(1.9),new InterpolatingDouble(-6150.0));
             ShooterVelocityTable.put(new InterpolatingDouble(2.0),new InterpolatingDouble(-6500.0));
             ShooterVelocityTable.put(new InterpolatingDouble(2.2),new InterpolatingDouble(-6500.0));
             ShooterVelocityTable.put(new InterpolatingDouble(3.0),new InterpolatingDouble(-8000.0));
