@@ -133,7 +133,7 @@ public final class Constants {
         public static final double MotionMagicVelocity = 8192;
         public static final int MotionMagicCurve = 1;
         public static final double TurretMinOutput = -1;
-        public static final double TurretGearRatio = 1/125.45;
+        public static final double TurretGearRatio = 1/125.45* Math.PI;
         public static final double TurretPostionCoffiecient =  TurretGearRatio/2048;
         public static final double TurretForwardSoftLimit = 390; 
         public static final double TurretReverseSoftLimit = -370;

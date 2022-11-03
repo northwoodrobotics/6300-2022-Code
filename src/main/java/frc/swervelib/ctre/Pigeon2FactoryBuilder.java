@@ -53,7 +53,7 @@ public class Pigeon2FactoryBuilder {
         public Double getForwardAcceleration(){
              pigeon.getBiasedAccelerometer(AccelerationArray);
              ForwardAcceleration= AccelerationArray[0];
-             return ForwardAcceleration;
+             return ForwardAcceleration/16384;
         }
 
 
