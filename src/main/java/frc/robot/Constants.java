@@ -30,7 +30,8 @@ public final class Constants {
         public static final double TargetHeight = Units.inchesToMeters(102);
         public static final double blindlightHeight = Units.inchesToMeters(40);
         public static final double blindlightAngle = 23;
-        public static final Pose2d GoalPose = new Pose2d(4, 6, Rotation2d.fromDegrees(0));
+        public static final Pose2d GoalPose = new Pose2d(8.23, 4.12, Rotation2d.fromDegrees(0));
+        public static final double HubRadius = Units.feetToMeters(2);
 
     }
     public static final class DriveConstants{
