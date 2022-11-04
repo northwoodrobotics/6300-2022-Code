@@ -68,15 +68,6 @@ public class SwerveDrivetrainModel {
     private double strafeSlow = 1.0;
     private double rotateSlow = 1.0;
 
-
-    SwerveModuleState[] noPushStates;{
-        noPushStates[0] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
-        noPushStates[1] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(315));
-        noPushStates[2] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(225));
-        noPushStates[3] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(135));
-        
-    }
-        
    
 
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
@@ -201,11 +192,7 @@ public class SwerveDrivetrainModel {
         
     }
     /** set modules to X pattern, which prevents  us from being pushed. */
-    public void setNoPush(){
-        states = noPushStates;
-        
-        
-    }
+
     public void VisionPose(Pose2d VisionMeasurement){
         m_poseEstimator.addVisionMeasurement(VisionMeasurement, Timer.getFPGATimestamp());
     }
