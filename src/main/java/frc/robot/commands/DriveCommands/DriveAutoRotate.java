@@ -2,6 +2,7 @@ package frc.robot.commands.DriveCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -57,7 +58,7 @@ public class DriveAutoRotate extends CommandBase {
        
       
         if (Math.abs(angleToGoal) > 1){
-            m_SwerveSubsystem.dt.driveClean(XTranslation, YTranslation, angleToGoal);
+            m_SwerveSubsystem.dt.driveSnap(XTranslation, YTranslation, Rotation2d.fromDegrees(angleToGoal));
         }else m_SwerveSubsystem.dt.driveClean(XTranslation, YTranslation, 0);
   
 

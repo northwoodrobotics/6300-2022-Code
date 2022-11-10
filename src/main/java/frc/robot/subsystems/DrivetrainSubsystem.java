@@ -142,6 +142,9 @@ public class DrivetrainSubsystem {
         SwerveConstants.MOI_KGM2 = Constants.DriveConstants.MOI_KGM2;
         SwerveConstants.KINEMATICS = Constants.DriveConstants.KINEMATICS;
 
+        SwerveConstants.kMinRotationCommand = Math.toRadians(0.3);
+        SwerveConstants.kMinTranslationCommand = 0.05;
+
 
 
         SwerveConstants.TRAJECTORYXkP = Constants.AutoConstants.TRAJECTORYXkP;

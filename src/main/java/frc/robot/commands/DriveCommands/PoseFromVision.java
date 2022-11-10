@@ -32,7 +32,7 @@ public class PoseFromVision extends CommandBase{
     }
     @Override
     public void execute(){
-        if (visionsystem.hasTarget()){
+        if (visionsystem.hasTarget()&& visionsystem.getTargetAngleX() <0.1){
             m_SwerveSubsystem.dt.VisionPose(PoseFromVison(visionsystem.getRobotToTargetDistance()));
 
         }
