@@ -15,15 +15,22 @@ public class NoPush extends CommandBase{
     public NoPush(SwerveSubsystem subsystem){
         this.m_SwerveSubsystem = subsystem;
         addRequirements(subsystem);
-        nopushStates[0]= new SwerveModuleState(0, Rotation2d.fromDegrees(45+90));
-        nopushStates[1]= new SwerveModuleState(0, Rotation2d.fromDegrees(315+90));
-        nopushStates[2]= new SwerveModuleState(0, Rotation2d.fromDegrees(225+90));
-        nopushStates[3]= new SwerveModuleState(0, Rotation2d.fromDegrees(135+90));
-
     }
+    public void setNopushStates(){
+      nopushStates[0]= new SwerveModuleState(0, Rotation2d.fromDegrees(45+90));
+      nopushStates[1]= new SwerveModuleState(0, Rotation2d.fromDegrees(315+90));
+      nopushStates[2]= new SwerveModuleState(0, Rotation2d.fromDegrees(225+90));
+      nopushStates[3]= new SwerveModuleState(0, Rotation2d.fromDegrees(135+90));
+    }
+    @Override
+    public void initialize(){
+      setNopushStates();
+    }
+
 
     @Override
     public void execute(){
+
       m_SwerveSubsystem.dt.setModuleStates(
           nopushStates
           )    

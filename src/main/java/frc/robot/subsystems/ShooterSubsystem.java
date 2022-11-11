@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -15,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 import java.util.OptionalDouble;
+import java.util.Map;
 
 
 
@@ -44,6 +46,12 @@ public class ShooterSubsystem extends SubsystemBase {
     private HoodControlMode hoodControlMode = HoodControlMode.DISABLED;
     private double hoodTargetPosition = Double.NaN;
     private double hoodPercentOutput = 0.0;
+
+    private double flyWheelOffset = 0.0; 
+    private double hoodOffset = 0.0; 
+
+    private final NetworkTableEntry flyWheelOffsetEntry;
+    private final NetworkTableEntry hoodOffsetEntry;
  
 
 
@@ -156,6 +164,14 @@ public class ShooterSubsystem extends SubsystemBase {
         tab.addNumber("HoodConverted", ()-> getHoodAngle()) // converted true hood angle. 
         .withPosition(1, 3)
         .withSize(1, 1);
+        flyWheelOffsetEntry = Shuffleboard.getTab("master")
+        .add("SpeedOffset", 0.0).withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", -1000.0, "max", 1000.0, "Block increment", 25.0)).withPosition(2, 1)
+        .getEntry();
+        hoodOffsetEntry = Shuffleboard.getTab("master")
+        .add("AngleOffset", 0.0).withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", -10, "max", 10, "Block increment", 25.0)).withPosition(2, 1)
+        .getEntry();
 
 
         
@@ -190,7 +206,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // runs shooter at set RPM
     public void RunShooter(double speed){
        
-        Shooter.set(ControlMode.Velocity, -speed/Constants.ShooterConstants.ShooterVelocitySensorCoffiecient);
+        Shooter.set(ControlMode.Velocity, -speed-flyWheelOffset/Constants.ShooterConstants.ShooterVelocitySensorCoffiecient);
     }
  
     public void stopFlywheel() {
@@ -267,7 +283,7 @@ public class ShooterSubsystem extends SubsystemBase {
                     HoodMotor.set(ControlMode.Disabled, 0.0);
                 } else { 
                     
-                    double targetAngle = getHoodTargetAngle().getAsDouble(); // recives target angle 
+                    double targetAngle = getHoodTargetAngle().getAsDouble() + hoodOffset; // recives target angle 
                     targetAngle = MathUtils.clamp(targetAngle, ShooterConstants.HoodMinAngle, ShooterConstants.HoodMaxAngle);// this function was borrowed from 2910 Jack-In-The-Bot, and simplly forces the hood to stay within its own min an max angles
                 
                     HoodMotor.set(ControlMode.MotionMagic, angleToTalonUnits(targetAngle)); // Hood Falcon recives the target angle 
@@ -281,7 +297,8 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
        
-        
+        flyWheelOffset = flyWheelOffsetEntry.getDouble(0.0);
+        hoodOffset = hoodOffsetEntry.getDouble(0.0);
     }
    
 

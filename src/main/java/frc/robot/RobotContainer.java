@@ -27,6 +27,7 @@ import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.DriveAutoRotate;
+import frc.robot.commands.DriveCommands.NoPush;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 //import frc.robot.commands.TurnToTarget;
 //import frc.robot.commands.AutoRoutines.DriveAndTurn;
@@ -167,7 +168,7 @@ public class RobotContainer {
     
     
     autoChooser.setDefaultOption("TwoBall", new TwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
-    autoChooser.addOption("FourBall", new FourBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
+    autoChooser.addOption("FiveBall", new FourBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("SystemsCheck", new SystemsCheck(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("TopSideTwoBall", new TopSideTwoBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
     autoChooser.addOption("OneBall", new OneBall(m_swerveSubsystem, shooter, blindlight, feeder, intake));
@@ -211,6 +212,8 @@ public class RobotContainer {
     driveController.leftTriggerButton.whileHeld(
       new ParallelCommandGroup(new ShooterCommand(shooter, blindlight),new AutoFeedCommand(m_swerveSubsystem, feeder, shooter, blindlight))
       );
+
+    driveController.aButton.whileHeld(new NoPush(m_swerveSubsystem));
     driveController.bButton.whenPressed(()-> blindlight.setLEDMode(LEDMode.LED_OFF));
     driveController.leftBumper.whileHeld(new ParallelDeadlineGroup(new RotateToTarget(m_swerveSubsystem, 
     () -> getDriveY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
@@ -220,8 +223,7 @@ public class RobotContainer {
       driveController.xButton.toggleWhenPressed(new IntakeMasterCommand(feeder, intake));
      
     
-      //driveController.Dpad.Up.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)+ 0.5)));
-      //driveController.Dpad.Down.whenPressed(()-> shooter.setHoodTargetAngle((shooter.getHoodTargetAngle().orElse(ShooterConstants.HoodMaxAngle)- 0.5)));
+     
      
      
       driveController.yButton.whileHeld(()-> feeder.runFeeder(0.-45));

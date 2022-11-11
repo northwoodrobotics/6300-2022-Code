@@ -33,7 +33,8 @@ public class IdleFlyWheel extends CommandBase{
     
     @Override
     public void initialize() {
-        subsystem.setFlywheelCurrentLimitEnabled(true);
+        subsystem.setFlywheelCurrentLimitEnabled(false);
+        
  
     }
     @Override
